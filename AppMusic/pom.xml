@@ -21,5 +21,16 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    
+
+    <dependency>
+        <groupId>com.toedter</groupId>
+        <artifactId>jcalendar</artifactId>
+        <version>1.4</version> <!-- Reemplaza esto con la versión más reciente si es necesario -->
+    </dependency>
+
+
+    
+    
   </dependencies>
 </project>
