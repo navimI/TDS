@@ -16,9 +16,11 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import com.toedter.calendar.JDateChooser;
+
 import java.awt.Insets;
 import javax.swing.JPasswordField;
-import com.toedter.calendar.JDateChooser;
+
 
 public class VentanaLoginRegistro {
 
