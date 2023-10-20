@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Point;
+
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -21,6 +23,10 @@ import java.awt.event.ActionEvent;
 
 public class VentanaMain extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
@@ -38,7 +44,6 @@ public class VentanaMain extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -63,60 +68,65 @@ public class VentanaMain extends JFrame {
 		
 		JPanel panelCardLayout = new JPanel();
 
-		JButton btnNewButton = new JButton("Buscar");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelBuscar");
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				VentanaBuscarCanciones ventanaBuscar = new VentanaBuscarCanciones();
+				Point botonLocation = getLocationOnScreen();
+				ventanaBuscar.setLocation(botonLocation);
+				ventanaBuscar.setVisible(true);
+				dispose();
+				//Cuando el user hace click en el botón "Buscar":
+				//Creamos la ventana VEntanaBuscarCanciones
 			}
 		});
-		btnNewButton.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnNewButton.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/lupa.png")));
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton.gridx = 0;
-		gbc_btnNewButton.gridy = 0;
-		panelBotonera.add(btnNewButton, gbc_btnNewButton);
+		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
+		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/lupa.png")));
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBuscar.gridx = 0;
+		gbc_btnBuscar.gridy = 0;
+		panelBotonera.add(btnBuscar, gbc_btnBuscar);
 		
-		JButton btnNewButton_1 = new JButton("Gestion Playlists");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnGestionPlaylists = new JButton("Gestion Playlists");
+		btnGestionPlaylists.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelGestion");
 			}
 		});
-		btnNewButton_1.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNewButton_1.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/mas.png")));
-		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_1.gridx = 0;
-		gbc_btnNewButton_1.gridy = 1;
-		panelBotonera.add(btnNewButton_1, gbc_btnNewButton_1);
+		btnGestionPlaylists.setHorizontalAlignment(SwingConstants.LEFT);
+		btnGestionPlaylists.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/mas.png")));
+		btnGestionPlaylists.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_btnGestionPlaylists = new GridBagConstraints();
+		gbc_btnGestionPlaylists.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnGestionPlaylists.insets = new Insets(0, 0, 5, 0);
+		gbc_btnGestionPlaylists.gridx = 0;
+		gbc_btnGestionPlaylists.gridy = 1;
+		panelBotonera.add(btnGestionPlaylists, gbc_btnGestionPlaylists);
 		
-		JButton btnNewButton_2 = new JButton("Recientes");
-		btnNewButton_2.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNewButton_2.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/reloj.png")));
-		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-		gbc_btnNewButton_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_2.gridx = 0;
-		gbc_btnNewButton_2.gridy = 2;
-		panelBotonera.add(btnNewButton_2, gbc_btnNewButton_2);
+		JButton btnRecientes = new JButton("Recientes");
+		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/reloj.png")));
+		btnRecientes.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_btnRecientes = new GridBagConstraints();
+		gbc_btnRecientes.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnRecientes.insets = new Insets(0, 0, 5, 0);
+		gbc_btnRecientes.gridx = 0;
+		gbc_btnRecientes.gridy = 2;
+		panelBotonera.add(btnRecientes, gbc_btnRecientes);
 		
-		JButton btnNewButton_3 = new JButton("Mis Playlists");
-		btnNewButton_3.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNewButton_3.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/altavoz.png")));
-		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
-		gbc_btnNewButton_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton_3.gridx = 0;
-		gbc_btnNewButton_3.gridy = 3;
-		panelBotonera.add(btnNewButton_3, gbc_btnNewButton_3);
+		JButton btnMisPlaylists = new JButton("Mis Playlists");
+		btnMisPlaylists.setHorizontalAlignment(SwingConstants.LEFT);
+		btnMisPlaylists.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/altavoz.png")));
+		btnMisPlaylists.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_btnMisPlaylists = new GridBagConstraints();
+		gbc_btnMisPlaylists.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnMisPlaylists.gridx = 0;
+		gbc_btnMisPlaylists.gridy = 3;
+		panelBotonera.add(btnMisPlaylists, gbc_btnMisPlaylists);
 		
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
