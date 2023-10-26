@@ -185,9 +185,23 @@ public class VentanaLoginRegistro {
 		
 		JButton btnRegistrar = new JButton("Registrar");
 		panel_1.add(btnRegistrar);
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				VentanaMain main = new VentanaMain();
+				main.setVisible(true);
+				frmAppmusic.setVisible(false);
+			}
+		});
 		
 		JButton btnIrALogin = new JButton("Ir a Login");
 		panel_1.add(btnIrALogin);
+		btnIrALogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+				card.show(frmAppmusic.getContentPane(), "panelLogin");
+				
+			}
+		});
 	}
 
 }
