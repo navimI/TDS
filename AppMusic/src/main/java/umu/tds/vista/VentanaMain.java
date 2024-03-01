@@ -72,16 +72,24 @@ public class VentanaMain extends JFrame {
 		
 		JPanel panelCardLayout = new JPanel();
 
-		JButton btnBuscar = new JButton("Buscar");
+		/*JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { 
+			public void actionPerformed(ActionEvent e) {
 				VentanaBuscarCanciones ventanaBuscar = new VentanaBuscarCanciones();
 				Point botonLocation = getLocationOnScreen();
 				ventanaBuscar.setLocation(botonLocation);
 				ventanaBuscar.setVisible(true);
-				dispose();
+				//dispose();
 				//Cuando el user hace click en el botón "Buscar":
 				//Creamos la ventana VEntanaBuscarCanciones
+				//contentPane.setVisible(false);
+			}
+		});*/
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout card = (CardLayout) panelCardLayout.getLayout();
+				card.show(panelCardLayout, "panelBuscar");
 			}
 		});
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -112,6 +120,14 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnGestionPlaylists, gbc_btnGestionPlaylists);
 		
 		JButton btnRecientes = new JButton("Recientes");
+		btnRecientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//System.out.println("Botón Recientes clicado"); //msg para depurar
+				CardLayout card = (CardLayout) panelCardLayout.getLayout();
+				card.show(panelCardLayout, "panelRecientes");
+				//System.out.println("Panel actual: " + card.toString());//msg para depurar
+			}
+		});
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/reloj.png")));
 		btnRecientes.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -123,6 +139,12 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnRecientes, gbc_btnRecientes);
 		
 		JButton btnMisPlaylists = new JButton("Mis Playlists");
+		btnMisPlaylists.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout card = (CardLayout) panelCardLayout.getLayout();
+				card.show(panelCardLayout, "panelPlaylists");
+			}
+		});
 		btnMisPlaylists.setHorizontalAlignment(SwingConstants.LEFT);
 		btnMisPlaylists.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/altavoz.png")));
 		btnMisPlaylists.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -168,8 +190,16 @@ public class VentanaMain extends JFrame {
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 		
+		JLabel lblpanelRecientes = new JLabel("PanelRecientes");
+		panelRecientes.add(lblpanelRecientes);
+		
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
+		
+		JLabel lblpanelPlaylists = new JLabel("PanelPlaylists");
+		panelPlaylists.add(lblpanelPlaylists);
+		
 	}
+	
 
 }
