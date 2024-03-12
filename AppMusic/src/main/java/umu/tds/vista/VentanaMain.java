@@ -5,13 +5,18 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Point;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -20,6 +25,8 @@ import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+
 
 public class VentanaMain extends JFrame {
 
@@ -69,6 +76,9 @@ public class VentanaMain extends JFrame {
 		gbl_panelBotonera.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonera.setLayout(gbl_panelBotonera);
 		
+		this.setMinimumSize(new Dimension(600, 400));
+	    this.setMaximumSize(new Dimension(700, 500));
+	    this.setSize(new Dimension(600, 400));
 		
 		JPanel panelCardLayout = new JPanel();
 
@@ -177,6 +187,63 @@ public class VentanaMain extends JFrame {
 		
 		JPanel panelBuscar = new JPanel();
 		panelCardLayout.add(panelBuscar, "panelBuscar");
+		
+		//Componentes para el panel Buscar:
+		JLabel lblInterprete = new JLabel("Intérprete:");
+		panelBuscar.add(lblInterprete);
+		// onfigurar el tamaño mínimo y máximo del panelBuscar
+		panelBuscar.setMinimumSize(new Dimension(600, 400));
+		panelBuscar.setMaximumSize(new Dimension(700, 500));
+		//Para que se vean de forma vertical:
+		//panelBuscar.setLayout(new BoxLayout(panelBuscar, BoxLayout.Y_AXIS));
+		
+		JTextField textFieldInterprete = new JTextField();
+		panelBuscar.add(textFieldInterprete);
+		textFieldInterprete.setColumns(15);
+
+		JLabel lblTitulo = new JLabel("Título:");
+		panelBuscar.add(lblTitulo);
+
+		JTextField textFieldTitulo = new JTextField();
+		panelBuscar.add(textFieldTitulo);
+		textFieldTitulo.setColumns(15);
+
+		JLabel lblEstilo = new JLabel("Estilo:");
+		panelBuscar.add(lblEstilo);
+		//Lista desplegable (combobox) para el estilo musical
+		String[] estilosMusicales = {"Pop", "Rock", "Electrónica", "Hip-hop", "Otros"};
+		JComboBox<String> comboBoxEstilo = new JComboBox<>(estilosMusicales);
+		panelBuscar.add(comboBoxEstilo);
+		
+		JLabel lblFavoritas = new JLabel("Favoritas:");
+		panelBuscar.add(lblFavoritas);
+
+		//Casilla de marcado (checkbox) para favoritas
+		JCheckBox checkBoxFavoritas = new JCheckBox();
+		panelBuscar.add(checkBoxFavoritas);
+
+		
+		
+		//Botón para realizar la búsqueda
+		JButton btnRealizarBusqueda = new JButton("Buscar");
+		btnRealizarBusqueda.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        //Obtener los valores de los campos y realizar la búsqueda
+		        String interprete = textFieldInterprete.getText();
+		        String titulo = textFieldTitulo.getText();
+		        String estilo = (String) comboBoxEstilo.getSelectedItem();
+		        boolean favoritas = checkBoxFavoritas.isSelected();
+
+		        //Realizar la acción correspondiente con los valores de búsqueda
+		        System.out.println("Realizando búsqueda con los siguientes filtros:");
+		        System.out.println("Intérprete: " + interprete);
+		        System.out.println("Título: " + titulo);
+		        System.out.println("Estilo: " + estilo);
+		        System.out.println("Favoritas: " + favoritas);
+		    }
+		});
+		panelBuscar.add(btnRealizarBusqueda);
+		
 		
 		JLabel lblPanelbuscar = new JLabel("PanelBuscar");
 		panelBuscar.add(lblPanelbuscar);
