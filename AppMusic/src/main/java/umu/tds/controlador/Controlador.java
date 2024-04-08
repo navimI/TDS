@@ -51,12 +51,13 @@ public class Controlador {
 		return catalogoUsuarios.login(user, password);
 	}
 
-	public boolean registrarUsuario(String nombre, String apellidos, String email, String user, String password,
+	//TODO: mejora decir que error a la hora de registrar se tiene
+	public boolean registrarUsuario(String nombre, String email, String user, String password,
 			String fechaNacim) {
 
 		if (esUsuarioRegistrado(user))
 			return false;
-		Usuario usuario = new Usuario(nombre, apellidos, email, user, password, fechaNacim);
+		Usuario usuario = new Usuario(nombre, email, user, password, fechaNacim);
 
 		adaptadorUsuario.registrarUsuario(usuario);
 

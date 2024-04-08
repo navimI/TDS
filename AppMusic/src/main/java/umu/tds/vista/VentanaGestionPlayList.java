@@ -3,18 +3,13 @@ package umu.tds.vista;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import java.awt.BorderLayout;
-import javax.swing.JTextPane;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -26,7 +21,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Panel;
-import java.awt.CardLayout;
 
 public class VentanaGestionPlayList {
 
@@ -57,18 +51,7 @@ public class VentanaGestionPlayList {
 		initialize();
 	}
 
-	// Función para cargar y redimensionar una imagen
-    private static ImageIcon createResizedImageIcon(String filePath, int width, int height) {
-        try {
-            File imageFile = new File(filePath);
-            BufferedImage img = ImageIO.read(imageFile);
-            Image resizedImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            return new ImageIcon(resizedImage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	
 	
 	/**
 	 * Initialize the contents of the frame.
