@@ -13,6 +13,7 @@ public class Cancion {
 	private int numReproducciones;
 	private final String estilo;
 	private final List<String> listaInterpretes;
+	private Boolean favorita;
 	// URL es un atributo calculado por el get
 	
 	//CONSTRUCTORES
@@ -21,6 +22,7 @@ public class Cancion {
 		this.estilo = estilo;
 		this.listaInterpretes = new LinkedList<String>(Arrays.asList(interpretes));
 		this.numReproducciones = 0;
+		this.favorita = false;
 	}
 	
 	public Cancion(String titulo, String estilo, List<String>interpretes) {
@@ -28,6 +30,7 @@ public class Cancion {
 		this.estilo = estilo;
 		this.listaInterpretes = new LinkedList<String>(interpretes);
 		this.numReproducciones = 0;
+		this.favorita = false;
 	}
 	
 	public Cancion(String titulo, String estilo) {
@@ -36,6 +39,7 @@ public class Cancion {
 		this.listaInterpretes = new LinkedList<String>();
 		this.listaInterpretes.add("Anonimo");
 		this.numReproducciones = 0;
+		this.favorita = false;
 	}
 
 	//MÉTODOS
@@ -43,7 +47,19 @@ public class Cancion {
 	public String getTitulo() {
 		return titulo;
 	}
+	
+	public Boolean esFavorita() {
+		return favorita;
+	}
+	
+	public void hacerFavorita() {
+		this.favorita = true;
+	}
 
+	public void quitarFavorita() {
+		this.favorita = false;
+	}
+	
 	//No existe un método setTitulo() porque no tiene sentido poder editar el titulo una vez que la cancion ya esta creada
 
 	public String getRutaFichero() {

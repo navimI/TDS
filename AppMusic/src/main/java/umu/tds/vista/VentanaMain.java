@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.eclipse.persistence.internal.oxm.schema.model.List;
+
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 
@@ -34,6 +36,7 @@ import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 
@@ -462,7 +465,7 @@ public class VentanaMain extends JFrame {
 		JLabel lblPanelbuscar = new JLabel("PanelBuscar");
 		panelBuscar.add(lblPanelbuscar);
 		
-		
+		//GESTIÓN:
 		//Para crear y editar playlists:		
 		JPanel panelGestion = new JPanel();
 		panelCardLayout.add(panelGestion, "panelGestion");
@@ -555,19 +558,76 @@ public class VentanaMain extends JFrame {
 		JLabel lblPanelgestion = new JLabel("PanelGestion");
 		panelGestion.add(lblPanelgestion);
 		
+		//RECIENTES:
+		
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 		
 		JLabel lblpanelRecientes = new JLabel("PanelRecientes");
 		panelRecientes.add(lblpanelRecientes);
 		
+		
+		//PANEL PLAYLISTS
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
+		panelPlaylists.setLayout(new BorderLayout());
 		
 		JLabel lblpanelPlaylists = new JLabel("PanelPlaylists");
 		panelPlaylists.add(lblpanelPlaylists);
 		
-	}
-	
+		//obtener las playlists disponibles
+		//java.util.LinkedList<Cancion> playlistsDisponibles = (LinkedList<Cancion>) playlist.getPlayList();
+		//para obtener la lista de canciones desde la instancia de PlayList
+        PlayList playlist = new PlayList("NombreDeLaPlaylist");
+        LinkedList<Cancion> listaCanciones = (LinkedList<Cancion>) playlist.getPlayList();
+        
+        
+        //crear tabla:
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("Título");
+        modeloTabla.addColumn("Intérprete");
+        modeloTabla.addColumn("Estilo");
+        modeloTabla.addColumn("Favoritas");
+        //añadir las canciones a la tabla:
+        for (Cancion cancion : listaCanciones) {
+            modeloTabla.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+        }
+     // Crear la tabla con el modelo de datos
+        JTable tablaCanciones1 = new JTable(modeloTabla);
 
+        // Agregar la tabla a un JScrollPane para permitir el desplazamiento si hay muchas canciones
+        JScrollPane scrollPaneTablaCanciones = new JScrollPane(tablaCanciones1);
+
+        // Agregar el JScrollPane al panel
+        panelPlaylists.add(scrollPaneTablaCanciones, BorderLayout.CENTER);
+        
+        /*
+		// Crear el JComboBox con las playlists disponibles
+		JComboBox<String> comboBoxPlaylists = new JComboBox<>(playlistsDisponibles);
+		comboBoxPlaylists.setEditable(true);
+
+		// Crear el panel de la ventana de diálogo
+		JPanel panelDialogo = new JPanel();
+		panelDialogo.add(new JLabel("Selecciona la playlist:"));
+		panelDialogo.add(comboBoxPlaylists);
+
+		// Mostrar la ventana de diálogo
+		int opcion = JOptionPane.showConfirmDialog(null, panelDialogo, "Seleccionar Playlist",
+		        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (opcion == JOptionPane.OK_OPTION) {
+		    // Obtener el nombre de la playlist seleccionada
+		    String nombrePlaylist = (String) comboBoxPlaylists.getSelectedItem();
+		    
+		    // Obtener la lista de canciones de la playlist seleccionada
+		   LinkedList<Cancion> cancionesPlaylist = (LinkedList<Cancion>) playlist.getPlayList();
+		    
+		    // Ahora puedes hacer lo que quieras con la lista de canciones obtenida
+		}
+		*/
+        
+		
+		
+
+	}
 }

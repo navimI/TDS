@@ -65,7 +65,7 @@ public class PlayList {
 	@Override
 	public String toString() {
 		return "PlayList [id=" + id + ", nombre=" + nombre + ", getNumCanciones()="
-				+ getNumCanciones() + ", PlayList=" + PlayList  + "]";
+				+ getNumCanciones() + ", PlayList=" + PlayList  + "]"; 
 	}
 	
 	/*TODO implementar reproducir lista
