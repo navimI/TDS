@@ -46,7 +46,7 @@ public class PlayList {
 	}
 	
 	public List<Cancion> getPlayList(){
-		return new LinkedList<Cancion>(PlayList);
+		return new LinkedList<Cancion>(PlayList); 
 	}
 	
 	public void addCanciones(Cancion cancion) {
