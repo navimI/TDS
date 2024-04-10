@@ -59,7 +59,7 @@ public class PlayList {
 	
 	public void removeCanciones(Cancion cancion) {
 		PlayList.remove(cancion);
-	
+	 
 	}
 
 	@Override

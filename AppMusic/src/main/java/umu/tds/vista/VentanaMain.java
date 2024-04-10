@@ -558,7 +558,7 @@ public class VentanaMain extends JFrame {
 		JLabel lblPanelgestion = new JLabel("PanelGestion");
 		panelGestion.add(lblPanelgestion);
 		
-		//RECIENTES:
+		//RECIENTES: 
 		
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");

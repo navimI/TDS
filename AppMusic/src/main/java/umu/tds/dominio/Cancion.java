@@ -47,7 +47,7 @@ public class Cancion {
 	public String getTitulo() {
 		return titulo;
 	}
-	
+	 
 	public Boolean esFavorita() {
 		return favorita;
 	}
