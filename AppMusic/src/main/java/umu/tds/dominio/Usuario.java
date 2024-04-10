@@ -8,7 +8,7 @@ public class Usuario {
 
 	private int id;
 	private final String nombre;
-	private final String apellidos;
+
 	private String email;
 	private String user;
 	private final String fechaNacim;
@@ -23,10 +23,10 @@ public class Usuario {
 	//TO-DO: Mirar si es interesante dejar esto asi o que se crea la lista de canciones y se almecene
 	
 	
-	public Usuario(String nombre, String apellidos, String email, String user, String password, String fechaNacim) {
+	public Usuario(String nombre, String email, String user, String password, String fechaNacim) {
 		this.id = 0;
 		this.nombre = nombre;
-		this.apellidos = apellidos;
+
 		this.fechaNacim = fechaNacim;
 		this.email = email;
 		this.user = user;
@@ -50,13 +50,6 @@ public class Usuario {
 	public String getNombre() {
 		return nombre;
 	}
-
-	
-
-	public String getApellidos() {
-		return apellidos;
-	}
-
 	
 	public String getEmail() {
 		return email;
@@ -108,7 +101,7 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", user="
+		return "Usuario [id=" + id + ", nombre=" + nombre  + ", email=" + email + ", user="
 				+ user + ", fechaNacim=" + fechaNacim + ", password=" + password + ", premium=" + premium
 				+ ", playListUsuario=" + playListUsuario + "]";
 	}

@@ -23,7 +23,11 @@ import javax.swing.JComboBox;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+/*<<<<<<< HEAD
+=======
 
+>>>>>>> branch 'main' of https://github.com/navimI/TDS.git
+*/
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Font;

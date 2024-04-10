@@ -21,9 +21,8 @@ import beans.Propiedad;
  */
 public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
-	private static final String USUARIO = "Usuario";
+	private static final String USUARIO = "usuario";
 	private static final String NOMBRE = "nombre";
-	private static final String APELLIDOS = "apellidos";
 	private static final String EMAIL = "email";
 	private static final String USER = "user";
 	private static final String PASSWORD = "password";
@@ -52,7 +51,6 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private Usuario entidadToUsuario(Entidad eUsuario) {
 
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
-		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
 		String email = servPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
 		String user = servPersistencia.recuperarPropiedadEntidad(eUsuario, USER);
 		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
@@ -60,7 +58,7 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
 		List<PlayList> playList = new LinkedList<PlayList>();
 		
-		Usuario usuario = new Usuario(nombre, apellidos, email, user, password, fechaNacimiento);
+		Usuario usuario = new Usuario(nombre, email, user, password, fechaNacimiento);
 		usuario.setId(eUsuario.getId());
 		usuario.setPremium(Boolean.valueOf(premium)==Boolean.TRUE);
 		
@@ -83,8 +81,9 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(NOMBRE, usuario.getNombre()),
-				new Propiedad(APELLIDOS, usuario.getApellidos()), new Propiedad(EMAIL, usuario.getEmail()),
-				new Propiedad(USER, usuario.getUser()), new Propiedad(PASSWORD, usuario.getPassword()),
+				new Propiedad(EMAIL, usuario.getEmail()),
+				new Propiedad(USER, usuario.getUser()),
+				new Propiedad(PASSWORD, usuario.getPassword()),
 				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacim()),
 				new Propiedad(PREMIUM, Boolean.valueOf(usuario.isPremiun()).toString()),
 				new Propiedad(LISTAUSUARIO, obtenerCodigosListasUsuario(usuario.getPlayListUsuario()))
@@ -136,8 +135,6 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 				prop.setValor(usuario.getEmail());
 			} else if (prop.getNombre().equals(NOMBRE)) {
 				prop.setValor(usuario.getNombre());
-			} else if (prop.getNombre().equals(APELLIDOS)) {
-				prop.setValor(usuario.getApellidos());
 			} else if (prop.getNombre().equals(USER)) {
 				prop.setValor(usuario.getUser());
 			} else if (prop.getNombre().equals(FECHA_NACIMIENTO)) {
