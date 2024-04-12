@@ -35,6 +35,13 @@
 			<artifactId>JTattoo</artifactId>
 			<version>1.6.13</version>
 		</dependency>
+		
+	<!-- https://mvnrepository.com/artifact/org.kohsuke/github-api -->
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>github-api</artifactId>
+			<version>1.315</version>
+		</dependency>
 
 
 

@@ -8,18 +8,24 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.JCheckBox;
+
 
 import umu.tds.controlador.Controlador;
+import umu.tds.github.LoginGitHub;
 
 public class LoginPanel {
 	
@@ -29,7 +35,7 @@ public class LoginPanel {
 	private JLabel loginUsuario;
 	private JLabel loginPassword;
 	
-	private JTextField userValue;
+	private JTextField userField;
 	private JPasswordField passwordValue;
 	
 	
@@ -84,14 +90,14 @@ public class LoginPanel {
 		gbc_loginUsuario.gridy = 1;
 		panelFormularioLogin.add(loginUsuario, gbc_loginUsuario);
 		
-		userValue = new JTextField();
+		userField = new JTextField();
 		GridBagConstraints gbc_userValue = new GridBagConstraints();
 		gbc_userValue.insets = new Insets(0, 0, 5, 5);
 		gbc_userValue.fill = GridBagConstraints.HORIZONTAL;
 		gbc_userValue.gridx = 2;
 		gbc_userValue.gridy = 1;
-		panelFormularioLogin.add(userValue, gbc_userValue);
-		userValue.setColumns(10);
+		panelFormularioLogin.add(userField, gbc_userValue);
+		userField.setColumns(10);
 		
 		//Campos Password
 		loginPassword = new JLabel("Password");
@@ -119,7 +125,7 @@ public class LoginPanel {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean login = Controlador.getUnicaInstancia().loginUsuario(userValue.getText(), 
+				boolean login = Controlador.getUnicaInstancia().loginUsuario(userField.getText(), 
 						new String(passwordValue.getPassword()));
 				if(login) {					
 					VentanaMain main = new VentanaMain();
@@ -149,36 +155,47 @@ public class LoginPanel {
 		JButton btnGH = new JButton("GitHub Login");
 		btnGH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
-				/*
-				 * JFileChooser fileChooser = new JFileChooser();
-				 * fileChooser.addChoosableFileFilter(new FileFilter() { public String
-				 * getDescription() { return "GitHub Properties File (*.properties)"; }
-				 * 
-				 * public boolean accept(File f) { if (f.isDirectory()) { return true; } else {
-				 * return f.getName().toLowerCase().endsWith(".properties"); } } });
-				 * fileChooser.setAcceptAllFileFilterUsed(false); File workingDirectory = new
-				 * File(System.getProperty("user.dir"));
-				 * fileChooser.setCurrentDirectory(workingDirectory); int result =
-				 * fileChooser.showOpenDialog(frame); if (result == JFileChooser.APPROVE_OPTION)
-				 * { File selectedFile = fileChooser.getSelectedFile();
-				 * System.out.println("Selected file: " + selectedFile.getAbsolutePath()); final
-				 * ImageIcon icon = new ImageIcon( EjemploLogin.class.getResource(
-				 * "/umu/tds/vista/resources/ondas-sonoras-64.png"));
-				 * 
-				 * if (LoginGitHub.INSTANCE.verificar(textField.getText(),
-				 * selectedFile.getAbsolutePath())) { JOptionPane.showMessageDialog(frame,
-				 * "Login Correcto", "Login", JOptionPane.INFORMATION_MESSAGE, icon);
-				 * VentanaMain main = new VentanaMain(); main.setVisible(true);
-				 * frmAppmusic.setVisible(false); } else { JOptionPane.showMessageDialog(frame,
-				 * "Login Fallido", "Login", JOptionPane.WARNING_MESSAGE, icon); CardLayout card
-				 * = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				 * card.show(frmAppmusic.getContentPane(), "panelRegistroGH"); } }
-				 * 
-				 */	
-				
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.addChoosableFileFilter(new FileFilter() {
+					public String getDescription() {
+						return "GitHub Properties File (*.properties)";
+					}
+
+					public boolean accept(File f) {
+						if (f.isDirectory()) {
+							return true;
+						} else {
+							return f.getName().toLowerCase().endsWith(".properties");
+						}
+					}
+				});
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				File workingDirectory = new File(System.getProperty("user.dir"));
+				fileChooser.setCurrentDirectory(workingDirectory);
+				int result = fileChooser.showOpenDialog(frmAppmusic);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+
+					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
+						JOptionPane.showMessageDialog(frmAppmusic, "Login Correcto", "Login",
+								JOptionPane.INFORMATION_MESSAGE);
+						VentanaMain main = new VentanaMain();
+						main.setVisible(true);
+						frmAppmusic.setVisible(false);
+						
+					} else {
+						JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido", "Login", JOptionPane.WARNING_MESSAGE);
+						CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+						card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
+					}
+				}
 			}
+				
+				  
+				 	
+				
+			
 		});
 		botonPanel.add(btnGH);
 	}
