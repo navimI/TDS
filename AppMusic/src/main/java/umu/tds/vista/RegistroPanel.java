@@ -64,8 +64,6 @@ public class RegistroPanel   {
 		
 		crearPanelBoton(frmAppmusic);
 		
-		//TODO: Falta por implementar una funcion que compruebe si los campos estan rellenados o no
-		
 	}
 	
 	private void crearPanel(JFrame frmAppmusic) {

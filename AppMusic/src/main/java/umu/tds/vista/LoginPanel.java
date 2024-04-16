@@ -151,10 +151,10 @@ public class LoginPanel {
 		botonPanel.add(btnRegistro);
 		
 		// Manejador del boton de login con GitHub
-		//TODO: Cambiar comportamiento con el login y el registro
 		JButton btnGH = new JButton("GitHub Login");
 		btnGH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// Abrir selector de ficheros y cargar fichero con Key
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.addChoosableFileFilter(new FileFilter() {
 					public String getDescription() {
@@ -176,7 +176,7 @@ public class LoginPanel {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-
+					//Comprueba si el fichero es valido la clave de Gh o no
 					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
 						boolean registred = Controlador.getUnicaInstancia().esUsuarioRegistrado(userField.getText());
 						if(registred) {
