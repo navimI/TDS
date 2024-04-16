@@ -25,7 +25,7 @@ import javax.swing.JCheckBox;
 
 
 import umu.tds.controlador.Controlador;
-import umu.tds.github.LoginGitHub;
+import umu.tds.utils.LoginGitHub;
 
 public class LoginPanel {
 	
@@ -133,8 +133,6 @@ public class LoginPanel {
 					frmAppmusic.setVisible(false);
 				} else
 					JOptionPane.showMessageDialog(frmAppmusic, "Nombre de usuario o contraseña no valido","Error",JOptionPane.ERROR_MESSAGE);
-				
-				 
 			}
 		});
 		botonPanel.add(btnLogin);

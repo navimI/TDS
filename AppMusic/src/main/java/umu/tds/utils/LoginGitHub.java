@@ -1,4 +1,4 @@
-package umu.tds.github;
+package umu.tds.utils;
 
 import java.io.IOException;
 
