@@ -15,14 +15,20 @@ import org.eclipse.persistence.internal.oxm.schema.model.List;
 
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
+import umu.tds.dominio.Usuario;
 
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.Box;
 /*<<<<<<< HEAD
 =======
 
@@ -37,6 +43,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -57,7 +64,6 @@ public class VentanaMain extends JFrame {
 	//para las playlists:
 	private JTextField textFieldTituloPlaylist;
 	private DefaultTableModel modeloTablaCanciones;
-	
 
 	/**
 	 * Launch the application.
@@ -105,9 +111,13 @@ public class VentanaMain extends JFrame {
 		gbl_panelBotonera.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonera.setLayout(gbl_panelBotonera);
 		
-		this.setMinimumSize(new Dimension(600, 400));
-	    this.setMaximumSize(new Dimension(700, 500));
-	    this.setSize(new Dimension(600, 400));
+		this.setMinimumSize(new Dimension(600, 500));
+	    this.setMaximumSize(new Dimension(800, 700));
+	    this.setSize(new Dimension(600, 500));
+	    
+	    
+
+	
 		
 		JPanel panelCardLayout = new JPanel();
 
@@ -418,21 +428,86 @@ public class VentanaMain extends JFrame {
 		
 		*/
 
+	  //PANEL PARA LOS BOTONES DE REPRODUCCIÓN:
+        //TODO: hacer que se comporten como un bloque fijo 	    
+	    JPanel panelBotonesReproduccion = new JPanel();
+        panelBotonesReproduccion.setLayout(new BoxLayout(panelBotonesReproduccion, BoxLayout.X_AXIS));
+
+        //Los añadirlos al panel
+        //botón anterior:
+        JButton btnAnterior = new JButton();
+        ImageIcon anterior = new ImageIcon(getClass().getResource("/vista/imagenes/anterior.jpg"));
+        Image anteRedimensionada = anterior.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon anteRedimensionado = new ImageIcon(anteRedimensionada);
+        btnAnterior.setIcon(anteRedimensionado);
+        btnAnterior.setBorderPainted(false);
+        btnAnterior.setContentAreaFilled(false);
+        btnAnterior.setFocusPainted(false);
+        btnAnterior.setOpaque(false);
+        panelBotonesReproduccion.add(btnAnterior);
+        //botón stop:
+        JButton btnDetener = new JButton();
+        ImageIcon stop = new ImageIcon(getClass().getResource("/vista/imagenes/stop.jpg"));
+        Image stopRedimensionada = stop.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon stopRedimensionado = new ImageIcon(stopRedimensionada);
+        btnDetener.setIcon(stopRedimensionado);
+        btnDetener.setBorderPainted(false);
+        btnDetener.setContentAreaFilled(false);
+        btnDetener.setFocusPainted(false);
+        btnDetener.setOpaque(false);
+        panelBotonesReproduccion.add(btnDetener);
+        //botón pausar:
+        JButton btnPausar = new JButton();
+        ImageIcon pause = new ImageIcon(getClass().getResource("/vista/imagenes/pause.jpg"));
+        Image pauseRedimensionada = pause.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon pauseRedimensionado = new ImageIcon(pauseRedimensionada);
+        btnPausar.setIcon(pauseRedimensionado);
+        btnPausar.setBorderPainted(false);
+        btnPausar.setContentAreaFilled(false);
+        btnPausar.setFocusPainted(false);
+        btnPausar.setOpaque(false);
+        panelBotonesReproduccion.add(btnPausar);
+        //botón play:
+        JButton btnReproducir = new JButton();
+        ImageIcon play = new ImageIcon(getClass().getResource("/vista/imagenes/play.jpg"));
+        Image playRedimensionada = play.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon playRedimensionado = new ImageIcon(playRedimensionada);
+        btnReproducir.setIcon(playRedimensionado);
+        btnReproducir.setBorderPainted(false);
+        btnReproducir.setContentAreaFilled(false);
+        btnReproducir.setFocusPainted(false);
+        btnReproducir.setOpaque(false);
+        panelBotonesReproduccion.add(btnReproducir);
+        //botón siguiente:
+		JButton btnSiguiente = new JButton();
+		ImageIcon siguiente = new ImageIcon(getClass().getResource("/vista/imagenes/siguiente.jpg"));
+		Image siguienteRedimensionada = siguiente.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon siguienteRedimensionado = new ImageIcon(siguienteRedimensionada);
+		btnSiguiente.setIcon(siguienteRedimensionado);
+		btnSiguiente.setBorderPainted(false);
+		btnSiguiente.setContentAreaFilled(false);
+		btnSiguiente.setFocusPainted(false);
+		btnSiguiente.setOpaque(false);
+        panelBotonesReproduccion.add(btnSiguiente);
+
+
+     //Agregar el panel de botones a la parte inferior de la ventana 
+        add(panelBotonesReproduccion, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
+        
+        //Hacer visible la ventana
+        setVisible(true);
+    
+
+            
+            //TODO: añadir ActionListener 
+        btnAnterior.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Lógica para el botón Anterior
+                }
+            });
 		
-		//Botones de reproducción
-		JButton btnReproducir = new JButton("Reproducir");
-		JButton btnDetener = new JButton("Detener");
-		JButton btnPausar = new JButton("Pausar");
-		JButton btnSiguiente = new JButton("Siguiente");
-		JButton btnAnterior = new JButton("Anterior");
-
-		//Añadir acción a los botones (puedes personalizar estas acciones)
-		btnReproducir.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // TODO Lógica para reproducir la canción seleccionada
-		    }
-		});
-
 		btnDetener.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        // TODO Lógica para detener la reproducción
@@ -564,8 +639,33 @@ public class VentanaMain extends JFrame {
 		
 		//RECIENTES: 
 		
+		//TODO
+		
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
+		panelRecientes.setLayout(new BorderLayout());
+		
+		/*
+		// Crear una tabla para mostrar las últimas canciones reproducidas
+		DefaultTableModel modeloTablaRecientes = new DefaultTableModel();
+		modeloTablaRecientes.addColumn("Título");
+		modeloTablaRecientes.addColumn("Intérprete");
+		modeloTablaRecientes.addColumn("Estilo");
+		modeloTablaRecientes.addColumn("Favoritas");
+		JTable tablaRecientes = new JTable(modeloTablaRecientes);
+		
+		// Agregar la tabla a un JScrollPane para permitir el desplazamiento
+		JScrollPane scrollPaneRecientes = new JScrollPane(tablaRecientes);
+		Usuario.actualizarRecientes.add(scrollPaneRecientes, BorderLayout.CENTER);
+		
+		List<Cancion> ultimasCanciones = this.usuario.getPlayListUsuario();
+		this.usuario.actualizarRecientes(ultimasCanciones);
+		
+		*/
+		
+		
+		
+		
 		
 		JLabel lblpanelRecientes = new JLabel("PanelRecientes");
 		panelRecientes.add(lblpanelRecientes);
@@ -605,30 +705,6 @@ public class VentanaMain extends JFrame {
         // Agregar el JScrollPane al panel
         panelPlaylists.add(scrollPaneTablaCanciones, BorderLayout.CENTER);
         
-        /*
-		// Crear el JComboBox con las playlists disponibles
-		JComboBox<String> comboBoxPlaylists = new JComboBox<>(playlistsDisponibles);
-		comboBoxPlaylists.setEditable(true);
-
-		// Crear el panel de la ventana de diálogo
-		JPanel panelDialogo = new JPanel();
-		panelDialogo.add(new JLabel("Selecciona la playlist:"));
-		panelDialogo.add(comboBoxPlaylists);
-
-		// Mostrar la ventana de diálogo
-		int opcion = JOptionPane.showConfirmDialog(null, panelDialogo, "Seleccionar Playlist",
-		        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-		if (opcion == JOptionPane.OK_OPTION) {
-		    // Obtener el nombre de la playlist seleccionada
-		    String nombrePlaylist = (String) comboBoxPlaylists.getSelectedItem();
-		    
-		    // Obtener la lista de canciones de la playlist seleccionada
-		   LinkedList<Cancion> cancionesPlaylist = (LinkedList<Cancion>) playlist.getPlayList();
-		    
-		    // Ahora puedes hacer lo que quieras con la lista de canciones obtenida
-		}
-		*/
         
 		
 		

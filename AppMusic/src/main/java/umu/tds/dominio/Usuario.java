@@ -39,6 +39,7 @@ public class Usuario {
 		 
 	}
 
+	
 	public int getId() {
 		return id;
 	}
@@ -187,5 +188,10 @@ public class Usuario {
 	 * 
 	 * 
 	 */
-
+    
+    public boolean actualizarRecientes(Cancion cancion) {
+        //TODO
+    	return false;
+    }
+    
 }
