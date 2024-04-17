@@ -27,7 +27,6 @@ public class Player {
 			try {
 				setCancionActual(cancion);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			mediaPlayer.play();

@@ -6,7 +6,10 @@ import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IAdaptadorPlayListDAO;
 import umu.tds.dominio.Usuario;
+import umu.tds.utils.Player;
 import umu.tds.dominio.CatalogoUsuarios;
+import umu.tds.dominio.PlayList;
+import umu.tds.dominio.Cancion;
 import umu.tds.dominio.CatalogoCancion;
 
 
@@ -21,9 +24,15 @@ public class Controlador {
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCancion catalogoCanciones;
 	
+	private Player reproductorActual;
 
 	
 	private Usuario usuarioActual;
+	
+	private Cancion cancionActual;
+	
+	private PlayList playListActual;
+	
 
 
 
@@ -31,6 +40,7 @@ public class Controlador {
 		usuarioActual = null;
 		iniciarAdaptadores();
 		inicializarCatalogos();
+		iniciarReproductor();
 	}
 
 	public static Controlador getUnicaInstancia() {
@@ -92,4 +102,33 @@ public class Controlador {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 		catalogoCanciones = CatalogoCancion.getUnicaInstancia();
 	}
+	
+	private void iniciarReproductor() {
+		reproductorActual = new Player();
+	}
+	
+	private void setCancion(Cancion cancion) {
+		cancionActual = cancion;
+	}
+	
+	private void playSong() {
+		reproductorActual.play("play",cancionActual);
+	}
+	
+	private void stopSong() {
+		reproductorActual.play("stop",cancionActual);
+	}
+	
+	private void nextSong() {
+		//TODO: implement how to get next song
+	}
+	
+	private void previousSong() {
+		//TODO: implement how to get previous song
+	}
+	
+	private void pauseSong() {
+		reproductorActual.play("stop",cancionActual);
+	}
+	
 }
