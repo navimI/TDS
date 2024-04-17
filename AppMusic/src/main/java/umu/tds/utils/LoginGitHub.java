@@ -1,4 +1,4 @@
-package umu.tds.github;
+package umu.tds.utils;
 
 import java.io.IOException;
 
@@ -15,8 +15,6 @@ public enum LoginGitHub {
 
 			if (github.isCredentialValid()) {
 				GHUser ghuser = github.getMyself();
-				System.out.println("Validado! " + ghuser.getLogin());
-				System.out.println("¿Login válido?: true");
 
 				return (ghuser.getLogin().equals(usuario) && github.isCredentialValid());
 			}

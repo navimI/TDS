@@ -25,7 +25,7 @@ import javax.swing.JCheckBox;
 
 
 import umu.tds.controlador.Controlador;
-import umu.tds.github.LoginGitHub;
+import umu.tds.utils.LoginGitHub;
 
 public class LoginPanel {
 	
@@ -133,8 +133,6 @@ public class LoginPanel {
 					frmAppmusic.setVisible(false);
 				} else
 					JOptionPane.showMessageDialog(frmAppmusic, "Nombre de usuario o contraseña no valido","Error",JOptionPane.ERROR_MESSAGE);
-				
-				 
 			}
 		});
 		botonPanel.add(btnLogin);
@@ -151,10 +149,10 @@ public class LoginPanel {
 		botonPanel.add(btnRegistro);
 		
 		// Manejador del boton de login con GitHub
-		//TODO: Cambiar funcionalidad por el login con GitHub
 		JButton btnGH = new JButton("GitHub Login");
 		btnGH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// Abrir selector de ficheros y cargar fichero con Key
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.addChoosableFileFilter(new FileFilter() {
 					public String getDescription() {
@@ -176,18 +174,25 @@ public class LoginPanel {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-
+					//Comprueba si el fichero es valido la clave de Gh o no
 					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
-						JOptionPane.showMessageDialog(frmAppmusic, "Login Correcto", "Login",
-								JOptionPane.INFORMATION_MESSAGE);
-						VentanaMain main = new VentanaMain();
-						main.setVisible(true);
-						frmAppmusic.setVisible(false);
+						boolean registred = Controlador.getUnicaInstancia().esUsuarioRegistrado(userField.getText());
+						if(registred) {
+							VentanaMain main = new VentanaMain();
+							main.setVisible(true);
+							frmAppmusic.setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(frmAppmusic, "Usuario no registrado", "Login",
+									JOptionPane.INFORMATION_MESSAGE);
+							CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+							card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
+						}
 						
 					} else {
-						JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido", "Login", JOptionPane.WARNING_MESSAGE);
-						CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-						card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
+						
+						JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido, clave de GH no corresponde a usuario", "Login", JOptionPane.WARNING_MESSAGE);
+						
+						
 					}
 				}
 			}
