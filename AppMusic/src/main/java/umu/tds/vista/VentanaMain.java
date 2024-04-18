@@ -431,7 +431,6 @@ public class VentanaMain extends JFrame {
 	  //PANEL PARA LOS BOTONES DE REPRODUCCIÓN:
         //TODO: hacer que se comporten como un bloque fijo 	    
 	    JPanel panelBotonesReproduccion = new JPanel();
-        panelBotonesReproduccion.setLayout(new BoxLayout(panelBotonesReproduccion, BoxLayout.X_AXIS));
 
         //Los añadirlos al panel
         //botón anterior:
@@ -439,6 +438,7 @@ public class VentanaMain extends JFrame {
         ImageIcon anterior = new ImageIcon(getClass().getResource("/vista/imagenes/anterior.jpg"));
         Image anteRedimensionada = anterior.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon anteRedimensionado = new ImageIcon(anteRedimensionada);
+        panelBotonesReproduccion.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         btnAnterior.setIcon(anteRedimensionado);
         btnAnterior.setBorderPainted(false);
         btnAnterior.setContentAreaFilled(false);
@@ -492,7 +492,7 @@ public class VentanaMain extends JFrame {
 
 
      //Agregar el panel de botones a la parte inferior de la ventana 
-        add(panelBotonesReproduccion, BorderLayout.SOUTH);
+        getContentPane().add(panelBotonesReproduccion, BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
         
@@ -533,11 +533,11 @@ public class VentanaMain extends JFrame {
 		});
 
 		//Añadir los botones al panelBuscar:
-		panelBuscar.add(btnReproducir);
-		panelBuscar.add(btnDetener);
-		panelBuscar.add(btnPausar);
-		panelBuscar.add(btnSiguiente);
-		panelBuscar.add(btnAnterior);
+//		panelBuscar.add(btnReproducir);
+//		panelBuscar.add(btnDetener);
+//		panelBuscar.add(btnPausar);
+//		panelBuscar.add(btnSiguiente);
+//		panelBuscar.add(btnAnterior);
 
 		
 		

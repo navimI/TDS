@@ -8,19 +8,19 @@ public class PlayList {
 	//Properties	
 	private int id;
 	String nombre;
-	List<Cancion> PlayList;
+	List<Cancion> playList;
 	
 	//Constructor
 	public PlayList(String nombre) {
 		id = 0;
 		this.nombre = nombre;
-		this.PlayList = new LinkedList<Cancion>();
+		this.playList = new LinkedList<Cancion>();
 	}
 	
 	public PlayList(String nombre, List<Cancion> canciones) {
 		id = 0;
 		this.nombre = nombre;
-		this.PlayList = new LinkedList<Cancion>(canciones);
+		this.playList = new LinkedList<Cancion>(canciones);
 	}
 	
 	//Methods
@@ -42,30 +42,40 @@ public class PlayList {
 	}
 	
 	public int getNumCanciones() {
-		return PlayList.size();
+		return playList.size();
 	}
 	
 	public List<Cancion> getPlayList(){
-		return new LinkedList<Cancion>(PlayList); 
+		return new LinkedList<Cancion>(playList); 
 	}
 	
 	public void addCanciones(Cancion cancion) {
-		PlayList.add(cancion);
+		playList.add(cancion);
 	}
 	
 	public void addCanciones(List<Cancion> canciones) {
-		PlayList.addAll(canciones);
+		playList.addAll(canciones);
 	}
 	
 	public void removeCanciones(Cancion cancion) {
-		PlayList.remove(cancion);
+		playList.remove(cancion);
 	 
 	}
 
 	@Override
 	public String toString() {
 		return "PlayList [id=" + id + ", nombre=" + nombre + ", getNumCanciones()="
-				+ getNumCanciones() + ", PlayList=" + PlayList  + "]"; 
+				+ getNumCanciones() + ", PlayList=" + playList  + "]"; 
+	}
+
+	public Cancion getSiguienteCancion(Cancion cancion) {
+		return null;
+
+	}
+
+	public Cancion getAnteriorCancion(Cancion cancion) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/*TODO implementar reproducir lista

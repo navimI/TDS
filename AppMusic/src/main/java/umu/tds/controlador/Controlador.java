@@ -38,6 +38,8 @@ public class Controlador {
 
 	private Controlador() {
 		usuarioActual = null;
+		cancionActual = null;
+		playListActual = null;
 		iniciarAdaptadores();
 		inicializarCatalogos();
 		iniciarReproductor();
@@ -120,11 +122,15 @@ public class Controlador {
 	}
 	
 	private void nextSong() {
-		//TODO: implement how to get next song
+		Cancion siguienteCancion = playListActual.getSiguienteCancion(cancionActual);
+		cancionActual = siguienteCancion;
+		reproductorActual.play("play",cancionActual);
 	}
 	
 	private void previousSong() {
-		//TODO: implement how to get previous song
+		Cancion anteriorCancion = playListActual.getAnteriorCancion(cancionActual);
+		cancionActual = anteriorCancion;
+		reproductorActual.play("play",cancionActual);
 	}
 	
 	private void pauseSong() {
