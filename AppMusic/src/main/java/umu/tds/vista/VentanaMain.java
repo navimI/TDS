@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.eclipse.persistence.internal.oxm.schema.model.List;
 
+import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Usuario;
@@ -212,7 +213,9 @@ public class VentanaMain extends JFrame {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		panelCentro.add(panel, BorderLayout.NORTH);
 		
-		JLabel lblBienvenido = new JLabel("Bienvenido, ");
+		// Cambiar comentario entre las 2 siguientes lineas dependiendo de si se va a ejecutar el todo el lanzador o solo la ventana main
+		//JLabel lblBienvenido = new JLabel("Bienvenido, "+Controlador.getUnicaInstancia().getUsuarioActualField("user"));
+		JLabel lblBienvenido = new JLabel("Bienvenido, [usuario]");
 		panel.add(lblBienvenido);
 		
 		JButton btnPremium = new JButton("Premium");

@@ -57,9 +57,13 @@ public class PlayList {
 		playList.addAll(canciones);
 	}
 	
-	public void removeCanciones(Cancion cancion) {
+	public void removeCancion(Cancion cancion) {
 		playList.remove(cancion);
 	 
+	}
+
+	public void removeAllCanciones() {
+		playList.clear();
 	}
 
 	@Override
@@ -69,17 +73,29 @@ public class PlayList {
 	}
 
 	public Cancion getSiguienteCancion(Cancion cancion) {
-		return null;
-
+		boolean found = false;
+    	for (Cancion c : playList) {
+			if (found) {
+				return c;
+			}
+			if (c.getID() == cancion.getID()) {
+				found = true;
+			}
+    	}
+		return found ? playList.get(0) : null;
 	}
 
 	public Cancion getAnteriorCancion(Cancion cancion) {
-		// TODO Auto-generated method stub
+		Cancion preCancion = playList.get(playList.size() - 1);
+		for (Cancion c : playList) {
+			if (c.getID() == cancion.getID()) {
+				return preCancion;
+			}
+			preCancion = c;
+		}
 		return null;
 	}
+
 	
-	/*TODO implementar reproducir lista
-	 * public void reproducirLista(){
-	 * listaCanciones.stream().forEach(l -> cancion.reproducirCancion())*/
 	
 }

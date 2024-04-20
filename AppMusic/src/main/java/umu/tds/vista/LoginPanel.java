@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.JCheckBox;
 
 
 import umu.tds.controlador.Controlador;
@@ -116,7 +115,6 @@ public class LoginPanel {
 		panelFormularioLogin.add(passwordValue, gbc_passwordValue);
 	}
 	
-	//TODO: cambiar login por comprobación de login
 	private void crearPanelBoton(JFrame frmAppmusic) {
 		JPanel botonPanel = new JPanel();
 		panelLogin.add(botonPanel, BorderLayout.SOUTH);
@@ -127,7 +125,8 @@ public class LoginPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean login = Controlador.getUnicaInstancia().loginUsuario(userField.getText(), 
 						new String(passwordValue.getPassword()));
-				if(login) {					
+				if(login) {
+					JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
 					VentanaMain main = new VentanaMain();
 					main.setVisible(true);
 					frmAppmusic.setVisible(false);
@@ -178,12 +177,15 @@ public class LoginPanel {
 					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
 						boolean registred = Controlador.getUnicaInstancia().esUsuarioRegistrado(userField.getText());
 						if(registred) {
+							Controlador.getUnicaInstancia().setUsuarioActual(userField.getText());
+							JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
 							VentanaMain main = new VentanaMain();
 							main.setVisible(true);
 							frmAppmusic.setVisible(false);
 						} else {
 							JOptionPane.showMessageDialog(frmAppmusic, "Usuario no registrado", "Login",
 									JOptionPane.INFORMATION_MESSAGE);
+							Controlador.getUnicaInstancia().setUsuarioTemporal(userField.getText());
 							CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
 							card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
 						}

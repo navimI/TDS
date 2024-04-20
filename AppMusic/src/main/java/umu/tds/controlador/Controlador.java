@@ -32,14 +32,17 @@ public class Controlador {
 	private Cancion cancionActual;
 	
 	private PlayList playListActual;
+	private PlayList playListTemporal;
 	
-
-
+	private String usuarioTemporal;
+	
+	
 
 	private Controlador() {
 		usuarioActual = null;
 		cancionActual = null;
 		playListActual = null;
+		playListTemporal = new PlayList("temp");
 		iniciarAdaptadores();
 		inicializarCatalogos();
 		iniciarReproductor();
@@ -54,14 +57,53 @@ public class Controlador {
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
+	
+	public String getUsuarioActualField(String field) {
+		String value = null;
+		switch (field) {
+			case "nombre":
+				value = usuarioActual.getNombre();
+				break;
+			case "email":
+				value = usuarioActual.getEmail();
+				break;
+			case "user":
+				value = usuarioActual.getUser();
+				break;
+			case "fechaNacim":
+				value = usuarioActual.getFechaNacim();
+				break;
+			default:
+				value = null;
+				break;
+		}
+		return value;
+	}
 
 	public boolean esUsuarioRegistrado(String user) {
 		return catalogoUsuarios.getUsuario(user) != null;
 	}
-
-	public boolean loginUsuario(String user, String password) {
-		return catalogoUsuarios.login(user, password);
+	
+	public void setUsuarioActual(String user) {
+		usuarioActual = catalogoUsuarios.getUsuario(user);
 	}
+	
+	public void setUsuarioTemporal(String user) {
+		usuarioTemporal = user;
+	}
+
+	public String getUsuarioTemporal() {
+		return usuarioTemporal;
+	}
+	
+	public boolean loginUsuario(String user, String password) {
+		if (catalogoUsuarios.login(user, password)){
+			setUsuarioActual(user);
+			return true;
+		} else return false;
+	}
+	
+	
 
 	//TODO: mejora decir que error a la hora de registrar se tiene
 	public boolean registrarUsuario(String nombre, String email, String user, String password,
@@ -74,6 +116,8 @@ public class Controlador {
 		adaptadorUsuario.registrarUsuario(usuario);
 
 		catalogoUsuarios.addUsuario(usuario);
+		
+		usuarioActual = usuario;
 		return true;
 	}
 
@@ -113,6 +157,10 @@ public class Controlador {
 		cancionActual = cancion;
 	}
 	
+	private void setPlayList(PlayList playList) {
+		playListActual = playList;
+	}
+	
 	private void playSong() {
 		reproductorActual.play("play",cancionActual);
 	}
@@ -122,19 +170,36 @@ public class Controlador {
 	}
 	
 	private void nextSong() {
-		Cancion siguienteCancion = playListActual.getSiguienteCancion(cancionActual);
-		cancionActual = siguienteCancion;
+		cancionActual = playListActual.getSiguienteCancion(cancionActual);
 		reproductorActual.play("play",cancionActual);
 	}
 	
 	private void previousSong() {
-		Cancion anteriorCancion = playListActual.getAnteriorCancion(cancionActual);
-		cancionActual = anteriorCancion;
+		cancionActual = playListActual.getAnteriorCancion(cancionActual);
 		reproductorActual.play("play",cancionActual);
 	}
 	
 	private void pauseSong() {
 		reproductorActual.play("stop",cancionActual);
+	}
+	
+	private void addCancionPlayList(Cancion cancion) {
+		playListTemporal.addCanciones(cancion);
+	}
+
+	private void removeCancionPlayList(Cancion cancion) {
+		playListTemporal.removeCancion(cancion);
+	}
+
+	private boolean guardarPlayList(String nombre) {
+		if (playListTemporal.getNumCanciones() == 0)
+			return false;
+		PlayList aux = new PlayList(nombre, playListTemporal.getPlayList());
+		adaptadorPlayList.registrarPlayList(aux);
+		usuarioActual.addPlayListUsuarios(aux);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		playListTemporal.removeAllCanciones();
+		return true;
 	}
 	
 }

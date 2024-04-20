@@ -297,7 +297,6 @@ public class RegistroPanel   {
 			status = status + "La fecha no puede ser posterior a la fecha actual.\n";
 		}
 		return status.equals("") ? "OK" : status;
-		//TODO: falta resetear el color del texto cuando se acceda al campo
 	}
 	
 	private void resetFields() {

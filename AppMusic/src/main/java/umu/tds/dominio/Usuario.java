@@ -92,12 +92,12 @@ public class Usuario {
 		return new LinkedList<PlayList>(playListUsuario);
 	}
 	
-	public boolean addPlayListUsuarios(List<PlayList> listaV) {
-		return this.playListUsuario.addAll(listaV);
+	public boolean addPlayListUsuarios(List<PlayList> listaC) {
+		return this.playListUsuario.addAll(listaC);
 	}
 	
-	public boolean addPlayListUsuarios(PlayList listaV) {
-		return this.playListUsuario.add(listaV);
+	public boolean addPlayListUsuarios(PlayList listaC) {
+		return this.playListUsuario.add(listaC);
 	}
 
 	@Override
