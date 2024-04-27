@@ -65,6 +65,10 @@ public class PlayList {
 	public void removeAllCanciones() {
 		playList.clear();
 	}
+	
+	public boolean isEmpty() {
+		return playList.size() == 0;
+	}
 
 	@Override
 	public String toString() {

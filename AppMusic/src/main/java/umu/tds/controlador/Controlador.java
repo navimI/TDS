@@ -25,13 +25,13 @@ public class Controlador {
 	private CatalogoCancion catalogoCanciones;
 	
 	private Player reproductorActual;
-
 	
 	private Usuario usuarioActual;
 	
 	private Cancion cancionActual;
 	
 	private PlayList playListActual;
+	
 	private PlayList playListTemporal;
 	
 	private String usuarioTemporal;
@@ -154,6 +154,8 @@ public class Controlador {
 	}
 	
 	private void setCancion(Cancion cancion) {
+		cancion.addReproduccion();
+		adaptadorCancion.modificarCancion(cancion);
 		cancionActual = cancion;
 	}
 	
@@ -161,38 +163,71 @@ public class Controlador {
 		playListActual = playList;
 	}
 	
-	private void playSong() {
-		reproductorActual.play("play",cancionActual);
+	private boolean playSong() {
+		if(cancionActual != null) {
+			reproductorActual.play("play",cancionActual);
+			return true;
+		}
+		return false;
 	}
 	
-	private void stopSong() {
-		reproductorActual.play("stop",cancionActual);
+	private boolean stopSong() {
+		if(cancionActual != null) {
+			reproductorActual.play("stop",cancionActual);
+			return true;
+		}
+		return false;
 	}
 	
-	private void nextSong() {
-		cancionActual = playListActual.getSiguienteCancion(cancionActual);
-		reproductorActual.play("play",cancionActual);
+	private boolean nextSong() {
+		if(playListActual != null || playListActual.isEmpty()) {
+			cancionActual = playListActual.getSiguienteCancion(cancionActual);
+		}
+		
+		if(cancionActual != null) {
+			reproductorActual.play("play",cancionActual);
+			return true;
+		}
+		return false;
 	}
 	
-	private void previousSong() {
-		cancionActual = playListActual.getAnteriorCancion(cancionActual);
-		reproductorActual.play("play",cancionActual);
+	private boolean previousSong() {
+		if(playListActual != null || playListActual.isEmpty()) {
+			cancionActual = playListActual.getAnteriorCancion(cancionActual);
+		}
+		if(cancionActual != null) {
+			reproductorActual.play("play",cancionActual);
+			return true;
+		}
+		return false;
 	}
 	
-	private void pauseSong() {
-		reproductorActual.play("stop",cancionActual);
+	private boolean pauseSong() {
+		if(cancionActual != null) {
+			reproductorActual.play("pause",cancionActual);
+			return true;
+		}
+		return false;
 	}
 	
-	private void addCancionPlayList(Cancion cancion) {
-		playListTemporal.addCanciones(cancion);
+	private boolean addCancionPlayList(Cancion cancion) {
+		if(cancion != null) {
+			playListTemporal.addCanciones(cancion);
+			return true;
+		}
+		return false;
 	}
 
-	private void removeCancionPlayList(Cancion cancion) {
-		playListTemporal.removeCancion(cancion);
+	private boolean removeCancionPlayList(Cancion cancion) {
+		if(cancion != null) {
+			playListTemporal.removeCancion(cancion);
+			return true;
+		}
+		return false;
 	}
 
 	private boolean guardarPlayList(String nombre) {
-		if (playListTemporal.getNumCanciones() == 0)
+		if (playListTemporal.isEmpty())
 			return false;
 		PlayList aux = new PlayList(nombre, playListTemporal.getPlayList());
 		adaptadorPlayList.registrarPlayList(aux);
