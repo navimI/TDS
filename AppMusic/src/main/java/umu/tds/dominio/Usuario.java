@@ -100,6 +100,7 @@ public class Usuario {
 		return this.playListUsuario.add(listaC);
 	}
 
+
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre  + ", email=" + email + ", user="

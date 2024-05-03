@@ -13,38 +13,32 @@ import javax.swing.table.DefaultTableModel;
 
 import org.eclipse.persistence.internal.oxm.schema.model.List;
 
-import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Usuario;
 
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.Box;
 /*<<<<<<< HEAD
 =======
 
 >>>>>>> branch 'main' of https://github.com/navimI/TDS.git
 */
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -645,30 +639,54 @@ public class VentanaMain extends JFrame {
 		//TODO
 		
 		JPanel panelRecientes = new JPanel();
-		panelCardLayout.add(panelRecientes, "panelRecientes");
+		//panelCardLayout.add(panelRecientes, "panelRecientes");
 		panelRecientes.setLayout(new BorderLayout());
 		
-		/*
-		// Crear una tabla para mostrar las últimas canciones reproducidas
-		DefaultTableModel modeloTablaRecientes = new DefaultTableModel();
-		modeloTablaRecientes.addColumn("Título");
-		modeloTablaRecientes.addColumn("Intérprete");
-		modeloTablaRecientes.addColumn("Estilo");
-		modeloTablaRecientes.addColumn("Favoritas");
-		JTable tablaRecientes = new JTable(modeloTablaRecientes);
-		
-		// Agregar la tabla a un JScrollPane para permitir el desplazamiento
-		JScrollPane scrollPaneRecientes = new JScrollPane(tablaRecientes);
-		Usuario.actualizarRecientes.add(scrollPaneRecientes, BorderLayout.CENTER);
-		
-		List<Cancion> ultimasCanciones = this.usuario.getPlayListUsuario();
-		this.usuario.actualizarRecientes(ultimasCanciones);
-		
-		*/
 		
 		
-		
-		
+	    //List<PlayList> ultimasCanciones = this.getPlayListUsuario();
+	    LinkedList<Cancion> ultimasCanciones = (LinkedList<Cancion>) playlist.getPlayList();
+
+	    
+	    JScrollPane scrollPaneRecientes;
+
+	    if (ultimasCanciones.isEmpty()) {
+	        System.out.println("La lista de canciones recientes está vacía.");
+	        // Crear una tabla vacía
+	        DefaultTableModel modeloTablaRecientes = new DefaultTableModel();
+	        modeloTablaRecientes.addColumn("Título");
+	        modeloTablaRecientes.addColumn("Intérprete");
+	        modeloTablaRecientes.addColumn("Estilo");
+	        modeloTablaRecientes.addColumn("Favoritas");
+
+	        JTable tablaRecientes = new JTable(modeloTablaRecientes);
+	        scrollPaneRecientes = new JScrollPane(tablaRecientes);
+	        panelRecientes.add(scrollPaneRecientes, BorderLayout.CENTER);
+	    } else {
+	        // Crear una tabla para mostrar las últimas canciones reproducidas
+	        DefaultTableModel modeloTablaRecientes = new DefaultTableModel();
+	        modeloTablaRecientes.addColumn("Título");
+	        modeloTablaRecientes.addColumn("Intérprete");
+	        modeloTablaRecientes.addColumn("Estilo");
+	        modeloTablaRecientes.addColumn("Favoritas");
+
+	        for (Cancion cancion : ultimasCanciones) {
+	            modeloTablaRecientes.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+	        }
+
+	        JTable tablaRecientes = new JTable(modeloTablaRecientes);
+	        scrollPaneRecientes = new JScrollPane(tablaRecientes);
+	        panelRecientes.add(scrollPaneRecientes, BorderLayout.CENTER);
+	    }
+
+	    // Mover esta línea fuera del bloque if-else
+	    panelCardLayout.add(panelRecientes, "panelRecientes");
+	    CardLayout cardLayout = (CardLayout) panelCardLayout.getLayout();
+	    cardLayout.show(panelCardLayout, "panelRecientes");
+
+	    // Revalidar el panel para actualizar la interfaz de usuario
+	    panelRecientes.revalidate();
+	    
 		
 		JLabel lblpanelRecientes = new JLabel("PanelRecientes");
 		panelRecientes.add(lblpanelRecientes);
@@ -707,9 +725,6 @@ public class VentanaMain extends JFrame {
 
         // Agregar el JScrollPane al panel
         panelPlaylists.add(scrollPaneTablaCanciones, BorderLayout.CENTER);
-        
-        
-		
 		
 
 	}
