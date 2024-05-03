@@ -170,7 +170,14 @@ public class Controlador {
 		}
 		return false;
 	}
-	
+	//runneable play:
+	public Runnable obtenerPlaySongRunnable() {
+	    return new Runnable() {
+	        public void run() {
+	            playSong();
+	        }
+	    };
+	}
 	private boolean stopSong() {
 		if(cancionActual != null) {
 			reproductorActual.play("stop",cancionActual);
@@ -179,16 +186,33 @@ public class Controlador {
 		return false;
 	}
 	
+	//runneable stop:
+	public Runnable obtenerStopSongRunnable() {
+	    return new Runnable() {
+	        public void run() {
+	            stopSong();
+	        }
+	    };
+	}
+	
 	private boolean nextSong() {
 		if(playListActual != null || playListActual.isEmpty()) {
 			cancionActual = playListActual.getSiguienteCancion(cancionActual);
 		}
 		
 		if(cancionActual != null) {
-			reproductorActual.play("play",cancionActual);
+			reproductorActual.play("next",cancionActual);
 			return true;
 		}
 		return false;
+	}
+	//runneable siguiente canción:
+	public Runnable obtenerNextSongRunnable() {
+	    return new Runnable() {
+	        public void run() {
+	            nextSong();
+	        }
+	    };
 	}
 	
 	private boolean previousSong() {
@@ -196,11 +220,22 @@ public class Controlador {
 			cancionActual = playListActual.getAnteriorCancion(cancionActual);
 		}
 		if(cancionActual != null) {
-			reproductorActual.play("play",cancionActual);
+			reproductorActual.play("previous",cancionActual);
 			return true;
 		}
 		return false;
 	}
+	
+	//runneable canción anterior:
+	public Runnable obtenerPreviousSongRunnable() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                previousSong();
+            }
+        };
+    }
+	
 	
 	private boolean pauseSong() {
 		if(cancionActual != null) {
@@ -208,6 +243,14 @@ public class Controlador {
 			return true;
 		}
 		return false;
+	}
+	//runneable pause :
+	public Runnable obtenerPauseSongRunnable() {
+	    return new Runnable() {
+	        public void run() {
+	            pauseSong();
+	        }
+	    };
 	}
 	
 	private boolean addCancionPlayList(Cancion cancion) {

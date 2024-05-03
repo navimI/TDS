@@ -13,6 +13,9 @@ import javax.swing.table.DefaultTableModel;
 
 import org.eclipse.persistence.internal.oxm.schema.model.List;
 
+import umu.tds.controlador.Controlador;
+import umu.tds.dao.DAOException;
+import umu.tds.dao.FactoriaDAO;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Usuario;
@@ -52,6 +55,7 @@ public class VentanaMain extends JFrame {
 	/**
 	 * 
 	 */
+	private Controlador controlador;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable tablaResultados;
@@ -498,36 +502,46 @@ public class VentanaMain extends JFrame {
     
 
             
-            //TODO: añadir ActionListener 
+        
+        
+            
         btnAnterior.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // Lógica para el botón Anterior
-                }
-            });
-		
-		btnDetener.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // TODO Lógica para detener la reproducción
-		    }
-		});
+            public void actionPerformed(ActionEvent e) {
+                // Obtiene el objeto que puede invocar previousSong() y lo ejecuta
+                controlador.obtenerPreviousSongRunnable().run();
+            }
+        });
 
-		btnPausar.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // TODO Lógica para pausar la reproducción
-		    }
-		});
+        
+        btnDetener.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Obtiene el objeto que puede invocar stopSong() y lo ejecuta
+                controlador.obtenerStopSongRunnable().run();
+            }
+        });
 
-		btnSiguiente.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // TODO Lógica para reproducir la siguiente canción
-		    }
-		});
+        btnPausar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Obtiene el objeto que puede invocar pauseSong() y lo ejecuta
+                controlador.obtenerPauseSongRunnable().run();
+            }
+        });
 
-		btnAnterior.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // TODO Lógica para reproducir la canción anterior
-		    }
-		});
+        btnSiguiente.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Obtiene el objeto que puede invocar nextSong() y lo ejecuta
+                controlador.obtenerNextSongRunnable().run();
+            }
+        });
+
+        btnReproducir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Obtiene el objeto que puede invocar playSong() y lo ejecuta
+                controlador.obtenerPlaySongRunnable().run();
+            }
+        });
+
+
 
 		//Añadir los botones al panelBuscar:
 //		panelBuscar.add(btnReproducir);
