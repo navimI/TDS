@@ -10,8 +10,8 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
-import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Cancion;
+import umu.tds.dominio.PlayList;
 
 public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 	// Declaración de constantes

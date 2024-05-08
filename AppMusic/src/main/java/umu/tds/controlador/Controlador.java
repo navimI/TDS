@@ -1,16 +1,21 @@
 package umu.tds.controlador;
 
-import umu.tds.dao.IAdaptadorUsuarioDAO;
-import umu.tds.dao.IAdaptadorCancionDAO;
+import java.util.ArrayList;
+import java.util.List;
+
+//import org.eclipse.persistence.internal.oxm.schema.model.List;
+
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
+import umu.tds.dao.IAdaptadorCancionDAO;
 import umu.tds.dao.IAdaptadorPlayListDAO;
-import umu.tds.dominio.Usuario;
-import umu.tds.utils.Player;
-import umu.tds.dominio.CatalogoUsuarios;
-import umu.tds.dominio.PlayList;
+import umu.tds.dao.IAdaptadorUsuarioDAO;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.CatalogoCancion;
+import umu.tds.dominio.CatalogoUsuarios;
+import umu.tds.dominio.PlayList;
+import umu.tds.dominio.Usuario;
+import umu.tds.utils.Player;
 
 
 public class Controlador {
@@ -57,6 +62,9 @@ public class Controlador {
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
+	
+	//TODO get para las playlists
+	//crear canciones de prueba con el formato y jugar con eso, con URL a la carpeta de recursos de canciones
 	
 	public String getUsuarioActualField(String field) {
 		String value = null;
@@ -279,5 +287,48 @@ public class Controlador {
 		playListTemporal.removeAllCanciones();
 		return true;
 	}
+
+	public static List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
+	    List<Cancion> resultados = new ArrayList<>();
+
+	    try {
+	        // Obtener todas las canciones del catálogo
+	        List<Cancion> canciones = CatalogoCancion.getUnicaInstancia().getCanciones();
+
+	        // Iterar sobre todas las canciones para realizar la búsqueda
+	        for (Cancion cancion : canciones) {
+	            // Comprobar si la canción coincide con los criterios de búsqueda
+	            if ((interprete.isEmpty() || cancion.getListaInterpretes().contains(interprete)) &&
+	                (titulo.isEmpty() || cancion.getTitulo().equalsIgnoreCase(titulo)) &&
+	                (estilo.isEmpty() || cancion.getEstilo().equalsIgnoreCase(estilo)) &&
+	                (!favoritas || cancion.esFavorita())) {
+	                // Agregar la canción a los resultados si coincide con los criterios de búsqueda
+	                resultados.add(cancion);
+	            }
+	        }
+
+	        // Realizar acciones con los resultados (mostrar en la interfaz, etc.)
+	        // Por ahora, solo imprimimos los resultados por consola
+	        if (resultados.isEmpty()) {
+	            System.out.println("No se encontraron canciones que coincidan con los criterios de búsqueda.");
+	        } else {
+	            System.out.println("Se encontraron las siguientes canciones:");
+	            for (Cancion cancion : resultados) {
+	                System.out.println(cancion);
+	            }
+	        }
+	    } catch (DAOException e) {
+	        // Manejar la excepción específica DAOException
+	        System.err.println("Error al obtener la lista de canciones del catálogo: " + e.getMessage());
+	        e.printStackTrace();
+	    } catch (Exception ex) {
+	        // Manejar cualquier otra excepción no controlada
+	        System.err.println("Error no controlado: " + ex.getMessage());
+	        ex.printStackTrace();
+	    }
+	    return resultados;
+	}
+
+
 	
 }

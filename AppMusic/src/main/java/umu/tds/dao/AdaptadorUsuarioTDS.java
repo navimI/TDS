@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import beans.Entidad;
+import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Usuario;
-import beans.Entidad;
-import beans.Propiedad;
 
 /**
  * 

@@ -2,10 +2,10 @@ package umu.tds.vista;
 
 
 
-import javax.swing.JFrame;
 import java.awt.CardLayout;
-
 import java.awt.Dimension;
+
+import javax.swing.JFrame;
 
 
 public class VentanaLoginRegistro {

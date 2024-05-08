@@ -1,26 +1,21 @@
 package umu.tds.vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.swing.SwingConstants;
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
-
-import javax.swing.JTable;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Panel;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class VentanaGestionPlayList {
 

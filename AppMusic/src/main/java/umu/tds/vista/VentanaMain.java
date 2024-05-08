@@ -1,32 +1,23 @@
 package umu.tds.vista;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-
-import org.eclipse.persistence.internal.oxm.schema.model.List;
-
-import umu.tds.controlador.Controlador;
-import umu.tds.dao.DAOException;
-import umu.tds.dao.FactoriaDAO;
-import umu.tds.dominio.Cancion;
-import umu.tds.dominio.PlayList;
-import umu.tds.dominio.Usuario;
-
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 
 /*<<<<<<< HEAD
 =======
@@ -36,18 +27,22 @@ import java.awt.Insets;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import java.awt.Font;
-import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.awt.event.ActionEvent;
-import java.awt.Dimension;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import umu.tds.controlador.Controlador;
+import umu.tds.dominio.Cancion;
+import umu.tds.dominio.PlayList;
 
 
 public class VentanaMain extends JFrame {
@@ -80,7 +75,22 @@ public class VentanaMain extends JFrame {
 		});
 	}
 	
-	
+	String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
+	public void realizarBusquedaDesdeControlador(String interprete, String titulo, String estilo, boolean favoritas, List<Cancion> resultados) {
+        // Convertir los resultados a un arreglo bidimensional de objetos
+        Object[][] datos = new Object[resultados.size()][4];
+        for (int i = 0; i < resultados.size(); i++) {
+            Cancion cancion = resultados.get(i);
+            datos[i][0] = cancion.getTitulo();
+            datos[i][1] = String.join(",", cancion.getListaInterpretes());
+            datos[i][2] = cancion.getEstilo();
+            datos[i][3] = cancion.esFavorita();
+        }
+
+        // Actualizar la tabla con los nuevos datos
+        DefaultTableModel model = new DefaultTableModel(datos, columnas);
+        tablaResultados.setModel(model);
+    }
 	
 	/**
 	 * Create the frame.
@@ -90,6 +100,7 @@ public class VentanaMain extends JFrame {
 	
 	
 	public VentanaMain() {
+		
 
 		playlist = new PlayList("NombreDeTuPlaylist");
 		
@@ -230,10 +241,20 @@ public class VentanaMain extends JFrame {
 		panelCardLayout.add(panelBuscar, "panelBuscar");
 		
 		
-		///////////
 		
+		// Crear una tabla vacía para mostrar los resultados
+		tablaResultados = new JTable();
+		// Configurar la tabla 
+		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
+		tablaResultados.setFillsViewportHeight(true);
 
-	    // Crear una tabla para mostrar los resultados (mover esta sección antes de su uso)
+		// Añadir la tabla a un JScrollPane para permitir el desplazamiento
+		JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
+		panelBuscar.add(scrollPane1);
+		String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
+		/*
+
+	    // Crear una tabla para mostrar los resultados COMO EJEMPLO (mover esta sección antes de su uso)
 	    String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
 	    Object[][] datos = {{"Canción 1", "Intérprete 1", "Pop", false},
 	                        {"Canción 2", "Intérprete 2", "Rock", true},
@@ -254,12 +275,12 @@ public class VentanaMain extends JFrame {
 	            if (e.getClickCount() == 2) {
 	                // Obtener la fila seleccionada
 	                int filaSeleccionada = tablaResultados.getSelectedRow();
-	                // TODO Lógica para reproducir la canción de la fila seleccionada
+	                //aqui Lógica para reproducir la canción de la fila seleccionada
 	                System.out.println("Reproduciendo canción de la fila: " + filaSeleccionada);
 	            }
 	        }
 	    });
-	    ///////////////
+	    */
 		
 		
 
@@ -296,6 +317,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(checkBoxFavoritas);
 
 		//Botón para realizar la búsqueda
+		/*
 		JButton btnRealizarBusqueda = new JButton("Buscar");
 		btnRealizarBusqueda.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -313,121 +335,30 @@ public class VentanaMain extends JFrame {
 		        System.out.println("Favoritas: " + favoritas);
 		    }
 		});
+		*/
+		JButton btnRealizarBusqueda = new JButton("Buscar");
+		btnRealizarBusqueda.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener los valores de los filtros
+		        String interprete = textFieldInterprete.getText();
+		        String titulo = textFieldTitulo.getText();
+		        String estilo = (String) comboBoxEstilo.getSelectedItem();
+		        boolean favoritas = checkBoxFavoritas.isSelected();
+
+		        // Llamar al método estático del Controlador para realizar la búsqueda
+		        Controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
+		    }
+		});
+
 		panelBuscar.add(btnRealizarBusqueda);
 		
 		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
 	    tablaResultados.setFillsViewportHeight(true);
 	    JScrollPane scrollPane = new JScrollPane(tablaResultados);
 	    panelBuscar.add(scrollPane);
-	    
-	    /*
-	 // Crear una tabla para mostrar los resultados
-	    String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
-	    Object[][] datos = {{"Canción 1", "Intérprete 1", "Pop", false},
-	                        {"Canción 2", "Intérprete 2", "Rock", true},
-	                        {"Canción 3", "Intérprete 3", "Jazz", false}};
-	 // Crear una tabla para mostrar los resultados
-	    tablaResultados = new JTable(datos, columnas);
-
-	    // Configurar la tabla 
-	    tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
-	    tablaResultados.setFillsViewportHeight(true);
-
-	    // Añadir la tabla a un JScrollPane para permitir el desplazamiento
-	    JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
-	    panelBuscar.add(scrollPane1);
-
-	    // Añadir acción de doble clic a la tabla para reproducir la canción seleccionada
-	    tablaResultados.addMouseListener(new MouseAdapter() {
-	        public void mouseClicked(MouseEvent e) {
-	            if (e.getClickCount() == 2) {
-	                // Obtener la fila seleccionada
-	                int filaSeleccionada = tablaResultados.getSelectedRow();
-	                // TODO Lógica para reproducir la canción de la fila seleccionada
-	                System.out.println("Reproduciendo canción de la fila: " + filaSeleccionada);
-	            }
-	        }
-	    });
-	    
-	 // Añadir acción de doble clic a la tabla para reproducir la canción seleccionada
-	    tablaResultados.addMouseListener(new MouseAdapter() {
-	        public void mouseClicked(MouseEvent e) {
-	            if (e.getClickCount() == 2) {
-	                // Obtener la fila seleccionada
-	                int filaSeleccionada = tablaResultados.getSelectedRow();
-	                // TODO Lógica para reproducir la canción de la fila seleccionada
-	                System.out.println("Reproduciendo canción de la fila: " + filaSeleccionada);
-	            }
-	        }
-	    }); 
 	
-	    */
-	    /*
-		//Botón para añadir a la lista
-	    JButton btnAnadirLista = new JButton("Añadir a Lista");
-		btnAnadirLista.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Obtener las filas seleccionadas
-		        int[] filasSeleccionadas = tablaResultados.getSelectedRows();
 
-		        if (filasSeleccionadas.length > 0) {
-		            // Obtener las playlists disponibles
-		            String[] playlistsDisponibles = getPlaylists();
 
-		            // Crear el JComboBox con las playlists disponibles
-		            JComboBox<String> comboBoxPlaylists = new JComboBox<>(playlistsDisponibles);
-		            comboBoxPlaylists.setEditable(true);
-
-		            // Crear el panel de la ventana de diálogo
-		            JPanel panelDialogo = new JPanel();
-		            panelDialogo.add(new JLabel("Selecciona o introduce el nombre de la playlist:"));
-		            panelDialogo.add(comboBoxPlaylists);
-
-		            // Mostrar la ventana de diálogo
-		            int opcion = JOptionPane.showConfirmDialog(null, panelDialogo, "Añadir a Lista",
-		                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-		            if (opcion == JOptionPane.OK_OPTION) {
-		                // Obtener el nombre de la playlist seleccionada o introducida
-		                String nombrePlaylist = (String) comboBoxPlaylists.getSelectedItem();
-
-		                // Lógica para añadir las canciones a la playlist seleccionada
-		                for (int fila : filasSeleccionadas) {
-		                    String titulo = (String) tablaResultados.getValueAt(fila, 0);
-		                    String interprete = (String) tablaResultados.getValueAt(fila, 1);
-		                    String estilo = (String) tablaResultados.getValueAt(fila, 2);
-		                    boolean favoritas = (boolean) tablaResultados.getValueAt(fila, 3);
-
-		                    // Lógica para añadir la canción a la playlist (nombrePlaylist)
-		                    // Puedes imprimir estos valores como ejemplo
-		                    System.out.println("Añadiendo a la playlist: " + nombrePlaylist);
-		                    System.out.println("Canción: " + titulo);
-		                    System.out.println("Intérprete: " + interprete);
-		                    System.out.println("Estilo: " + estilo);
-		                    System.out.println("Favoritas: " + favoritas);
-
-		                    // Añadir la canción a la playlist
-		                    playlist.addCanciones(new Cancion(titulo, estilo));
-		                }
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Selecciona al menos una canción para añadir a la lista.",
-		                    "Error", JOptionPane.ERROR_MESSAGE);
-		        }
-		    }
-
-		    //TODO
-			private String[] getPlaylists() {
-				// TODO lógica para obtener las playlists disponibles. Habría que cargarlas desde algún almacenamiento
-			    // Por ahora, simplemente devolveré un array de ejemplo
-			    return new String[]{"Playlist1", "Playlist2", "Playlist3"};
-			}
-	
-			
-		});
-		panelBuscar.add(btnAnadirLista);
-		
-		*/
 
 	  //PANEL PARA LOS BOTONES DE REPRODUCCIÓN:
         //TODO: hacer que se comporten como un bloque fijo 	    

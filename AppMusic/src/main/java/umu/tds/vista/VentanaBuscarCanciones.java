@@ -1,8 +1,17 @@
 package umu.tds.vista;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 public class VentanaBuscarCanciones extends JPanel {
     private static final long serialVersionUID = 1L; //Añadido por el warning: The serializabel class VentanaBuscarCanciones does not declare a static final seralVersionUID field of type long
