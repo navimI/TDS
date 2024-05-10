@@ -36,7 +36,7 @@ public class Controlador {
 	
 	private Cancion cancionActual;
 	
-	private PlayList playListActual;
+	private  PlayList playListActual;
 	
 	private PlayList playListTemporal;
 	
@@ -66,6 +66,10 @@ public class Controlador {
 	
 	//TODO get para las playlists
 	//crear canciones de prueba con el formato y jugar con eso, con URL a la carpeta de recursos de canciones
+	
+	public  PlayList getPlayListActual() {
+        return playListActual;
+    }
 	
 	public String getUsuarioActualField(String field) {
 		String value = null;
@@ -270,7 +274,7 @@ public class Controlador {
 		return false;
 	}
 
-	private boolean removeCancionesDePlaylist(List<Cancion> canciones) {
+	public boolean removeCancionesDePlaylist(List<Cancion> canciones) {
 	    boolean eliminado = false;
 	    for (Cancion cancion : canciones) {
 	        if (removeCancionPlayList(cancion)) {
@@ -292,8 +296,8 @@ public class Controlador {
 	}
 
 	
-	public boolean removePlaylist(String nombrePlaylist) {
-	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(nombrePlaylist); //busca la playlist por su nombre
+	public boolean removePlaylist(PlayList playlistSeleccionada) {
+	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(playlistSeleccionada); //busca la playlist por su nombre
 	    if (playlist != null) {
 	        adaptadorPlayList.borrarPlayList(playlist);//Elimina la playlist del adaptador
 	        usuarioActual.removePlayListUsuarios(playlist);// Eliminar la playlist del usuario actual

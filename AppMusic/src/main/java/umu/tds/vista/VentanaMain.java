@@ -8,12 +8,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -643,8 +645,12 @@ public class VentanaMain extends JFrame {
 		        if (filaSeleccionada != -1) {
 		            // Obtener el título de la playlist seleccionada
 		            String tituloPlaylist = (String) tablaCanciones.getValueAt(filaSeleccionada, 0);
-		            // Llamar al método removePlaylist del controlador
-		            boolean eliminado = controlador.removePlaylist(tituloPlaylist);
+		            
+		            // Obtener la instancia actual de la lista de reproducción
+		            PlayList listaSeleccionada = controlador.getPlayListActual();
+		            
+		            // Llamar al método removePlaylist del controlador con la instancia de PlayList
+		            boolean eliminado = controlador.removePlaylist(listaSeleccionada);
 		            if (eliminado) {
 		                // Playlist eliminada exitosamente
 		                JOptionPane.showMessageDialog(null, "Playlist eliminada exitosamente.");
@@ -658,6 +664,7 @@ public class VentanaMain extends JFrame {
 		        }
 		    }
 		});
+
 
 		btnEliminarCancion.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -752,34 +759,142 @@ public class VentanaMain extends JFrame {
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
 		panelPlaylists.setLayout(new BorderLayout());
 		
+		
+		// Crear el campo para introducir el título de la playlist
+		JTextField textFieldTituloPlaylist1 = new JTextField(20);
+
+		// Botón para crear la playlist
+		JButton btnCrearPlaylist1 = new JButton("Crear Playlist");
+
+		// Botón para eliminar la playlist
+		JButton btnEliminarPlaylist1 = new JButton("Eliminar Playlist");
+
+		// Botón para eliminar canciones de la lista
+		JButton btnEliminarCancion1 = new JButton("Eliminar de la Lista");
+		btnCrearPlaylist.setPreferredSize(new Dimension(12, 30));
+		btnEliminarPlaylist.setPreferredSize(new Dimension(12, 30));
+		btnEliminarCancion.setPreferredSize(new Dimension(12, 30));
+		
+
+		// Añadir acciones a los botones
+		btnCrearPlaylist1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String tituloPlaylist = textFieldTituloPlaylist1.getText();
+		        if (!tituloPlaylist.isEmpty()) {
+		            boolean creado = controlador.guardarPlayListDesdeVentana(tituloPlaylist);
+		            if (creado) {
+		                JOptionPane.showMessageDialog(null, "La playlist se creó exitosamente.");
+		            } else {
+		                JOptionPane.showMessageDialog(null, "No se pudo crear la playlist.");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Por favor, ingresa un título para la playlist.");
+		        }
+		    }
+		});
+
+		btnEliminarPlaylist1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener la playlist seleccionada en la interfaz (si hay alguna)
+		        PlayList playlistSeleccionada = controlador.getPlayListActual();
+		        if (playlistSeleccionada != null) {
+		            boolean eliminado = controlador.removePlaylist(playlistSeleccionada);
+		            if (eliminado) {
+		                JOptionPane.showMessageDialog(null, "La playlist se eliminó exitosamente.");
+		            } else {
+		                JOptionPane.showMessageDialog(null, "No se pudo eliminar la playlist.");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Por favor, selecciona una playlist.");
+		        }
+		    }
+		});
+
+
+		// Crear tabla para las canciones
+		DefaultTableModel modeloTablaCanciones1 = new DefaultTableModel();
+		modeloTablaCanciones1.addColumn("Título");
+		modeloTablaCanciones1.addColumn("Intérprete");
+		modeloTablaCanciones1.addColumn("Estilo");
+		modeloTablaCanciones1.addColumn("Favoritas");
+
+		PlayList listaDeReproduccion = controlador.getPlayListActual();
+		// Agregar las canciones al modelo de la tablaaa
+		List<Cancion> listaCanciones = listaDeReproduccion.getPlayList();
+		for (Cancion cancion : listaCanciones) {
+		    modeloTablaCanciones1.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+		}
+
+
+
+		// Crear la tabla con el modelo de datos
+		JTable tablaCanciones1 = new JTable(modeloTablaCanciones1);
+
+		// Agregar la tabla a un JScrollPane para permitir el desplazamiento si hay muchas canciones
+		JScrollPane scrollPaneTablaCanciones = new JScrollPane(tablaCanciones1);
+
+		// Agregar el JScrollPane al panel
+		panelPlaylists.add(scrollPaneTablaCanciones, BorderLayout.CENTER);
+
+		// Añadir acciones a los botones
+		btnEliminarCancion1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        PlayList listaCanciones = controlador.getPlayListActual();
+		        if (listaCanciones != null) {
+		            List<Cancion> canciones = listaCanciones.getPlayList();
+		            int[] filasSeleccionadas = tablaCanciones1.getSelectedRows();
+		            if (filasSeleccionadas.length > 0) {
+		                List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+		                for (int fila : filasSeleccionadas) {
+		                    // Obtener la canción seleccionada en la tabla
+		                    Cancion cancion = canciones.get(fila);
+		                    cancionesSeleccionadas.add(cancion);
+		                }
+		                // Llamar al método removeCancionesDePlaylist del controlador
+		                boolean eliminado = controlador.removeCancionesDePlaylist(cancionesSeleccionadas);
+		                if (eliminado) {
+		                    JOptionPane.showMessageDialog(null, "Las canciones se eliminaron exitosamente de la playlist.");
+		                } else {
+		                    JOptionPane.showMessageDialog(null, "No se pudieron eliminar las canciones de la playlist.");
+		                }
+		            } else {
+		                JOptionPane.showMessageDialog(null, "Por favor, selecciona al menos una canción.");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "No hay una lista de canciones disponible.");
+		        }
+		    }
+		});
+
+
+
+
+
+		
+		// Establecer el layout del panel
+		panelPlaylists.setLayout(new BorderLayout());
+
+		// Crear un panel para contener los botones en la parte sur
+		JPanel panelBotonesMisPlayLists = new JPanel(new GridLayout(1, 3)); // GridLayout con una fila y tres columnas
+
+		// Agregar los botones al panel de botones
+		panelBotonesMisPlayLists.add(btnCrearPlaylist1);
+		panelBotonesMisPlayLists.add(btnEliminarPlaylist1);
+		panelBotonesMisPlayLists.add(btnEliminarCancion1);
+
+		// Agregar el panel de botones al sur del panel principal
+		panelPlaylists.add(panelBotonesMisPlayLists, BorderLayout.SOUTH);
+
+;
+
+		
+		
+		
 		JLabel lblpanelPlaylists = new JLabel("PanelPlaylists");
 		panelPlaylists.add(lblpanelPlaylists);
 		
-		//obtener las playlists disponibles
-		//java.util.LinkedList<Cancion> playlistsDisponibles = (LinkedList<Cancion>) playlist.getPlayList();
-		//para obtener la lista de canciones desde la instancia de PlayList
-        PlayList playlist = new PlayList("NombreDeLaPlaylist");
-        LinkedList<Cancion> listaCanciones = (LinkedList<Cancion>) playlist.getPlayList();
-        
-        
-        //crear tabla:
-        DefaultTableModel modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("Título");
-        modeloTabla.addColumn("Intérprete");
-        modeloTabla.addColumn("Estilo");
-        modeloTabla.addColumn("Favoritas");
-        //añadir las canciones a la tabla:
-        for (Cancion cancion : listaCanciones) {
-            modeloTabla.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
-        }
-     // Crear la tabla con el modelo de datos
-        JTable tablaCanciones1 = new JTable(modeloTabla);
-
-        // Agregar la tabla a un JScrollPane para permitir el desplazamiento si hay muchas canciones
-        JScrollPane scrollPaneTablaCanciones = new JScrollPane(tablaCanciones1);
-
-        // Agregar el JScrollPane al panel
-        panelPlaylists.add(scrollPaneTablaCanciones, BorderLayout.CENTER);
+		
+	
 		
 
 	}
