@@ -10,4 +10,5 @@ public interface IAdaptadorPlayListDAO {
 	public void modificarPlayList(PlayList listaV);
 	public PlayList recuperarPlayList(int id);
 	public List<PlayList> recuperarTodosPlayList();
+	public PlayList buscarPlayListPorNombre(String nombrePlaylist);
 }

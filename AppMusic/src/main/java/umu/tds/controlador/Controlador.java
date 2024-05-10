@@ -1,6 +1,7 @@
 package umu.tds.controlador;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 //import org.eclipse.persistence.internal.oxm.schema.model.List;
@@ -269,14 +270,45 @@ public class Controlador {
 		return false;
 	}
 
-	private boolean removeCancionPlayList(Cancion cancion) {
-		if(cancion != null) {
-			playListTemporal.removeCancion(cancion);
-			return true;
-		}
-		return false;
+	private boolean removeCancionesDePlaylist(List<Cancion> canciones) {
+	    boolean eliminado = false;
+	    for (Cancion cancion : canciones) {
+	        if (removeCancionPlayList(cancion)) {
+	            eliminado = true;
+	        }
+	    }
+	    return eliminado;
 	}
 
+	public boolean removeCancionPlayList(Cancion cancion) {
+        if(cancion != null) {
+            playListTemporal.removeCancion(cancion);
+            return true;
+        }
+        return false;
+    }
+	public boolean removeCancionesDePlaylistDesdeMain(LinkedList<Cancion> cancionesSeleccionadas) {
+		return removeCancionesDePlaylist(cancionesSeleccionadas);
+	}
+
+	
+	public boolean removePlaylist(String nombrePlaylist) {
+	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(nombrePlaylist); //busca la playlist por su nombre
+	    if (playlist != null) {
+	        adaptadorPlayList.borrarPlayList(playlist);//Elimina la playlist del adaptador
+	        usuarioActual.removePlayListUsuarios(playlist);// Eliminar la playlist del usuario actual
+	        adaptadorUsuario.modificarUsuario(usuarioActual);// Guardar los cambios en el adaptador de usuario
+	        return true;
+	    } else {
+	    	System.out.println("No se encontró la PlayList");
+	        return false;
+	    }
+	}
+	
+	
+	public boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
+        return guardarPlayList(nombrePlaylist);
+    }
 	private boolean guardarPlayList(String nombre) {
 		if (playListTemporal.isEmpty())
 			return false;
@@ -329,6 +361,27 @@ public class Controlador {
 	    return resultados;
 	}
 
+	// Método para crear o editar una playlist
+    public void crearOEditarPlaylist(String tituloPlaylist) {
+        if (tituloPlaylist == null || tituloPlaylist.isEmpty()) {
+            // Mostrar un mensaje de error si no se proporciona un título de playlist válido
+            System.out.println("Error: título de playlist inválido");
+            return;
+        }
 
+        if (playListActual != null && playListActual.getNombre().equals(tituloPlaylist)) {
+            // La playlist actual ya tiene el mismo título, por lo que se puede editar
+            // Aquí implementar la lógica para editar la playlist existente
+            System.out.println("Editando la playlist existente: " + playListActual.getNombre());
+        } else {
+            // Crear una nueva playlist
+            playListActual = new PlayList(tituloPlaylist);
+            // Mostrar un mensaje de éxito
+            System.out.println("Playlist creada: " + tituloPlaylist);
+        }
+    }
+
+	
+   
 	
 }

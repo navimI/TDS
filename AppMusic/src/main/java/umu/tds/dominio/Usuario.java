@@ -194,5 +194,12 @@ public class Usuario {
         //TODO
     	return false;
     }
+
+
+    public void removePlayListUsuarios(PlayList playlist) {
+        if (playlist != null && playListUsuario.contains(playlist)) {
+            playListUsuario.remove(playlist);
+        }
+    }
     
 }
