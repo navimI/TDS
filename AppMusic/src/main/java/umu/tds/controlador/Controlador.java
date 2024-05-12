@@ -297,17 +297,19 @@ public class Controlador {
 
 	
 	public boolean removePlaylist(PlayList playlistSeleccionada) {
-	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(playlistSeleccionada); //busca la playlist por su nombre
+	    String nombrePlaylist = playlistSeleccionada.getNombre(); // obtener el nombre de la playlist seleccionada
+	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(nombrePlaylist); // buscar la playlist por su nombre
 	    if (playlist != null) {
-	        adaptadorPlayList.borrarPlayList(playlist);//Elimina la playlist del adaptador
-	        usuarioActual.removePlayListUsuarios(playlist);// Eliminar la playlist del usuario actual
-	        adaptadorUsuario.modificarUsuario(usuarioActual);// Guardar los cambios en el adaptador de usuario
+	        adaptadorPlayList.borrarPlayList(playlist); // eliminar la playlist del adaptador
+	        usuarioActual.removePlayListUsuarios(playlist); // eliminar la playlist del usuario actual
+	        adaptadorUsuario.modificarUsuario(usuarioActual); // guardar los cambios en el adaptador de usuario
 	        return true;
 	    } else {
-	    	System.out.println("No se encontró la PlayList");
+	        System.out.println("No se encontró la PlayList");
 	        return false;
 	    }
 	}
+
 	
 	
 	public boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
@@ -323,13 +325,14 @@ public class Controlador {
 		playListTemporal.removeAllCanciones();
 		return true;
 	}
-
+/*
 	public static List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
 	    List<Cancion> resultados = new ArrayList<>();
 
 	    try {
 	        // Obtener todas las canciones del catálogo
 	        List<Cancion> canciones = CatalogoCancion.getUnicaInstancia().getCanciones();
+	        // OJO PATRON EXPERTO - 
 
 	        // Iterar sobre todas las canciones para realizar la búsqueda
 	        for (Cancion cancion : canciones) {
@@ -364,6 +367,12 @@ public class Controlador {
 	    }
 	    return resultados;
 	}
+*/
+	public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
+        //llamando al método realizarBusqueda del CatalogoCancion, para respetar el patrón experto
+        return CatalogoCancion.getUnicaInstancia().realizarBusqueda(interprete, titulo, estilo, favoritas);
+    }
+
 
 	// Método para crear o editar una playlist
     public void crearOEditarPlaylist(String tituloPlaylist) {

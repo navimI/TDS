@@ -147,4 +147,16 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		return playList;
 	}
 
+	@Override
+	public PlayList buscarPlayListPorNombre(String nombre) {
+	    List<PlayList> todasLasListas = recuperarTodosPlayList();
+	    for (PlayList lista : todasLasListas) {
+	        if (lista.getNombre().equals(nombre)) {
+	            return lista;
+	        }
+	    }
+	    return null; //Devolver null si no se encuentra ninguna lista con ese nombre
+	}
+
+
 }

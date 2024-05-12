@@ -340,17 +340,31 @@ public class VentanaMain extends JFrame {
 		*/
 		JButton btnRealizarBusqueda = new JButton("Buscar");
 		btnRealizarBusqueda.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Obtener los valores de los filtros
-		        String interprete = textFieldInterprete.getText();
-		        String titulo = textFieldTitulo.getText();
-		        String estilo = (String) comboBoxEstilo.getSelectedItem();
-		        boolean favoritas = checkBoxFavoritas.isSelected();
+			// Dentro del ActionListener del botón btnRealizarBusqueda
+			public void actionPerformed(ActionEvent e) {
+			    // Valores de los filtros
+			    String interprete = textFieldInterprete.getText();
+			    String titulo = textFieldTitulo.getText();
+			    String estilo = (String) comboBoxEstilo.getSelectedItem();
+			    boolean favoritas = checkBoxFavoritas.isSelected();
+			    
+			    // Llamamos al método realizarBusqueda a través del controlador
+			    List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
+			    
+			    // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
+			    DefaultTableModel modeloTabla = new DefaultTableModel();
+			    // Añadir las columnas
+			    modeloTabla.setColumnIdentifiers(new String[]{"Título", "Intérprete", "Estilo", "Favoritas"});
+			    // Añadir las filas con los datos de las canciones encontradas
+			    for (Cancion cancion : resultados) {
+			        modeloTabla.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+			    }
+			    // Asignar el nuevo modelo a la tabla
+			    tablaResultados.setModel(modeloTabla);
+			}
 
-		        // Llamar al método estático del Controlador para realizar la búsqueda
-		        Controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
-		    }
 		});
+
 
 		panelBuscar.add(btnRealizarBusqueda);
 		
