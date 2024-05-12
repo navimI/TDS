@@ -394,7 +394,20 @@ public class Controlador {
         }
     }
 
-	
+    public void agregarCancionAPlayListTemporalPorID(int idCancion) {
+        Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
+        if (cancion != null) {
+            playListTemporal.addCanciones(cancion);
+        }
+    }
+
+    public void quitarCancionDePlayListTemporalPorID(int idCancion) {
+        Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
+        if (cancion != null) {
+            playListTemporal.removeCancion(cancion);
+        }
+    }
+
    
 	
 }

@@ -18,6 +18,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -253,7 +255,9 @@ public class VentanaMain extends JFrame {
 		// Añadir la tabla a un JScrollPane para permitir el desplazamiento
 		JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
 		panelBuscar.add(scrollPane1);
-		String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
+		//String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
+	    String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas", "Seleccionar"};
+
 		/*
 
 	    // Crear una tabla para mostrar los resultados COMO EJEMPLO (mover esta sección antes de su uso)
@@ -339,45 +343,52 @@ public class VentanaMain extends JFrame {
 		});
 		*/
 		JButton btnRealizarBusqueda = new JButton("Buscar");
-		btnRealizarBusqueda.addActionListener(new ActionListener() {
-			// Dentro del ActionListener del botón btnRealizarBusqueda
-			public void actionPerformed(ActionEvent e) {
-			    // Valores de los filtros
-			    String interprete = textFieldInterprete.getText();
-			    String titulo = textFieldTitulo.getText();
-			    String estilo = (String) comboBoxEstilo.getSelectedItem();
-			    boolean favoritas = checkBoxFavoritas.isSelected();
-			    
-			    // Llamamos al método realizarBusqueda a través del controlador
-			    List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
-			    
-			    // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
-			    DefaultTableModel modeloTabla = new DefaultTableModel();
-			    // Añadir las columnas
-			    modeloTabla.setColumnIdentifiers(new String[]{"Título", "Intérprete", "Estilo", "Favoritas"});
-			    // Añadir las filas con los datos de las canciones encontradas
-			    for (Cancion cancion : resultados) {
-			        modeloTabla.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
-			    }
-			    // Asignar el nuevo modelo a la tabla
-			    tablaResultados.setModel(modeloTabla);
-			}
+	    btnRealizarBusqueda.addActionListener(new ActionListener() {
+	        // Dentro del ActionListener del botón btnRealizarBusqueda
+	    	// Dentro del ActionListener del botón btnRealizarBusqueda
+	    	public void actionPerformed(ActionEvent e) {
+	    	    // Valores de los filtros
+	    	    String interprete = textFieldInterprete.getText();
+	    	    String titulo = textFieldTitulo.getText();
+	    	    String estilo = (String) comboBoxEstilo.getSelectedItem();
+	    	    boolean favoritas = checkBoxFavoritas.isSelected();
+	    	    
+	    	    // Llamamos al método realizarBusqueda a través del controlador
+	    	    List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
+	    	    
+	    	    // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
+	    	    DefaultTableModel modeloTabla = new DefaultTableModel();
+	    	    // Añadir las columnas
+	    	    modeloTabla.setColumnIdentifiers(columnas);
+	    	    // Añadir las filas con los datos de las canciones encontradas
+	    	    for (Cancion cancion : resultados) {
+	    	        modeloTabla.addRow(new Object[]{cancion.getID(), cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita(), false});
+	    	    }
+	    	    // Asignar el nuevo modelo a la tabla
+	    	    tablaResultados.setModel(modeloTabla);
+	    	}
 
-		});
 
-
-		panelBuscar.add(btnRealizarBusqueda);
+	    });
+	    panelBuscar.add(btnRealizarBusqueda);
+	 
 		
 		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
 	    tablaResultados.setFillsViewportHeight(true);
 	    JScrollPane scrollPane = new JScrollPane(tablaResultados);
 	    panelBuscar.add(scrollPane);
 	
-
-
+	    //TODO cómo añadir la cancion que salga en el panel buscar a la lista temporal.
+	    //pones la ID en una de los campos y luego paso la ID al catálogo
+	    //con el panel buscar, donde set column, añadir otra columna que sea id, cuando se recuperen los datos, que aparezca el valor de id, en el for cancion resultados
+	    //añadir otra columna que sea un seleccionable, que si esta activado, esa cancion la cargue a la playlist temporal, y si estaba seleccionada y la deselecciona, que la quite
+	    //estas funciones aún no están en el Controlador. 
+	    
+	    //TODO - cambiar las llamadas al Controlador para que sean con Controlador.getUnicaInstancia()... 
+	    //TODO - chequear los runeables de lo sbotones de reproduccion, son realmente necesarios????
+	    
 
 	  //PANEL PARA LOS BOTONES DE REPRODUCCIÓN:
-        //TODO: hacer que se comporten como un bloque fijo 	    
 	    JPanel panelBotonesReproduccion = new JPanel();
 
         //Los añadirlos al panel
