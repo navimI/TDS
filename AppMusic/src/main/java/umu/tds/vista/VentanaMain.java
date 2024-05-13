@@ -135,19 +135,7 @@ public class VentanaMain extends JFrame {
 		
 		JPanel panelCardLayout = new JPanel();
 
-		/*JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				VentanaBuscarCanciones ventanaBuscar = new VentanaBuscarCanciones();
-				Point botonLocation = getLocationOnScreen();
-				ventanaBuscar.setLocation(botonLocation);
-				ventanaBuscar.setVisible(true);
-				//dispose();
-				//Cuando el user hace click en el botón "Buscar":
-				//Creamos la ventana VEntanaBuscarCanciones
-				//contentPane.setVisible(false);
-			}
-		});*/
+		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -241,10 +229,11 @@ public class VentanaMain extends JFrame {
 		panelCardLayout.setLayout(new CardLayout(0, 0));
 		
 		
+		
+		
+		//PANEL BUSCAR:
 		JPanel panelBuscar = new JPanel();
 		panelCardLayout.add(panelBuscar, "panelBuscar");
-		
-		
 		
 		// Crear una tabla vacía para mostrar los resultados
 		tablaResultados = new JTable();
@@ -258,37 +247,6 @@ public class VentanaMain extends JFrame {
 		//String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
 	    String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas", "Seleccionar"};
 
-		/*
-
-	    // Crear una tabla para mostrar los resultados COMO EJEMPLO (mover esta sección antes de su uso)
-	    String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
-	    Object[][] datos = {{"Canción 1", "Intérprete 1", "Pop", false},
-	                        {"Canción 2", "Intérprete 2", "Rock", true},
-	                        {"Canción 3", "Intérprete 3", "Jazz", false}};
-	    tablaResultados = new JTable(datos, columnas);
-
-	    // Configurar la tabla 
-	    tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
-	    tablaResultados.setFillsViewportHeight(true);
-
-	    // Añadir la tabla a un JScrollPane para permitir el desplazamiento
-	    JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
-	    panelBuscar.add(scrollPane1);
-
-	    // Añadir acción de doble clic a la tabla para reproducir la canción seleccionada
-	    tablaResultados.addMouseListener(new MouseAdapter() {
-	        public void mouseClicked(MouseEvent e) {
-	            if (e.getClickCount() == 2) {
-	                // Obtener la fila seleccionada
-	                int filaSeleccionada = tablaResultados.getSelectedRow();
-	                //aqui Lógica para reproducir la canción de la fila seleccionada
-	                System.out.println("Reproduciendo canción de la fila: " + filaSeleccionada);
-	            }
-	        }
-	    });
-	    */
-		
-		
 
 		//Componentes para el panel Buscar:
 		JLabel lblInterprete = new JLabel("Intérprete:");
@@ -322,26 +280,7 @@ public class VentanaMain extends JFrame {
 		JCheckBox checkBoxFavoritas = new JCheckBox();
 		panelBuscar.add(checkBoxFavoritas);
 
-		//Botón para realizar la búsqueda
-		/*
-		JButton btnRealizarBusqueda = new JButton("Buscar");
-		btnRealizarBusqueda.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        //Obtener los valores de los campos y realizar la búsqueda
-		        String interprete = textFieldInterprete.getText();
-		        String titulo = textFieldTitulo.getText();
-		        String estilo = (String) comboBoxEstilo.getSelectedItem();
-		        boolean favoritas = checkBoxFavoritas.isSelected();
-
-		        //Realizar la acción correspondiente con los valores de búsqueda
-		        System.out.println("Realizando búsqueda con los siguientes filtros:");
-		        System.out.println("Intérprete: " + interprete);
-		        System.out.println("Título: " + titulo);
-		        System.out.println("Estilo: " + estilo);
-		        System.out.println("Favoritas: " + favoritas);
-		    }
-		});
-		*/
+		
 		JButton btnRealizarBusqueda = new JButton("Buscar");
 	    btnRealizarBusqueda.addActionListener(new ActionListener() {
 	        // Dentro del ActionListener del botón btnRealizarBusqueda
