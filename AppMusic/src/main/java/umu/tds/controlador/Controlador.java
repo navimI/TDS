@@ -1,6 +1,7 @@
 package umu.tds.controlador;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -371,6 +372,18 @@ public class Controlador {
 	public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
         //llamando al método realizarBusqueda del CatalogoCancion, para respetar el patrón experto
         return CatalogoCancion.getUnicaInstancia().realizarBusqueda(interprete, titulo, estilo, favoritas);
+		
+		/*prueba:
+			//objetos de prueba Cancion
+	        Cancion cancion1 = new Cancion("Cancion 1", "Rock", "Interprete 1", "Interprete 2");
+	        Cancion cancion2 = new Cancion("Cancion 2", "Pop", "Interprete 3");
+	        Cancion cancion3 = new Cancion("Cancion 3", "Electrónica", Arrays.asList("Interprete 4", "Interprete 5"));
+	        List<Cancion> canciones = new ArrayList<>();
+	        canciones.add(cancion1);
+	        canciones.add(cancion2);
+	        canciones.add(cancion3);
+	        return canciones;
+	        */
     }
 
 
