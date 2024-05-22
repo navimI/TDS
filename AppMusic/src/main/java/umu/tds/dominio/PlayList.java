@@ -63,7 +63,7 @@ public class PlayList {
 	}
 	
 	public boolean removeCancion(int idCancion) {
-		playList.removeIf(c -> c.getID() == idCancion);
+		return playList.removeIf(c -> c.getID() == idCancion);
 	}
 	
 	public boolean hasCancion(int idCancion) {
