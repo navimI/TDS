@@ -61,6 +61,14 @@ public class PlayList {
 		playList.remove(cancion);
 	 
 	}
+	
+	public boolean removeCancion(int idCancion) {
+		playList.removeIf(c -> c.getID() == idCancion);
+	}
+	
+	public boolean hasCancion(int idCancion) {
+		return playList.stream().anyMatch(c -> c.getID() == idCancion);
+	}
 
 	public void removeAllCanciones() {
 		playList.clear();

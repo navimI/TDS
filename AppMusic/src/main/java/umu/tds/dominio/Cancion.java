@@ -126,11 +126,5 @@ public class Cancion {
 	}
 	
 	
-	
-	/*TODO implementar reproducir Cancion
-	 * public void reproducirCancion(){
-	 * 	addReproduccion();
-	 * 	play();*/
-	
 }
 
