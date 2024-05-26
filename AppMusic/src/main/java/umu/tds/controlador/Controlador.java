@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import tds.CargadorCanciones.CancionesListener;
+
 //import org.eclipse.persistence.internal.oxm.schema.model.List;
 
 import umu.tds.dao.DAOException;
@@ -16,11 +18,12 @@ import umu.tds.dominio.Cancion;
 import umu.tds.dominio.CatalogoCancion;
 import umu.tds.dominio.CatalogoUsuarios;
 import umu.tds.dominio.PlayList;
+import umu.tds.dominio.TipoDescuentos;
 import umu.tds.dominio.Usuario;
 import umu.tds.utils.Player;
 
 
-public class Controlador {
+public class Controlador implements CancionesListener{
 	private static Controlador unicaInstancia;
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -43,12 +46,14 @@ public class Controlador {
 	
 	private String usuarioTemporal;
 	
+	private TipoDescuentos descuentoAplicado;
 	
 
 	private Controlador() {
 		usuarioActual = null;
 		cancionActual = null;
 		playListActual = null;
+		descuentoAplicado = TipoDescuentos.NINGUNO;
 		playListTemporal = new PlayList("temp");
 		iniciarAdaptadores();
 		inicializarCatalogos();
@@ -269,7 +274,7 @@ public class Controlador {
 	
 	private boolean addCancionPlayList(Cancion cancion) {
 		if(cancion != null) {
-			playListTemporal.addCanciones(cancion);
+			playListTemporal.addCancion(cancion);
 			return true;
 		}
 		return false;
@@ -410,7 +415,7 @@ public class Controlador {
     public void agregarCancionAPlayListTemporalPorID(int idCancion) {
         Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
         if (cancion != null) {
-            playListTemporal.addCanciones(cancion);
+            playListTemporal.addCancion(cancion);
         }
     }
 

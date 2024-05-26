@@ -191,8 +191,7 @@ public class Usuario {
 	 */
     
     public boolean actualizarRecientes(Cancion cancion) {
-        //TODO
-    	return false;
+        z
     }
 
 
