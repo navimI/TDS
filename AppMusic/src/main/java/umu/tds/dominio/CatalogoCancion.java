@@ -58,15 +58,15 @@ public class CatalogoCancion {
 			}
 		}
 
-		public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
+		public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo) {
 	        List<Cancion> cancionesEncontradas = new LinkedList<>();
 	        try {
 	            List<Cancion> todasLasCanciones = getCanciones();
 
 	            for (Cancion cancion : todasLasCanciones) {
 	                if ((titulo.isEmpty() || cancion.getTitulo().equalsIgnoreCase(titulo)) &&
-	                    (estilo.isEmpty() || cancion.getEstilo().equalsIgnoreCase(estilo)) &&
-	                    (!favoritas || cancion.esFavorita())) {
+	                    (estilo.isEmpty() || cancion.getEstilo().equalsIgnoreCase(estilo)) 
+	                    ) {
 	                    // Verificar si algún intérprete de la canción coincide con algún intérprete de la lista
 	                    boolean coincidenciaInterprete = false;
 	                    for (String interpreteCancion : cancion.getListaInterpretes()) {

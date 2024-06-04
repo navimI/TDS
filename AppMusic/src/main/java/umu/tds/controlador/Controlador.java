@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import tds.CargadorCanciones.CancionesListener;
@@ -389,8 +390,20 @@ public class Controlador implements CancionesListener{
 	}
 */
 	public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
-        //llamando al método realizarBusqueda del CatalogoCancion, para respetar el patrón experto
-        return CatalogoCancion.getUnicaInstancia().realizarBusqueda(interprete, titulo, estilo, favoritas);
+        
+		List<Cancion> aux;
+		
+		//llamando al método realizarBusqueda del CatalogoCancion, para respetar el patrón experto
+		
+		
+		aux = CatalogoCancion.getUnicaInstancia().realizarBusqueda(interprete, titulo, estilo);
+		
+		if (favoritas) {
+			return aux.stream()
+				.filter(cancion -> playListFavoritos.contains(cancion))
+				.collect(Collectors.toList());
+		}
+		else return aux;
 		
 		/*prueba:
 			//objetos de prueba Cancion
