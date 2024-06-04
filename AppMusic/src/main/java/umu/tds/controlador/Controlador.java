@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tds.CargadorCanciones.CancionesListener;
+import tds.CargadorCanciones.CargadorCanciones;
 
 //import org.eclipse.persistence.internal.oxm.schema.model.List;
 
@@ -33,6 +34,7 @@ public class Controlador implements CancionesListener{
 	
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCancion catalogoCanciones;
+	private CargadorCanciones cargadorCanciones = new CargadorCanciones();
 	
 	private Player reproductorActual;
 	
@@ -170,6 +172,11 @@ public class Controlador implements CancionesListener{
 	
 	private void iniciarReproductor() {
 		reproductorActual = new Player();
+	}
+
+	private void cargarCanciones(String fichero){
+		cargadorCanciones.setArchivoCanciones(fichero);
+		
 	}
 	
 	private void setCancion(Cancion cancion) {
@@ -416,7 +423,9 @@ public class Controlador implements CancionesListener{
         Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
         if (cancion != null) {
             playListTemporal.addCancion(cancion);
-        }
+        }else 
+        	throw new IllegalArgumentException("La canción no existe");
+        
     }
 
     public void quitarCancionDePlayListTemporalPorID(int idCancion) {
@@ -424,6 +433,8 @@ public class Controlador implements CancionesListener{
         if (cancion != null) {
             playListTemporal.removeCancion(cancion);
         }
+		else
+			throw new IllegalArgumentException("La canción no existe");
     }
 
    

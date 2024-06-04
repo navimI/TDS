@@ -9,14 +9,17 @@ public class Cancion {
 	//ATRIBUTOS
 
 	private int ID; 		
-	private final String titulo;
+	private String titulo;
 	private int numReproducciones;
-	private final String estilo;
-	private final List<String> listaInterpretes;
+	private String estilo;
+	private List<String> listaInterpretes;
 	private Boolean favorita;
 	// URL es un atributo calculado por el get
 	
 	//CONSTRUCTORES
+	
+	public Cancion() {}
+	
 	public Cancion(String titulo, String estilo, String ... interpretes) {
 		this.titulo = titulo;
 		this.estilo = estilo;

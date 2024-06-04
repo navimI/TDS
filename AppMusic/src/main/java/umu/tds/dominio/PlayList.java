@@ -3,6 +3,7 @@ package umu.tds.dominio;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PlayList {
 	//Properties	
@@ -49,25 +50,38 @@ public class PlayList {
 		return new LinkedList<Cancion>(playList); 
 	}
 	
+	//Las canciones que estan al final de la lista son las canciones añadidas recientemente
+	//El orden de la playlist es de más antiguedad en la introducción de la lista a la más reciente.
 	public void addCancion(Cancion cancion) {
-		playList.add(cancion);
+		int i = hasCancion(cancion.getID());
+		if (i>=0) {
+			playList.remove(i);
+			playList.add(cancion);
+		} else {
+			playList.add(cancion);
+		}
 	}
 	
+	// Usamos el stream que nos añade todas las canciones de la lista pasada por el argumento
+	// haciendo uso de la función definida de añadir canción
 	public void addCanciones(List<Cancion> canciones) {
-		playList.addAll(canciones);
+		canciones.forEach(c -> addCancion(c));
 	}
 	
 	public void removeCancion(Cancion cancion) {
-		playList.remove(cancion);
-	 
+		int i = hasCancion(cancion.getID());
+		if(i>=0)playList.remove(i);
 	}
 	
 	public boolean removeCancion(int idCancion) {
 		return playList.removeIf(c -> c.getID() == idCancion);
 	}
 	
-	public boolean hasCancion(int idCancion) {
-		return playList.stream().anyMatch(c -> c.getID() == idCancion);
+	public int hasCancion(int idCancion) {
+		return IntStream.range(0, playList.size())
+			.filter(i -> playList.get(i).getID() == idCancion)
+			.findFirst()
+			.orElse(-1);
 	}
 
 	public void removeAllCanciones() {
