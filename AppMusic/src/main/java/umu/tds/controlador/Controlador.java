@@ -283,7 +283,7 @@ public class Controlador implements CancionesListener{
 	
 	private boolean addCancionPlayListFavoritos(Cancion cancion) {
 		if(cancion != null) {
-			int i = hasCancion(cancion.getID());
+			int i = posicionFavorita(cancion.getID());
 			if (i>=0) {
 				playListFavoritos.remove(i);
 				playListFavoritos.add(cancion);
@@ -307,7 +307,7 @@ public class Controlador implements CancionesListener{
 
 	public boolean removeCancionPlayListFavoritos(Cancion cancion) {
         if(cancion != null) {
-        	int i = hasCancion(cancion.getID());
+        	int i = posicionFavorita(cancion.getID());
         	if(i>=0) playListFavoritos.remove(i);
             return true;
         }
@@ -428,11 +428,15 @@ public class Controlador implements CancionesListener{
 
    //------------------ metodos auxiliares -----------------------------
    
-    public int hasCancion(int idCancion) {
+    public int posicionFavorita(int idCancion) {
 		return IntStream.range(0, playListFavoritos.size())
 			.filter(i -> playListFavoritos.get(i).getID() == idCancion)
 			.findFirst()
 			.orElse(-1);
 	}
+    
+    public boolean esFavorita(int idCancion) {
+    	return posicionFavorita(idCancion) >= 0 ? true : false;
+    }
 	
 }
