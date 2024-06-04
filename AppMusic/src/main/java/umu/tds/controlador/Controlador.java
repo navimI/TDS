@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import tds.CargadorCanciones.CancionesListener;
 import tds.CargadorCanciones.CargadorCanciones;
@@ -25,6 +26,7 @@ import umu.tds.utils.Player;
 
 
 public class Controlador implements CancionesListener{
+	
 	private static Controlador unicaInstancia;
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -44,7 +46,7 @@ public class Controlador implements CancionesListener{
 	
 	private  PlayList playListActual;
 	
-	private PlayList playListTemporal;
+	private List<Cancion> playListFavoritos;
 	
 	private String usuarioTemporal;
 	
@@ -56,7 +58,7 @@ public class Controlador implements CancionesListener{
 		cancionActual = null;
 		playListActual = null;
 		descuentoAplicado = TipoDescuentos.NINGUNO;
-		playListTemporal = new PlayList("temp");
+		playListFavoritos = new LinkedList<Cancion>();
 		iniciarAdaptadores();
 		inicializarCatalogos();
 		iniciarReproductor();
@@ -279,33 +281,40 @@ public class Controlador implements CancionesListener{
 	    };
 	}
 	
-	private boolean addCancionPlayList(Cancion cancion) {
+	private boolean addCancionPlayListFavoritos(Cancion cancion) {
 		if(cancion != null) {
-			playListTemporal.addCancion(cancion);
+			int i = hasCancion(cancion.getID());
+			if (i>=0) {
+				playListFavoritos.remove(i);
+				playListFavoritos.add(cancion);
+			} else {
+				playListFavoritos.add(cancion);
+			}
 			return true;
 		}
 		return false;
 	}
 
-	public boolean removeCancionesDePlaylist(List<Cancion> canciones) {
+	public boolean removeCancionesDePlaylistFavoritos(List<Cancion> canciones) {
 	    boolean eliminado = false;
 	    for (Cancion cancion : canciones) {
-	        if (removeCancionPlayList(cancion)) {
+	        if (removeCancionPlayListFavoritos(cancion)) {
 	            eliminado = true;
 	        }
 	    }
 	    return eliminado;
 	}
 
-	public boolean removeCancionPlayList(Cancion cancion) {
+	public boolean removeCancionPlayListFavoritos(Cancion cancion) {
         if(cancion != null) {
-            playListTemporal.removeCancion(cancion);
+        	int i = hasCancion(cancion.getID());
+        	if(i>=0) playListFavoritos.remove(i);
             return true;
         }
         return false;
     }
 	public boolean removeCancionesDePlaylistDesdeMain(LinkedList<Cancion> cancionesSeleccionadas) {
-		return removeCancionesDePlaylist(cancionesSeleccionadas);
+		return removeCancionesDePlaylistFavoritos(cancionesSeleccionadas);
 	}
 
 	
@@ -325,17 +334,15 @@ public class Controlador implements CancionesListener{
 
 	
 	
-	public boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
-        return guardarPlayList(nombrePlaylist);
-    }
-	private boolean guardarPlayList(String nombre) {
-		if (playListTemporal.isEmpty())
+	
+	private boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
+		if (playListFavoritos.isEmpty())
 			return false;
-		PlayList aux = new PlayList(nombre, playListTemporal.getPlayList());
+		PlayList aux = new PlayList(nombrePlaylist, playListFavoritos);
 		adaptadorPlayList.registrarPlayList(aux);
 		usuarioActual.addPlayListUsuarios(aux);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-		playListTemporal.removeAllCanciones();
+		playListFavoritos.clear();
 		return true;
 	}
 /*
@@ -399,30 +406,12 @@ public class Controlador implements CancionesListener{
     }
 
 
-	// Método para crear o editar una playlist
-    public void crearOEditarPlaylist(String tituloPlaylist) {
-        if (tituloPlaylist == null || tituloPlaylist.isEmpty()) {
-            // Mostrar un mensaje de error si no se proporciona un título de playlist válido
-            System.out.println("Error: título de playlist inválido");
-            return;
-        }
-
-        if (playListActual != null && playListActual.getNombre().equals(tituloPlaylist)) {
-            // La playlist actual ya tiene el mismo título, por lo que se puede editar
-            // Aquí implementar la lógica para editar la playlist existente
-            System.out.println("Editando la playlist existente: " + playListActual.getNombre());
-        } else {
-            // Crear una nueva playlist
-            playListActual = new PlayList(tituloPlaylist);
-            // Mostrar un mensaje de éxito
-            System.out.println("Playlist creada: " + tituloPlaylist);
-        }
-    }
+	
 
     public void agregarCancionAPlayListTemporalPorID(int idCancion) {
         Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
         if (cancion != null) {
-            playListTemporal.addCancion(cancion);
+            addCancionPlayListFavoritos(cancion);
         }else 
         	throw new IllegalArgumentException("La canción no existe");
         
@@ -431,12 +420,19 @@ public class Controlador implements CancionesListener{
     public void quitarCancionDePlayListTemporalPorID(int idCancion) {
         Cancion cancion = CatalogoCancion.getUnicaInstancia().getCancion(idCancion);
         if (cancion != null) {
-            playListTemporal.removeCancion(cancion);
+            removeCancionPlayListFavoritos(cancion);
         }
 		else
 			throw new IllegalArgumentException("La canción no existe");
     }
 
+   //------------------ metodos auxiliares -----------------------------
    
+    public int hasCancion(int idCancion) {
+		return IntStream.range(0, playListFavoritos.size())
+			.filter(i -> playListFavoritos.get(i).getID() == idCancion)
+			.findFirst()
+			.orElse(-1);
+	}
 	
 }
