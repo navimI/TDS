@@ -89,7 +89,7 @@ public class VentanaMain extends JFrame {
             datos[i][0] = cancion.getTitulo();
             datos[i][1] = String.join(",", cancion.getListaInterpretes());
             datos[i][2] = cancion.getEstilo();
-            datos[i][3] = cancion.esFavorita();
+            datos[i][3] = controlador.esFavorita(cancion.getID());
         }
 
         // Actualizar la tabla con los nuevos datos
@@ -301,8 +301,7 @@ public class VentanaMain extends JFrame {
 	    	    modeloTabla.setColumnIdentifiers(columnas);
 	    	    // Añadir las filas con los datos de las canciones encontradas
 	    	    for (Cancion cancion : resultados) {
-	    	        modeloTabla.addRow(new Object[]{cancion.getID(), cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita(), false});
-	    	    }
+	    	        modeloTabla.addRow(new Object[]{cancion.getID(), cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), controlador.esFavorita(cancion.getID()), false});	    	    }
 	    	    // Asignar el nuevo modelo a la tabla
 	    	    tablaResultados.setModel(modeloTabla);
 	    	}
@@ -697,7 +696,7 @@ public class VentanaMain extends JFrame {
 	        modeloTablaRecientes.addColumn("Favoritas");
 
 	        for (Cancion cancion : ultimasCanciones) {
-	            modeloTablaRecientes.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+	            modeloTablaRecientes.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), controlador.esFavorita(cancion.getID())});
 	        }
 
 	        JTable tablaRecientes = new JTable(modeloTablaRecientes);
@@ -786,7 +785,7 @@ public class VentanaMain extends JFrame {
 		// Agregar las canciones al modelo de la tablaaa
 		List<Cancion> listaCanciones = listaDeReproduccion.getPlayList();
 		for (Cancion cancion : listaCanciones) {
-		    modeloTablaCanciones1.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), cancion.esFavorita()});
+		    modeloTablaCanciones1.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), controlador.esFavorita(cancion.getID())});
 		}
 
 
