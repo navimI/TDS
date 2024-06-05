@@ -5,24 +5,17 @@ import java.util.EventObject;
 
 @SuppressWarnings("serial")
 public class CancionesEvent extends EventObject {
-	protected Canciones cancionesAnteriores;
-	protected Canciones cancionesNuevas;
+	protected Canciones cancionesCargadas;
 
-	public CancionesEvent(Object fuente, Canciones cancionesAnteriores, Canciones cancionesNuevas) {
+	public CancionesEvent(Object fuente,  Canciones cancionesCargadas) {
 		super(fuente);
-		this.cancionesAnteriores = cancionesAnteriores;
-		this.cancionesNuevas = cancionesNuevas;
-	}
-
-	public Canciones getCancionesAnteriores() {
-
-		return cancionesAnteriores;
-
+		
+		this.cancionesCargadas = cancionesCargadas;
 	}
 
 	public Canciones getCancionesNuevas() {
 
-		return cancionesNuevas;
+		return cancionesCargadas;
 
 	}
 }

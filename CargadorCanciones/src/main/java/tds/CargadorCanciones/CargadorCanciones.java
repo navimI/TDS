@@ -1,14 +1,6 @@
 package tds.CargadorCanciones;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+
 
 
 
@@ -16,40 +8,75 @@ import static java.util.stream.Collectors.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+import java.util.Vector;
 
 public class CargadorCanciones implements Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
+	
+	// Definimos la propiedad ligada
 	private Canciones archivoCanciones;
-	private final PropertyChangeSupport listenersArchivoCancion = new
-			PropertyChangeSupport(this); 
+	
+	// Implementa la lista de fuente de eventos para la gestion de listeners. 
+	private Vector<CancionesListener> listeners; 
 
 	
+	// Constructor
 	
-	public void addArchivoCancionesChangeListener(PropertyChangeListener pcl) {
-		 listenersArchivoCancion.addPropertyChangeListener(pcl);
-		 }
-	
-	public void removeArchivoCancionesChangeListener(PropertyChangeListener pcl) {
-		 listenersArchivoCancion.removePropertyChangeListener(pcl);
-		 } 
+	public CargadorCanciones() {
+		archivoCanciones = new Canciones();
+		listeners = new Vector<>(); 
+	}
 
+	
+	// Getters and setters
+	
+	public void addListener(CancionesListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	public void removeListener(CancionesListener listener) {
+		this.listeners.removeElement(listener);
+	}
+	
 	
 	public Canciones getArchivoCanciones() {
 		return archivoCanciones;
 	}
+
+	// Método que necesita notificar los 
 	
 	public void setArchivoCanciones(String fichero) {
 		
-		Canciones nuevoArchivoCanciones = null;
+		// Llama al método cargarCanciones del Mapper transformado de fichero XML a Canciones.
 		
-		nuevoArchivoCanciones = MapperCancionesXMLtoJava.cargarCanciones(fichero);
+		archivoCanciones = MapperCancionesXMLtoJava.cargarCanciones(fichero);
 		
-		Canciones antesArchivoCanciones = archivoCanciones;
-		this.archivoCanciones = nuevoArchivoCanciones;
-		listenersArchivoCancion.firePropertyChange("archivoCanciones",antesArchivoCanciones, nuevoArchivoCanciones);
+		// Se crea un evento para notificar a los clientes.
+		
+		CancionesEvent e = new CancionesEvent(this, archivoCanciones);
+		
+		//Se notifica a los oyentes del nuevo evento ocurrido.
+		
+		notifyListenner(e);
+		
+		
+	}
+	
+	// Método para notificar a los oyentes de los cambios en el cargador
+	
+	@SuppressWarnings("unchecked")
+	public void notifyListenner(CancionesEvent e) {
+		Vector<CancionesListener> lista;
+		synchronized(this) {
+			lista = (Vector<CancionesListener>)listeners.clone();
 		}
+		for (CancionesListener cl : lista) {
+			cl.cambioNotificado(e);
+		}
+	}
 	
 	
 }
