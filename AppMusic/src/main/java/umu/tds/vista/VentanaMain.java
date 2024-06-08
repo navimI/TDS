@@ -2,6 +2,7 @@ package umu.tds.vista;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -13,21 +14,16 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
 
 /*<<<<<<< HEAD
 =======
 
 >>>>>>> branch 'main' of https://github.com/navimI/TDS.git
 */
+import pulsador.Luz;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -43,6 +39,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
@@ -51,9 +48,6 @@ import umu.tds.dominio.PlayList;
 
 public class VentanaMain extends JFrame {
 
-	/**
-	 * 
-	 */
 	private Controlador controlador;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -63,7 +57,6 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldTituloPlaylist;
 	private DefaultTableModel modeloTablaCanciones;
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -100,10 +93,7 @@ public class VentanaMain extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	
 	//Trying git
-	
-	
 	public VentanaMain() {
 		
 		playlist = new PlayList("NombreDeTuPlaylist");
@@ -115,6 +105,20 @@ public class VentanaMain extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		
+		// Crear una instancia de Luz
+        Luz luz = new Luz();
+        luz.setColorEncendido(Color.GREEN); // Establecer el color encendido
+        luz.setColorApagado(Color.RED);     // Establecer el color apagado
+        luz.setNombre("Luz Principal");     // Establecer el nombre de la luz
+
+        // Establecer la posición y tamaño del componente Luz
+        luz.setBounds(50, 50, 100, 100); // Posición (x, y) y tamaño (ancho, alto)
+        
+        // Añadir la luz al contentPane
+        contentPane.add(luz);
+		
 		
 		JPanel panelBotonera = new JPanel();
 		contentPane.add(panelBotonera, BorderLayout.WEST);
@@ -129,9 +133,6 @@ public class VentanaMain extends JFrame {
 	    this.setMaximumSize(new Dimension(800, 700));
 	    this.setSize(new Dimension(600, 500));
 	    
-	    
-
-	
 		
 		JPanel panelCardLayout = new JPanel();
 
