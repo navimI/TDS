@@ -36,5 +36,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/PulsadorLuz"/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/AppMusicTDS/PulsadorLuzProyecto.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
