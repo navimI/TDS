@@ -44,7 +44,8 @@ public class CatalogoCancion {
 		}
 		
 		public void addCancion(Cancion cancion) {
-			canciones.put(cancion.getID(), cancion);
+			
+				canciones.put(cancion.getID(), cancion);
 		}
 		
 		public void removeCancion(Cancion cancion) {
@@ -56,6 +57,10 @@ public class CatalogoCancion {
 			for (Cancion cancion: listaContenido) {
 				canciones.put(cancion.getID(), cancion);
 			}
+		}
+
+		public boolean existeCancion(Cancion cancion) {
+			return canciones.values().stream().anyMatch(c -> c.cancionesIguales(cancion));
 		}
 
 		public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo) {

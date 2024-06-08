@@ -3,6 +3,7 @@ package umu.tds.dominio;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Cancion {
@@ -17,7 +18,9 @@ public class Cancion {
 	
 	//CONSTRUCTORES
 	
-	public Cancion() {}
+	public Cancion() {
+		this.numReproducciones = 0;
+	}
 	
 	public Cancion(String titulo, String estilo, String ... interpretes) {
 		this.titulo = titulo;
@@ -77,6 +80,10 @@ public class Cancion {
 		this.numReproducciones = n;
 	}
 
+	public void addReproduccion() {   //para añadir  una reproducción al vídeo
+		numReproducciones ++;
+	}
+
 	public List<String> getListaInterpretes() {
 		return new LinkedList<String>(listaInterpretes);  //copia defensiva para evitar aliasing
 	}
@@ -88,6 +95,20 @@ public class Cancion {
 	public void setID(int ID) {
 		this.ID = ID;
 	}
+
+	public boolean cancionesIguales(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Cancion other = (Cancion) obj;
+		return numReproducciones == other.numReproducciones &&
+			Objects.equals(titulo, other.titulo) &&
+			Objects.equals(estilo, other.estilo) &&
+			Objects.equals(listaInterpretes, other.listaInterpretes);
+}
 	
 
 	public String getEstilo() {
@@ -99,20 +120,13 @@ public class Cancion {
 	// por eso los definimos al principio como final
 	// para asegurar que el atributo listaInterpretes no pueda ser modificado desde fuera de la clase
 	// se devuelve una copia defensiva en el metodo getListaInterpretes()
-
 	
 
-	
-
-	
-	public void addReproduccion() {   //para añadir  una reproducción al vídeo
-		this.numReproducciones = numReproducciones ++;
-	}
 
 	@Override
 	public String toString() {
-		return "Cancion [ID=" + ID + ", url=" + getRutaFichero() + ", titulo=" + titulo + ", numReproducciones=" + numReproducciones
-				+ ", listaInterpretes=" + listaInterpretes + "]";
+		return "Cancion [ID=" + ID + ", url=" + getRutaFichero() + ", titulo=" + getTitulo() + ", numReproducciones=" + getNumReproducciones()
+				+ ", listaInterpretes=" + getListaInterpretes() + "]";
 	}
 	
 	

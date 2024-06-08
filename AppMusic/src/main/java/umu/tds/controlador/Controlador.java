@@ -1,16 +1,16 @@
 package umu.tds.controlador;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import tds.CargadorCanciones.CancionesEvent;
 import tds.CargadorCanciones.CancionesListener;
 import tds.CargadorCanciones.CargadorCanciones;
 
-//import org.eclipse.persistence.internal.oxm.schema.model.List;
+
 
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
@@ -23,6 +23,7 @@ import umu.tds.dominio.CatalogoUsuarios;
 import umu.tds.dominio.PlayList;
 import umu.tds.dominio.TipoDescuentos;
 import umu.tds.dominio.Usuario;
+import umu.tds.utils.CancionCargadorAdapter;
 import umu.tds.utils.Player;
 
 
@@ -71,12 +72,32 @@ public class Controlador implements CancionesListener{
 		return unicaInstancia;
 	}
 
+	private void iniciarAdaptadores() {
+		FactoriaDAO factoria = null;
+		try {
+			factoria = FactoriaDAO.getInstancia();
+		}catch (DAOException e) {
+			e.printStackTrace();
+		}
+		adaptadorUsuario = factoria.getUsuarioDAO();
+		adaptadorCancion = factoria.getCancionDAO();
+		adaptadorPlayList = factoria.getPlayListDAO();
+		
+	}
+	
+	private void inicializarCatalogos() {
+		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+		catalogoCanciones = CatalogoCancion.getUnicaInstancia();
+	}
+	
+	private void iniciarReproductor() {
+		reproductorActual = new Player();
+	}
+
+
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
-	
-	//TODO get para las playlists
-	//crear canciones de prueba con el formato y jugar con eso, con URL a la carpeta de recursos de canciones
 	
 	public  PlayList getPlayListActual() {
         return playListActual;
@@ -145,6 +166,8 @@ public class Controlador implements CancionesListener{
 		return true;
 	}
 
+
+
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getUser()))
 			return false;
@@ -154,28 +177,8 @@ public class Controlador implements CancionesListener{
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
 	}
+
 	
-	private void iniciarAdaptadores() {
-		FactoriaDAO factoria = null;
-		try {
-			factoria = FactoriaDAO.getInstancia();
-		}catch (DAOException e) {
-			e.printStackTrace();
-		}
-		adaptadorUsuario = factoria.getUsuarioDAO();
-		adaptadorCancion = factoria.getCancionDAO();
-		adaptadorPlayList = factoria.getPlayListDAO();
-		
-	}
-	
-	private void inicializarCatalogos() {
-		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
-		catalogoCanciones = CatalogoCancion.getUnicaInstancia();
-	}
-	
-	private void iniciarReproductor() {
-		reproductorActual = new Player();
-	}
 
 	private void cargarCanciones(String fichero){
 		cargadorCanciones.setArchivoCanciones(fichero);
@@ -346,49 +349,7 @@ public class Controlador implements CancionesListener{
 		playListFavoritos.clear();
 		return true;
 	}
-/*
-	public static List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
-	    List<Cancion> resultados = new ArrayList<>();
 
-	    try {
-	        // Obtener todas las canciones del catálogo
-	        List<Cancion> canciones = CatalogoCancion.getUnicaInstancia().getCanciones();
-	        // OJO PATRON EXPERTO - 
-
-	        // Iterar sobre todas las canciones para realizar la búsqueda
-	        for (Cancion cancion : canciones) {
-	            // Comprobar si la canción coincide con los criterios de búsqueda
-	            if ((interprete.isEmpty() || cancion.getListaInterpretes().contains(interprete)) &&
-	                (titulo.isEmpty() || cancion.getTitulo().equalsIgnoreCase(titulo)) &&
-	                (estilo.isEmpty() || cancion.getEstilo().equalsIgnoreCase(estilo)) &&
-	                (!favoritas || cancion.esFavorita())) {
-	                // Agregar la canción a los resultados si coincide con los criterios de búsqueda
-	                resultados.add(cancion);
-	            }
-	        }
-
-	        // Realizar acciones con los resultados (mostrar en la interfaz, etc.)
-	        // Por ahora, solo imprimimos los resultados por consola
-	        if (resultados.isEmpty()) {
-	            System.out.println("No se encontraron canciones que coincidan con los criterios de búsqueda.");
-	        } else {
-	            System.out.println("Se encontraron las siguientes canciones:");
-	            for (Cancion cancion : resultados) {
-	                System.out.println(cancion);
-	            }
-	        }
-	    } catch (DAOException e) {
-	        // Manejar la excepción específica DAOException
-	        System.err.println("Error al obtener la lista de canciones del catálogo: " + e.getMessage());
-	        e.printStackTrace();
-	    } catch (Exception ex) {
-	        // Manejar cualquier otra excepción no controlada
-	        System.err.println("Error no controlado: " + ex.getMessage());
-	        ex.printStackTrace();
-	    }
-	    return resultados;
-	}
-*/
 	public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo, boolean favoritas) {
         
 		List<Cancion> aux;
@@ -451,5 +412,41 @@ public class Controlador implements CancionesListener{
     public boolean esFavorita(int idCancion) {
     	return posicionFavorita(idCancion) >= 0 ? true : false;
     }
+	
+	// Método para registrar las canciones del cargador en el catálogo de canciones
+	
+	private void registrarCancionesCargador(tds.CargadorCanciones.Cancion cancion) {
+
+		// Crear un adaptador de canción a partir de la canción del cargador		
+		CancionCargadorAdapter cancionAdapter = new CancionCargadorAdapter(cancion);
+		
+		// Comprogar que la cancion no esté ya registrada en la base de datos, si esta registrada no hacer nada
+		if(!catalogoCanciones.existeCancion(cancionAdapter)) {
+			
+			cancionAdapter.descargarCancion();
+			
+			// Registrar la canción en el adaptador de canciones
+			adaptadorCancion.registrarCancion(cancionAdapter);
+			
+			// Añadir la canción al catálogo de canciones
+			catalogoCanciones.addCancion(cancionAdapter);
+			
+			
+			
+		}
+		
+		
+		
+	}
+
+	//------------------ eventos del cargador de canciones -----------------------------
+
+	@Override
+	public void cambioNotificado(CancionesEvent e) {
+		e.getCancionesNuevas().getCancion().stream()
+			.forEach(c->registrarCancionesCargador(c) );
+		
+	}
+
 	
 }

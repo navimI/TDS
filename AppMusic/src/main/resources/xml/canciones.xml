@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<canciones xmlns="http://www.tds.es/canciones" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+	xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
+	
+	<cancion titulo="I'll take a melody">
+		<URL><![CDATA[https://ia801406.us.archive.org/8/items/tsheaffer2020-11-08/16%20I%27ll%20Take%20A%20Melody.mp3]]></URL>
+		<estilo>Folk</estilo>
+		<interprete>Todd Sheaffer</interprete>
+	</cancion>
+
+	<cancion titulo="La Vie en rose">
+		<URL><![CDATA[https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3]]></URL>
+		<estilo>Cabaret</estilo>
+		<interprete>Edith Piaf</interprete>
+	</cancion>
+
+	<cancion titulo="In the Court of the Crimson King">
+		<URL><![CDATA[https://ia800102.us.archive.org/7/items/cd_in-the-court-of-the-crimson-king_king-crimson/disc1/05.%20King%20Crimson%20-%20The%20Court%20of%20the%20Crimson%20King%20%28including%20The%20Return%20of%20the%20Fire%20Witch%20and%20The%20Dance%20of%20the%20Puppets%29_sample.mp3]]></URL>
+		<estilo>Rock-sinfonico</estilo>
+		<interprete>King Crimson </interprete>
+	</cancion>
+	
+	<cancion titulo="La Cumparsita">
+		<URL><![CDATA[https://ia801609.us.archive.org/14/items/78_la-cumparsita_pietro-g.h.-matos-rodriguez_gbia0001088b/La%20Cumparsita%20-%20Pietro%20-%20G.H.%20Matos%20Rodriguez-restored.mp3]]></URL>
+		<estilo>Tango</estilo>
+		<interprete>Pietro</interprete>
+	</cancion>
+	
+	<cancion titulo="Culo">
+		<URL><![CDATA[https://archive.org/download/pitbull-discography/Pitbull%20-%20Discography/%282004%29%20M.I.A.M.I/02.%20Culo%20%28Ft.%20Lil%27%20Jon%29.mp3]]></URL>
+		<estilo>Electrolatino</estilo>
+		<interprete>Pitbull,Lil'Jon</interprete>
+	</cancion>
+	
+	
+	<cancion titulo="Culo">
+		<URL><![CDATA[https://archive.org/download/pitbull-discography/Pitbull%20-%20Discography/%282004%29%20M.I.A.M.I/02.%20Culo%20%28Ft.%20Lil%27%20Jon%29.mp3]]>></URL>
+		<estilo>Electrolatino</estilo>
+		<interprete>Pitbull,Lil'Jon</interprete>
+	</cancion>
+
+</canciones>
