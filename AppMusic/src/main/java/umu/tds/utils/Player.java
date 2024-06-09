@@ -7,6 +7,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import umu.tds.dominio.Cancion;
 
+@SuppressWarnings("restriction")
 public class Player {
 	// canciones almacenadas en src/main/resources
 	private Cancion cancionActual = null;

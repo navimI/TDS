@@ -44,8 +44,8 @@ public class CancionCargadorAdapterTest implements CancionesListener{
         loader.addListener(this);
 
         // Establece la ruta del archivo XML que contiene las canciones
-
-        loader.setArchivoCanciones("C:\\Users\\igalc\\git\\TDS\\AppMusic\\src\\main\\resources\\xml\\canciones.xml");
+        String rutaLoader = getClass().getResource("/xml").getPath()+"/canciones.xml";
+        loader.setArchivoCanciones(rutaLoader);
     }
 
     @Override
@@ -87,7 +87,8 @@ public class CancionCargadorAdapterTest implements CancionesListener{
 
         // Almacenar los nombres de los ficheros en la lista
         for (File fichero : ficheros) {
-            listaDescargas.add(fichero.getName());
+        	if(fichero.getName()!=".gitignore")
+        		listaDescargas.add(fichero.getName());
         }
     }
     

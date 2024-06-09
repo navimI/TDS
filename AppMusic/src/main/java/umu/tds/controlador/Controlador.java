@@ -324,7 +324,7 @@ public class Controlador implements CancionesListener{
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
-	private boolean playSong() {
+	public boolean playSong() {
 		if(cancionActual != null) {
 			reproductorActual.play("play",cancionActual);
 			return true;
@@ -336,7 +336,7 @@ public class Controlador implements CancionesListener{
 	/**
 	 * <h1> Detiene la cancion actual.</h1>
 	 */
-	private boolean stopSong() {
+	public boolean stopSong() {
 		if(cancionActual != null) {
 			reproductorActual.play("stop",cancionActual);
 			return true;
@@ -349,7 +349,7 @@ public class Controlador implements CancionesListener{
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
-	private boolean nextSong() {
+	public boolean nextSong() {
 		if(playListActual != null || !playListActual.isEmpty()) {
 			cancionActual = playListActual.getSiguienteCancion(cancionActual);
 		}
@@ -366,7 +366,7 @@ public class Controlador implements CancionesListener{
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
-	private boolean previousSong() {
+	public boolean previousSong() {
 		if(playListActual != null || playListActual.isEmpty()) {
 			cancionActual = playListActual.getAnteriorCancion(cancionActual);
 		}
@@ -383,7 +383,7 @@ public class Controlador implements CancionesListener{
 	 * @return True si la canción se ha pausado correctamente, False en caso contrario. 
 	*/
 	
-	private boolean pauseSong() {
+	public boolean pauseSong() {
 		if(cancionActual != null) {
 			reproductorActual.play("pause",cancionActual);
 			return true;

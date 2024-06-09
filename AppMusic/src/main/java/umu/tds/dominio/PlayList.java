@@ -122,6 +122,8 @@ public class PlayList {
 		return null;
 	}
 
-	
+	public void ponerPrimera(Cancion cancion) {
+		addCancion(cancion);
+	}
 	
 }
