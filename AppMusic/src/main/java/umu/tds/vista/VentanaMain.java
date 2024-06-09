@@ -18,13 +18,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/*<<<<<<< HEAD
-=======
-
->>>>>>> branch 'main' of https://github.com/navimI/TDS.git
-*/
-import pulsador.Luz;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
