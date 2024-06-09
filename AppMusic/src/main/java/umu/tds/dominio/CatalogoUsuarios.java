@@ -66,6 +66,10 @@ public class CatalogoUsuarios {
 	public void removeUsuario(Usuario usuario) {
 		userID.remove(usuario.getId());
 	}
+
+	public void updateUsuario(Usuario usuario) {
+		addUsuario(usuario);
+	}
 	
 	private void cargarCatalogo() throws DAOException{
 		List<Usuario> listaAsistentes = adaptadorUsuario.recuperarTodosUsuarios();

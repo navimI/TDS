@@ -26,6 +26,8 @@ import umu.tds.controlador.Controlador;
 import umu.tds.utils.LoginGitHub;
 
 public class LoginPanel {
+
+	private static Controlador controlador;
 	
 	private JPanel panelLogin;
 	private JPanel panelFormularioLogin;
@@ -40,6 +42,8 @@ public class LoginPanel {
 	
 	public LoginPanel(JFrame frmAppmusic) {
 		
+		controlador = Controlador.getUnicaInstancia();
+
 		crearPanel(frmAppmusic);
 
 		crearPanelLogo();
@@ -122,7 +126,7 @@ public class LoginPanel {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean login = Controlador.getUnicaInstancia().loginUsuario(userField.getText(), 
+				boolean login = controlador.loginUsuario(userField.getText(), 
 						new String(passwordValue.getPassword()));
 				if(login) {
 					JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
@@ -174,9 +178,9 @@ public class LoginPanel {
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 					//Comprueba si el fichero es valido la clave de Gh o no
 					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
-						boolean registred = Controlador.getUnicaInstancia().esUsuarioRegistrado(userField.getText());
+						boolean registred = controlador.esUsuarioRegistrado(userField.getText());
 						if(registred) {
-							Controlador.getUnicaInstancia().setUsuarioActual(userField.getText());
+							controlador.setUsuarioActual(userField.getText());
 							JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
 							VentanaMain main = new VentanaMain();
 							main.setVisible(true);
@@ -184,7 +188,7 @@ public class LoginPanel {
 						} else {
 							JOptionPane.showMessageDialog(frmAppmusic, "Usuario no registrado", "Login",
 									JOptionPane.INFORMATION_MESSAGE);
-							Controlador.getUnicaInstancia().setUsuarioTemporal(userField.getText());
+							controlador.setUsuarioTemporal(userField.getText());
 							CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
 							card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
 						}

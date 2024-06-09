@@ -646,7 +646,7 @@ public class VentanaMain extends JFrame {
 		                cancionesSeleccionadas.add(cancion);
 		            }
 		            // Llamar al método removeCancionesDePlaylist del controlador
-		            boolean eliminado = controlador.removeCancionesDePlaylistDesdeMain(cancionesSeleccionadas);
+		            boolean eliminado = controlador.removeCancionesDePlaylistFavoritos(cancionesSeleccionadas);
 		            if (eliminado) {
 		                JOptionPane.showMessageDialog(null, "Canciones eliminadas exitosamente de la playlist.");
 		            } else {

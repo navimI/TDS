@@ -190,9 +190,9 @@ public class Usuario {
 	 * 
 	 */
     
-    public boolean actualizarRecientes(Cancion cancion) {
-        z
-    }
+    // public boolean actualizarRecientes(Cancion cancion) {
+    //     z
+    // }
 
 
     public void removePlayListUsuarios(PlayList playlist) {
