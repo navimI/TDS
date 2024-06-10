@@ -24,7 +24,6 @@ public class Luz extends Canvas implements Serializable {
 	private String nombre;
 
 	// atributos
-	// private Vector encendidoListeners = new Vector(); //oyentes
 	private Vector<IEncendidoListener> oyentes;
 	private boolean bPulsado = false; // para si está presionado o no el botón
 
@@ -34,6 +33,8 @@ public class Luz extends Canvas implements Serializable {
 	public Luz() { // constructor
 		setSize(20, 20); // tamañado inicial
 		setMinimumSize(new Dimension(20, 20));
+		this.colorEncendido = Color.GREEN;
+        this.colorApagado = Color.RED;
 		repaint();
 
 		// Con el ratón:
@@ -115,6 +116,7 @@ public class Luz extends Canvas implements Serializable {
 			EncendidoEvent o = new EncendidoEvent(this, anterior, nuevo);
 			notificarOyentes(o);
 		}
+		repaint();
 	}
 
 	/**
@@ -167,7 +169,7 @@ public class Luz extends Canvas implements Serializable {
 	public void luzReleased(MouseEvent e) {
 		if (bPulsado) {
 			bPulsado = false;
-			setEncendido(!encendido); // TODO if (encendido){setEncendido(false);}else{seEncendido(true);}
+			setEncendido(!encendido); 
 			repaint();
 		}
 	}
@@ -185,7 +187,7 @@ public class Luz extends Canvas implements Serializable {
 			copia = (Vector<IEncendidoListener>) oyentes.clone();
 		}
 		// copia.stream().forEach(o -> o.enteradoCambioEncendido(e));
-		copia.forEach(o -> o.enteradoCambioEncendido(e)); // TODO ¿quién define este método?
+		copia.forEach(o -> o.enteradoCambioEncendido(e)); 
 	}
 
 	/**
