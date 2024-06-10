@@ -19,6 +19,7 @@ public class Usuario {
 	private static final int TOPCANCIONES = 10;
 
 	private List<PlayList> playListUsuario;
+	private PlayList recientes;
 	private static final String RECIENTES = "Canciones Recientes";
 	//TO-DO: Mirar si es interesante dejar esto asi o que se crea la lista de canciones y se almecene
 	
@@ -33,8 +34,8 @@ public class Usuario {
 		this.password = password;
 		this.premium = false;
 		this.playListUsuario = new LinkedList<PlayList>();
-		PlayList aux = new PlayList(RECIENTES);
-		this.playListUsuario.add(aux);
+		PlayList recientes = new PlayList(RECIENTES);
+		this.playListUsuario.add(recientes);
 		
 		 
 	}
@@ -181,18 +182,22 @@ public class Usuario {
 	 * 
 	 */
 
-	/*
-	 * TODO implementar actualiza ultimos canciones
-	 * 
-	 * private void actualizaultimosCanciones(){ quita del final el cancion mas antiguo
-	 * inserta al principio el mas receciente
-	 * 
-	 * 
-	 */
     
-    public boolean actualizarRecientes(Cancion cancion) {
-        z
-    }
+	 public boolean actualizarRecientes(Cancion cancion) {
+		if (recientes.getPlayList().size() < ULTCANCIONES) {
+			recientes.addCancion(cancion);
+			return true;
+		}
+		else if (recientes.getPlayList().size() == ULTCANCIONES) {
+			if (-1==recientes.hasCancion(cancion.getID())) {
+				recientes.getPlayList().remove(ULTCANCIONES-1);
+			}
+			recientes.addCancion(cancion);
+			return true;
+		}
+		return false;
+	}
+    
 
 
     public void removePlayListUsuarios(PlayList playlist) {

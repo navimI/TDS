@@ -399,7 +399,7 @@ public class VentanaMain extends JFrame {
         btnAnterior.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar previousSong() y lo ejecuta
-                controlador.obtenerPreviousSongRunnable().run();
+                controlador.previousSong();
             }
         });
 
@@ -407,28 +407,28 @@ public class VentanaMain extends JFrame {
         btnDetener.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar stopSong() y lo ejecuta
-                controlador.obtenerStopSongRunnable().run();
+                controlador.stopSong();
             }
         });
 
         btnPausar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar pauseSong() y lo ejecuta
-                controlador.obtenerPauseSongRunnable().run();
+                controlador.pauseSong();
             }
         });
 
         btnSiguiente.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar nextSong() y lo ejecuta
-                controlador.obtenerNextSongRunnable().run();
+                controlador.nextSong();
             }
         });
 
         btnReproducir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar playSong() y lo ejecuta
-                controlador.obtenerPlaySongRunnable().run();
+                controlador.playSong();
             }
         });
 
@@ -576,7 +576,7 @@ public class VentanaMain extends JFrame {
 		panelGestion.add(btnEliminarCancion);
 
 		// Lógica para manejar las acciones de los botones:
-		// Lógica para manejar las acciones de los botones:
+		
 		btnCrearPlaylist.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        String tituloPlaylist = textFieldTituloPlaylist.getText();
@@ -640,7 +640,7 @@ public class VentanaMain extends JFrame {
 		                cancionesSeleccionadas.add(cancion);
 		            }
 		            // Llamar al método removeCancionesDePlaylist del controlador
-		            boolean eliminado = controlador.removeCancionesDePlaylistDesdeMain(cancionesSeleccionadas);
+		            boolean eliminado = controlador.removeCancionesDePlaylistFavoritos(cancionesSeleccionadas);
 		            if (eliminado) {
 		                JOptionPane.showMessageDialog(null, "Canciones eliminadas exitosamente de la playlist.");
 		            } else {
@@ -735,21 +735,21 @@ public class VentanaMain extends JFrame {
 		
 
 		// Añadir acciones a los botones
-		btnCrearPlaylist1.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        String tituloPlaylist = textFieldTituloPlaylist1.getText();
-		        if (!tituloPlaylist.isEmpty()) {
-		            boolean creado = controlador.guardarPlayListDesdeVentana(tituloPlaylist);
-		            if (creado) {
-		                JOptionPane.showMessageDialog(null, "La playlist se creó exitosamente.");
-		            } else {
-		                JOptionPane.showMessageDialog(null, "No se pudo crear la playlist.");
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Por favor, ingresa un título para la playlist.");
-		        }
-		    }
-		});
+				btnCrearPlaylist1.addActionListener(new ActionListener() {
+				    public void actionPerformed(ActionEvent e) {
+				        String tituloPlaylist = textFieldTituloPlaylist1.getText();
+				        if (!tituloPlaylist.isEmpty() || tituloPlaylist!="Canciones Recientes") {
+				            boolean creado = controlador.guardarPlayListDesdeVentana(tituloPlaylist);
+				            if (creado) {
+				                JOptionPane.showMessageDialog(null, "La playlist se creó exitosamente.");
+				            } else {
+				                JOptionPane.showMessageDialog(null, "No se pudo crear la playlist.");
+				            }
+				        } else {
+				            JOptionPane.showMessageDialog(null, "Por favor, ingresa un título valido para la playlist.");
+				        }
+				    }
+				});
 
 		btnEliminarPlaylist1.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {

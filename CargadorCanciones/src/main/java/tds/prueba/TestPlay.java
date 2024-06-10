@@ -47,6 +47,7 @@ import java.awt.Font;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 
+@SuppressWarnings("restriction")
 public class TestPlay {
 
 	private JFrame frmReproductorDeCanciones;
