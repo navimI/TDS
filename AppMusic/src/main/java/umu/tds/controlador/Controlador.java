@@ -339,7 +339,7 @@ public class Controlador implements CancionesListener{
 	
 	
 	
-	private boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
+	public boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
 		if (playListFavoritos.isEmpty())
 			return false;
 		PlayList aux = new PlayList(nombrePlaylist, playListFavoritos);

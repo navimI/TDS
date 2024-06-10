@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import pulsador.Luz;
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
@@ -107,7 +108,7 @@ public class VentanaMain extends JFrame {
         luz.setNombre("Luz Principal");     // Establecer el nombre de la luz
 
         // Establecer la posición y tamaño del componente Luz
-        luz.setBounds(50, 50, 100, 100); // Posición (x, y) y tamaño (ancho, alto)
+        luz.setBounds(25, 250, 50, 50); // Posición (x, y) y tamaño (ancho, alto)
         
         // Añadir la luz al contentPane
         contentPane.add(luz);
