@@ -88,6 +88,7 @@ public class Controlador implements CancionesListener{
 		descuentoAplicado = TipoDescuentos.NINGUNO;
 		playListFavoritos = new LinkedList<Cancion>();
 		cargadorCanciones = new CargadorCanciones();
+		cargadorCanciones.addListener(this);
 		iniciarAdaptadores();
 		inicializarCatalogos();
 		iniciarReproductor();
@@ -310,6 +311,8 @@ public class Controlador implements CancionesListener{
 	 */
 
 	public void cargarCanciones(String fichero){
+		
+		
 		cargadorCanciones.setArchivoCanciones(fichero);
 		
 	}
@@ -613,6 +616,8 @@ public class Controlador implements CancionesListener{
 	
 	private void registrarCancionesCargador(tds.CargadorCanciones.Cancion cancion) {
 		
+		
+		
 		CancionCargadorAdapter cancionAdapter = new CancionCargadorAdapter(cancion);
 		
 		if(!catalogoCanciones.existeCancion(cancionAdapter)) {
@@ -622,6 +627,7 @@ public class Controlador implements CancionesListener{
 			adaptadorCancion.registrarCancion(cancionAdapter);
 			
 			catalogoCanciones.addCancion(cancionAdapter);
+			
 
 		}
 		
@@ -636,8 +642,11 @@ public class Controlador implements CancionesListener{
 	 */
 	@Override
 	public void cambioNotificado(CancionesEvent e) {
-		e.getCancionesNuevas().getCancion().stream()
-			.forEach(c->registrarCancionesCargador(c) );
+		tds.CargadorCanciones.Canciones canciones = e.getCancionesNuevas();
+		for (tds.CargadorCanciones.Cancion cancion : canciones.getCancion()) {
+			registrarCancionesCargador(cancion);
+		}
+		
 		
 	}
 

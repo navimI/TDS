@@ -97,17 +97,12 @@ public class Cancion {
 	}
 
 	public boolean cancionesIguales(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
+		
 		Cancion other = (Cancion) obj;
-		return numReproducciones == other.numReproducciones &&
-			Objects.equals(titulo, other.titulo) &&
-			Objects.equals(estilo, other.estilo) &&
-			Objects.equals(listaInterpretes, other.listaInterpretes);
+		return getNumReproducciones() == other.getNumReproducciones() &&
+			Objects.equals(getTitulo(), other.getTitulo()) &&
+			Objects.equals(getEstilo(), other.getEstilo()) &&
+			Objects.equals(getListaInterpretes(), other.getListaInterpretes());
 }
 	
 

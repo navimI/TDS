@@ -43,14 +43,10 @@ public class CancionCargadorAdapterTest implements CancionesListener{
         // Añade esta clase como listener del cargador de canciones
         loader.addListener(this);
 
-        // Establece la ruta del archivo XML que contiene las canciones
-<<<<<<< HEAD
 
-        loader.setArchivoCanciones("C:\\Users\\User\\git\\AppMusic\\AppMusic\\src\\main\\resources\\xml\\canciones.xml");
-=======
         String rutaLoader = getClass().getResource("/xml").getPath()+"/canciones.xml";
         loader.setArchivoCanciones(rutaLoader);
->>>>>>> branch 'main' of https://github.com/navimI/TDS.git
+
     }
 	//C:\Users\User\git\AppMusic\AppMusic\src\main\resources\xml\canciones.xml
 
@@ -93,14 +89,11 @@ public class CancionCargadorAdapterTest implements CancionesListener{
 
         // Almacenar los nombres de los ficheros en la lista
         for (File fichero : ficheros) {
-<<<<<<< HEAD
+
         	if(fichero.getName()!=".gitignore") {
                 listaDescargas.add(fichero.getName()); }
             
-=======
-        	if(fichero.getName()!=".gitignore")
-        		listaDescargas.add(fichero.getName());
->>>>>>> branch 'main' of https://github.com/navimI/TDS.git
+
         }
         System.out.println(listaDescargas);
     }
