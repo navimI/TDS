@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -55,6 +56,13 @@ public class VentanaMain extends JFrame {
 	//para las playlists:
 	private JTextField textFieldTituloPlaylist;
 	private DefaultTableModel modeloTablaCanciones;
+	
+	//para buscar:
+	private JPanel panelBuscar;
+	private JTextField textFieldInterprete;
+    private JTextField textFieldTitulo;
+    private JComboBox<String> comboBoxEstilo;
+    private JCheckBox checkBoxFavoritas;
 	
 	/**
 	 * Launch the application.
@@ -264,7 +272,7 @@ public class VentanaMain extends JFrame {
 		
 		
 		//PANEL BUSCAR:
-		JPanel panelBuscar = new JPanel();
+		panelBuscar = new JPanel();
 		panelCardLayout.add(panelBuscar, "panelBuscar");
 		
 		// Crear una tabla vacía para mostrar los resultados
@@ -300,10 +308,13 @@ public class VentanaMain extends JFrame {
 
 		JLabel lblEstilo = new JLabel("Estilo:");
 		panelBuscar.add(lblEstilo);
-		//Lista desplegable (combobox) para el estilo musical
-		String[] estilosMusicales = {"Pop", "Rock", "Electrónica", "Hip-hop", "Otros"};
-		JComboBox<String> comboBoxEstilo = new JComboBox<>(estilosMusicales);
-		panelBuscar.add(comboBoxEstilo);
+			
+		List<String> estilosMusicalesList = controlador.listarEstilos();
+		estilosMusicalesList.add("");
+		//Lista desplegable (combobox) para el estilo musical	
+		DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(estilosMusicalesList.toArray(new String[0]));
+		JComboBox<String> comboBoxEstilo = new JComboBox<>(modeloComboBox);
+        panelBuscar.add(comboBoxEstilo);
 
 		JLabel lblFavoritas = new JLabel("Favoritas:");
 		panelBuscar.add(lblFavoritas);
@@ -313,10 +324,9 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(checkBoxFavoritas);
 
 		
-		JButton btnRealizarBusqueda = new JButton("Buscar");
+		JButton btnRealizarBusqueda = new JButton("Buscar"); //TODO que se vean las canciones de la búsqueda
 	    btnRealizarBusqueda.addActionListener(new ActionListener() {
 	        // Dentro del ActionListener del botón btnRealizarBusqueda
-	    	// Dentro del ActionListener del botón btnRealizarBusqueda
 	    	public void actionPerformed(ActionEvent e) {
 	    	    // Valores de los filtros
 	    	    String interprete = textFieldInterprete.getText();
@@ -337,12 +347,10 @@ public class VentanaMain extends JFrame {
 	    	    // Asignar el nuevo modelo a la tabla
 	    	    tablaResultados.setModel(modeloTabla);
 	    	}
-
-
 	    });
 	    panelBuscar.add(btnRealizarBusqueda);
 	 
-		
+	    
 		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
 	    tablaResultados.setFillsViewportHeight(true);
 	    JScrollPane scrollPane = new JScrollPane(tablaResultados);
