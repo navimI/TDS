@@ -211,6 +211,14 @@ public class Controlador implements CancionesListener{
 		usuarioActual = catalogoUsuarios.getUsuario(user);
 	}
 	
+	/**
+	 * <h1>Obtiene si el usuario actual es premium.</h1>
+	 * @return True si el usuario es premium, False en caso contrario.
+	 */
+	public boolean esUsuarioActualPremium() {
+		return usuarioActual.isPremiun();
+	}
+
 
 	/**
 	 * <h1>Devuelve el usuario temporal cargado en la aplicacion.</h1>
