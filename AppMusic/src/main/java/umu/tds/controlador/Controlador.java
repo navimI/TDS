@@ -307,6 +307,7 @@ public class Controlador implements CancionesListener{
 	private void setCancion(Cancion cancion) {
 		cancion.addReproduccion();
 		adaptadorCancion.modificarCancion(cancion);
+		usuarioActual.actualizarRecientes(cancion);
 		cancionActual = cancion;
 	}
 
@@ -351,7 +352,7 @@ public class Controlador implements CancionesListener{
 	
 	public boolean nextSong() {
 		if(playListActual != null || !playListActual.isEmpty()) {
-			cancionActual = playListActual.getSiguienteCancion(cancionActual);
+			setCancion(playListActual.getSiguienteCancion(cancionActual));
 		}
 		
 		if(cancionActual != null) {
@@ -368,7 +369,7 @@ public class Controlador implements CancionesListener{
 	
 	public boolean previousSong() {
 		if(playListActual != null || playListActual.isEmpty()) {
-			cancionActual = playListActual.getAnteriorCancion(cancionActual);
+			setCancion(playListActual.getAnteriorCancion(cancionActual));
 		}
 		if(cancionActual != null) {
 			reproductorActual.play("play",cancionActual);
