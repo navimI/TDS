@@ -91,6 +91,7 @@ public class VentanaMain extends JFrame {
 	public VentanaMain() {
 		
 		playlist = new PlayList("NombreDeTuPlaylist");
+		controlador = Controlador.getUnicaInstancia();
 		
 		setTitle("AppMusic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -775,13 +776,15 @@ public class VentanaMain extends JFrame {
 		modeloTablaCanciones1.addColumn("Intérprete");
 		modeloTablaCanciones1.addColumn("Estilo");
 		modeloTablaCanciones1.addColumn("Favoritas");
-
-		PlayList listaDeReproduccion = controlador.getPlayListActual();
+		
+		controlador.isEmptyPlayListActual();
 		// Agregar las canciones al modelo de la tablaaa
-		List<Cancion> listaCanciones = listaDeReproduccion.getPlayList();
+		if(!controlador.isEmptyPlayListActual()) {
+		List<Cancion> listaCanciones = controlador.getCancionesPlayListActual();
+		
 		for (Cancion cancion : listaCanciones) {
 		    modeloTablaCanciones1.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), controlador.esFavorita(cancion.getID())});
-		}
+		}}
 
 
 

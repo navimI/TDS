@@ -84,7 +84,7 @@ public class Controlador implements CancionesListener{
 	private Controlador() {
 		usuarioActual = null;
 		cancionActual = null;
-		playListActual = null;
+		playListActual = new PlayList("");
 		descuentoAplicado = TipoDescuentos.NINGUNO;
 		playListFavoritos = new LinkedList<Cancion>();
 		cargadorCanciones = new CargadorCanciones();
@@ -160,8 +160,17 @@ public class Controlador implements CancionesListener{
 	 */
 
 	public  PlayList getPlayListActual() {
-        return playListActual;
+		return playListActual;
     }
+	
+	public List<Cancion> getCancionesPlayListActual(){
+		return playListActual.getPlayList();
+	}
+	
+	public boolean isEmptyPlayListActual() {
+		
+		return playListActual.isEmpty();
+	}
 
 	/**
 	 * <h1>Obtiene un valor del usuario actual.</h1>

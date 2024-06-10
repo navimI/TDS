@@ -135,32 +135,7 @@ public class Usuario {
 	 * }
 	 */
 
-	public void topTen() {
-    	if (!premium) {
-      		  //El usuario no es premium, se muestra:
-			  //Hay que cambiar esto por un mensaje en la interfaz
-        System.out.println("Debes ser usuario premium para acceder al topTen.");
-        return;
-    	}
-
-    		//Todas las canciones:
-    		List<Cancion> todasLasCanciones = new LinkedList<>();
-    		for (PlayList lista : playListUsuario) {
-      		  todasLasCanciones.addAll(lista.getPlayList());
-   		 }
-
-   	 //Ordena las canciones:
- 		 todasLasCanciones.sort(Comparator.comparingInt(Cancion::getNumReproducciones).reversed());
-
-  	  //Muestra topTen
-    		int limite = Math.min(TOPCANCIONES, todasLasCanciones.size());
-    		System.out.println("Top Ten:");
-
-   		 for (int i = 0; i < limite; i++) {
-     		   Cancion cancion = todasLasCanciones.get(i);
-      		  System.out.println((i + 1) + ". " + cancion.getTitulo() + " - " + cancion.getListaInterpretes());
-   		 }
-		}
+	
 
     public boolean isPassword(String password) {
         return this.password.equals(password);
