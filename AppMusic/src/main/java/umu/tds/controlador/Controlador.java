@@ -292,7 +292,7 @@ public class Controlador implements CancionesListener{
 	 * @param fichero Ruta del fichero de canciones.
 	 */
 
-	private void cargarCanciones(String fichero){
+	public void cargarCanciones(String fichero){
 		cargadorCanciones.setArchivoCanciones(fichero);
 		
 	}

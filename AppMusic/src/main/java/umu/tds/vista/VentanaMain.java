@@ -14,7 +14,9 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,8 +35,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import pulsador.IEncendidoListener;
 import pulsador.Luz;
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
@@ -109,6 +114,27 @@ public class VentanaMain extends JFrame {
 
         // Establecer la posición y tamaño del componente Luz
         luz.setBounds(25, 250, 50, 50); // Posición (x, y) y tamaño (ancho, alto)
+        
+        luz.addEncendidoListener(new IEncendidoListener() {
+        	@Override
+            public void enteradoCambioEncendido(EventObject arg0) {
+                if (luz.isEncendido()) {
+                    JFileChooser jfc = new JFileChooser(new File("./xml"));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Xml Song Files", "xml");
+                    jfc.setFileFilter(filter);
+    
+                    int returnValue = jfc.showOpenDialog(contentPane);
+    
+                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                        controlador.cargarCanciones(jfc.getSelectedFile().getAbsolutePath());
+                        contentPane.revalidate();
+                        
+                        JOptionPane.showMessageDialog(contentPane, 
+                                "Canciones cargadas con éxito.\n", "", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                   luz.setEncendido(false);
+                }}
+        });
         
         // Añadir la luz al contentPane
         contentPane.add(luz);
@@ -432,116 +458,9 @@ public class VentanaMain extends JFrame {
             }
         });
 
-
-
-		//Añadir los botones al panelBuscar:
-//		panelBuscar.add(btnReproducir);
-//		panelBuscar.add(btnDetener);
-//		panelBuscar.add(btnPausar);
-//		panelBuscar.add(btnSiguiente);
-//		panelBuscar.add(btnAnterior);
-
-		
 		
 		JLabel lblPanelbuscar = new JLabel("PanelBuscar");
 		panelBuscar.add(lblPanelbuscar);
-		
-		
-		/*
-		//GESTIÓN:
-		//Para crear y editar playlists:		
-		JPanel panelGestion = new JPanel();
-		panelCardLayout.add(panelGestion, "panelGestion");
-		panelGestion.setLayout(new BoxLayout(panelGestion, BoxLayout.Y_AXIS)); // Cambiar el layout a BoxLayout
-		//panelGestion.setLayout(new BorderLayout());
-		//Para introducir el título de la playlist:
-	    textFieldTituloPlaylist = new JTextField();
-	    textFieldTituloPlaylist.setPreferredSize(new Dimension(150, 20)); // Establece un tamaño más pequeño
-	    textFieldTituloPlaylist.setText("Introduce el título de la playlist"); // Texto de sugerencia
-	    panelGestion.add(textFieldTituloPlaylist, BorderLayout.NORTH);
-
-
-	    // Botones para crear y eliminar playlists:
-	    JButton btnCrearPlaylist = new JButton("Crear");
-	    JButton btnEliminarPlaylist = new JButton("Eliminar");
-	    JPanel panelBotonesPlaylist = new JPanel();
-	    panelBotonesPlaylist.add(btnCrearPlaylist);
-	    panelBotonesPlaylist.add(btnEliminarPlaylist);
-	    panelGestion.add(panelBotonesPlaylist); // Agregar el panel de botones en la parte superior
-
-	    //Para mostrar canciones seleccionadas, la tabla:
-	    modeloTablaCanciones = new DefaultTableModel();
-	    modeloTablaCanciones.setColumnIdentifiers(new String[]{"Título", "Intérprete", "Estilo", "Favoritas"});
-	    JTable tablaCanciones = new JTable(modeloTablaCanciones);
-	    JScrollPane scrollPaneTabla = new JScrollPane(tablaCanciones);
-	    panelGestion.add(scrollPaneTabla, BorderLayout.CENTER);
-	    //Para eliminar canciones de la lista, el bitón:
-	    JButton btnEliminarCancion = new JButton("Eliminar de la Lista");
-	    
-	    //Lógica que llama a la clase PlayList:
-	 //Llamada para crear o editar playlist
-        btnCrearPlaylist.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String tituloPlaylist = textFieldTituloPlaylist.getText();
-                // Verificar si el título de la playlist ya existe
-                if (playlist != null && playlist.getNombre().equals(tituloPlaylist)) {
-                    int opcion = JOptionPane.showConfirmDialog(null, "¿Desea editar la playlist existente?",
-                            "Editar Playlist", JOptionPane.YES_NO_OPTION);
-                    if (opcion == JOptionPane.YES_OPTION) {
-                        // Aquí se implementaría la lógica para editar la playlist
-                        // Por ahora, simplemente mostramos un mensaje
-                        JOptionPane.showMessageDialog(null, "Editando la playlist existente: " + playlist.getNombre());
-                    }
-                } else {
-                    // Crear una nueva playlist
-                    playlist = new PlayList(tituloPlaylist);
-                    // Mostrar un mensaje de éxito
-                    JOptionPane.showMessageDialog(null, "Playlist creada: " + tituloPlaylist);
-                }
-            }
-        });
-
-        // Llamada para eliminar playlist
-        btnEliminarPlaylist.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (playlist != null) {
-                    int opcion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar la playlist actual?",
-                            "Eliminar Playlist", JOptionPane.YES_NO_OPTION);
-                    if (opcion == JOptionPane.YES_OPTION) {
-                        // Eliminar la playlist
-                        playlist = null;
-                        textFieldTituloPlaylist.setText("");
-                        modeloTablaCanciones.setRowCount(0); // Limpiar la tabla de canciones
-                        // Mostrar un mensaje de éxito
-                        JOptionPane.showMessageDialog(null, "Playlist eliminada.");
-                    }
-                } else {
-                    // Mostrar un mensaje de error si no hay playlist para eliminar
-                    JOptionPane.showMessageDialog(null, "No hay ninguna playlist para eliminar.");
-                }
-            }
-        });
-
-        // Llamada para eliminar canciones de la lista
-        btnEliminarCancion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tablaCanciones.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    // Eliminar la canción seleccionada de la playlist
-                    modeloTablaCanciones.removeRow(filaSeleccionada);
-                } else {
-                    // Mostrar un mensaje de error si no se ha seleccionado ninguna canción
-                    JOptionPane.showMessageDialog(null, "Seleccione una canción para eliminar de la lista.");
-                }
-            }
-        });
-	    
-	    
-		
-		JLabel lblPanelgestion = new JLabel("PanelGestion");
-		panelGestion.add(lblPanelgestion);
-		
-		*/
 		
 		
 		//GESTIÓN:
@@ -776,7 +695,7 @@ public class VentanaMain extends JFrame {
 		modeloTablaCanciones1.addColumn("Estilo");
 		modeloTablaCanciones1.addColumn("Favoritas");
 
-		PlayList listaDeReproduccion = controlador.getPlayListActual();
+		PlayList listaDeReproduccion = controlador.getPlayListActual(); //TODO cambiar por funcion del controlador de playList actual
 		// Agregar las canciones al modelo de la tablaaa
 		List<Cancion> listaCanciones = listaDeReproduccion.getPlayList();
 		for (Cancion cancion : listaCanciones) {
@@ -825,9 +744,6 @@ public class VentanaMain extends JFrame {
 		});
 
 
-
-
-
 		
 		// Establecer el layout del panel
 		panelPlaylists.setLayout(new BorderLayout());
@@ -844,16 +760,8 @@ public class VentanaMain extends JFrame {
 		panelPlaylists.add(panelBotonesMisPlayLists, BorderLayout.SOUTH);
 
 ;
-
-		
-		
 		
 		JLabel lblpanelPlaylists = new JLabel("PanelPlaylists");
 		panelPlaylists.add(lblpanelPlaylists);
-		
-		
-	
-		
-
 	}
 }
