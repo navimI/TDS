@@ -303,6 +303,14 @@ public class Controlador implements CancionesListener{
 		return true;
 	}
 
+	/**
+	 * <h1>Obtener top 10 canciones.</h1>
+	 * @return Lista de las 10 canciones más reproducidas en orde descendente.
+	 */
+
+	public List<Cancion> getTopCanciones() {
+		return catalogoCanciones.topCanciones();
+	}
 
 	/**
 	 * <h1>Carga las canciones de un fichero en la aplicación.</h1>
@@ -508,6 +516,10 @@ public class Controlador implements CancionesListener{
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		playListFavoritos.clear();
 		return true;
+	}
+	
+	public List<String> listarEstilos(){
+		return catalogoCanciones.listaEstilos();
 	}
 
 	/**

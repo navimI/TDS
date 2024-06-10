@@ -1,8 +1,10 @@
 package umu.tds.dominio;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
@@ -58,9 +60,32 @@ public class CatalogoCancion {
 				canciones.put(cancion.getID(), cancion);
 			}
 		}
+		
+		public List<String> listaEstilos(){
+			return canciones.values().stream().map(c -> c.getEstilo()).distinct().collect(Collectors.toList());
+		}
 
 		public boolean existeCancion(Cancion cancion) {
 			return canciones.values().stream().anyMatch(c -> c.cancionesIguales(cancion));
+		}
+
+		public List<Cancion> topCanciones(){
+			List<Cancion> topCanciones = new LinkedList<Cancion>();
+			for (Cancion cancion: canciones.values()) {
+				if (topCanciones.size() < 10) {
+					topCanciones.add(cancion);
+				} else {
+					for (Cancion cancionTop: topCanciones) {
+						if (cancion.getNumReproducciones() > cancionTop.getNumReproducciones()) {
+							topCanciones.remove(cancionTop);
+							topCanciones.add(cancion);
+							break;
+						}
+					}
+				}
+			}
+			topCanciones.sort(Comparator.comparingInt(Cancion::getNumReproducciones).reversed());
+			return topCanciones;
 		}
 
 		public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo) {
