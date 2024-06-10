@@ -120,6 +120,10 @@ public class VentanaMain extends JFrame {
         	@Override
             public void enteradoCambioEncendido(EventObject arg0) {
                 if (luz.isEncendido()) {
+                	//luz a verde:
+                	luz.setColorEncendido(Color.GREEN);
+                    luz.repaint();
+                    
                     JFileChooser jfc = new JFileChooser(new File("./xml"));
                     FileNameExtensionFilter filter = new FileNameExtensionFilter("Xml Song Files", "xml");
                     jfc.setFileFilter(filter);
@@ -127,13 +131,19 @@ public class VentanaMain extends JFrame {
                     int returnValue = jfc.showOpenDialog(contentPane);
     
                     if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    	
                         controlador.cargarCanciones(jfc.getSelectedFile().getAbsolutePath());
                         contentPane.revalidate();
                         
                         JOptionPane.showMessageDialog(contentPane, 
                                 "Canciones cargadas con éxito.\n", "", JOptionPane.INFORMATION_MESSAGE);
+                        
+                     //color de la luz a rojo después de mostrar el mensaje:
+                        luz.setColorEncendido(Color.RED);
+                        luz.repaint();
                     }
                    luz.setEncendido(false);
+                   luz.repaint(); //repintada después de cambiar el estado
                 }}
         });
         
