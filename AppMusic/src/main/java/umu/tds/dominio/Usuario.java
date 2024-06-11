@@ -1,8 +1,13 @@
 package umu.tds.dominio;
 
+import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.itextpdf.text.DocumentException;
+
+import umu.tds.utils.GeneradorPDF;
 
 public class Usuario {
 
@@ -140,7 +145,20 @@ public class Usuario {
     public boolean isPassword(String password) {
         return this.password.equals(password);
     }
-
+    
+    public boolean generarPDF(String rutaFichero) {
+    	GeneradorPDF generador = new GeneradorPDF();
+    	try {
+			generador.generarFichero(rutaFichero, getNombre(), getPlayListUsuario());
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
 
 
 
