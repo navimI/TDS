@@ -3,6 +3,7 @@ package umu.tds.vista;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -36,7 +37,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import pulsador.IEncendidoListener;
@@ -149,6 +153,8 @@ public class VentanaMain extends JFrame {
                      //color de la luz a rojo después de mostrar el mensaje:
                         luz.setColorEncendido(Color.RED);
                         luz.repaint();
+                        List<String> estilosMusicalesList = controlador.listarEstilos();
+                		estilosMusicalesList.add("");
                     }
                    luz.setEncendido(false);
                    luz.repaint(); //repintada después de cambiar el estado
@@ -269,14 +275,137 @@ public class VentanaMain extends JFrame {
 		panelCardLayout.setLayout(new CardLayout(0, 0));
 		
 		
-		
-		
+		// PANEL BUSCAR:
+		panelBuscar = new JPanel();
+		panelCardLayout.add(panelBuscar, "panelBuscar");
+
+		// Crear una tabla vacía para mostrar los resultados
+		tablaResultados = new JTable() {
+		    @Override
+		    public Class<?> getColumnClass(int column) {
+		        if (column == 4) {
+		            return Boolean.class; // La columna Favoritas será un checkbox
+		        }
+		        return super.getColumnClass(column);
+		    }
+		};
+		// Configurar la tabla 
+		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
+		tablaResultados.setFillsViewportHeight(true);
+
+		// Añadir la tabla a un JScrollPane para permitir el desplazamiento
+		JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
+		panelBuscar.add(scrollPane1);
+		String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas"};
+
+		// Componentes para el panel Buscar:
+		JLabel lblInterprete = new JLabel("Intérprete:");
+		panelBuscar.add(lblInterprete);
+		// Configurar el tamaño mínimo y máximo del panelBuscar
+		panelBuscar.setMinimumSize(new Dimension(600, 400));
+		panelBuscar.setMaximumSize(new Dimension(700, 500));
+
+		JTextField textFieldInterprete = new JTextField();
+		panelBuscar.add(textFieldInterprete);
+		textFieldInterprete.setColumns(15);
+
+		JLabel lblTitulo = new JLabel("Título:");
+		panelBuscar.add(lblTitulo);
+
+		JTextField textFieldTitulo = new JTextField();
+		panelBuscar.add(textFieldTitulo);
+		textFieldTitulo.setColumns(15);
+
+		JLabel lblEstilo = new JLabel("Estilo:");
+		panelBuscar.add(lblEstilo);
+
+		List<String> estilosMusicalesList = controlador.listarEstilos();
+		estilosMusicalesList.add("");
+		// Lista desplegable (combobox) para el estilo musical
+		DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(estilosMusicalesList.toArray(new String[0]));
+		JComboBox<String> comboBoxEstilo = new JComboBox<>(modeloComboBox);
+		panelBuscar.add(comboBoxEstilo);
+
+		JLabel lblFavoritas = new JLabel("Favoritas:");
+		panelBuscar.add(lblFavoritas);
+
+		// Casilla de marcado (checkbox) para favoritas
+		JCheckBox checkBoxFavoritas = new JCheckBox();
+		panelBuscar.add(checkBoxFavoritas);
+
+		JButton btnRealizarBusqueda = new JButton("Buscar");
+		btnRealizarBusqueda.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        // Valores de los filtros
+		        String interprete = textFieldInterprete.getText();
+		        String titulo = textFieldTitulo.getText();
+		        String estilo = (String) comboBoxEstilo.getSelectedItem();
+		        boolean favoritas = checkBoxFavoritas.isSelected();
+
+		        // Llamamos al método realizarBusqueda a través del controlador
+		        List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
+
+		        // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
+		        DefaultTableModel modeloTabla = new DefaultTableModel() {
+		            @Override
+		            public boolean isCellEditable(int row, int column) {
+		                return column == 4; // Solo la columna de Favoritas será editable
+		            }
+		        };
+		        // Añadir las columnas
+		        modeloTabla.setColumnIdentifiers(columnas);
+		        // Añadir las filas con los datos de las canciones encontradas
+		        for (Cancion cancion : resultados) {
+		            modeloTabla.addRow(new Object[]{
+		                cancion.getID(), 
+		                cancion.getTitulo(), 
+		                cancion.getListaInterpretes(), 
+		                cancion.getEstilo(), 
+		                controlador.esFavorita(cancion.getID())
+		            });
+		        }
+		        // Asignar el nuevo modelo a la tabla
+		        tablaResultados.setModel(modeloTabla);
+		        
+		        // Agregar un listener para manejar los cambios en la columna de Favoritas
+		        tablaResultados.getModel().addTableModelListener(new TableModelListener() {
+		            @Override
+		            public void tableChanged(TableModelEvent e) {
+		                if (e.getType() == TableModelEvent.UPDATE) {
+		                    int row = e.getFirstRow();
+		                    int column = e.getColumn();
+		                    if (column == 4) { // Si la columna cambiada es "Favoritas"
+		                        int idCancion = (int) tablaResultados.getValueAt(row, 0);
+		                        boolean isFavorita = (boolean) tablaResultados.getValueAt(row, column);
+		                        controlador.invertirFavoritosID(idCancion);
+		                    }
+		                }
+		            }
+		        });
+		    }
+		});
+		panelBuscar.add(btnRealizarBusqueda);
+
+		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
+		tablaResultados.setFillsViewportHeight(true);
+		JScrollPane scrollPane = new JScrollPane(tablaResultados);
+		panelBuscar.add(scrollPane);
+
+		/*
 		//PANEL BUSCAR:
 		panelBuscar = new JPanel();
 		panelCardLayout.add(panelBuscar, "panelBuscar");
 		
-		// Crear una tabla vacía para mostrar los resultados
-		tablaResultados = new JTable();
+		// Crear una tabla vacía para mostrar los resultados		
+		tablaResultados = new JTable() {
+		    @Override
+		    public Class<?> getColumnClass(int column) {
+		        if (column == 4) {
+		            return Boolean.class; // La columna Favoritas será un checkbox
+		        }
+		        return super.getColumnClass(column);
+		    }
+		};
 		// Configurar la tabla 
 		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
 		tablaResultados.setFillsViewportHeight(true);
@@ -285,7 +414,7 @@ public class VentanaMain extends JFrame {
 		JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
 		panelBuscar.add(scrollPane1);
 		//String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
-	    String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas", "Seleccionar"};
+	    String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas"};
 
 
 		//Componentes para el panel Buscar:
@@ -324,7 +453,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(checkBoxFavoritas);
 
 		
-		JButton btnRealizarBusqueda = new JButton("Buscar"); //TODO que se vean las canciones de la búsqueda
+		JButton btnRealizarBusqueda = new JButton("Buscar"); //TODO lista favoritos
 	    btnRealizarBusqueda.addActionListener(new ActionListener() {
 	        // Dentro del ActionListener del botón btnRealizarBusqueda
 	    	public void actionPerformed(ActionEvent e) {
@@ -338,15 +467,59 @@ public class VentanaMain extends JFrame {
 	    	    List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
 	    	    
 	    	    // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
-	    	    DefaultTableModel modeloTabla = new DefaultTableModel();
+	    	    //DefaultTableModel modeloTabla = new DefaultTableModel();
+	    	    
+	    	    DefaultTableModel modeloTabla = new DefaultTableModel() {
+	                @Override
+	                public boolean isCellEditable(int row, int column) {
+	                    return column == 4; // Solo la columna de Favoritas será editable
+	                }
+	            };
+	            
 	    	    // Añadir las columnas
 	    	    modeloTabla.setColumnIdentifiers(columnas);
 	    	    // Añadir las filas con los datos de las canciones encontradas
 	    	    for (Cancion cancion : resultados) {
-	    	        modeloTabla.addRow(new Object[]{cancion.getID(), cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo(), controlador.esFavorita(cancion.getID()), false});	    	    }
+	                modeloTabla.addRow(new Object[]{
+	                    cancion.getID(), 
+	                    cancion.getTitulo(), 
+	                    cancion.getListaInterpretes(), 
+	                    cancion.getEstilo(), 
+	                    controlador.esFavorita(cancion.getID())
+	                });
+	            }
 	    	    // Asignar el nuevo modelo a la tabla
 	    	    tablaResultados.setModel(modeloTabla);
-	    	}
+	            
+	            // Crear un renderer para la columna "Favoritas"
+	            DefaultTableCellRenderer favoritasRenderer = new DefaultTableCellRenderer() {
+	                private final JCheckBox checkBox = new JCheckBox();
+
+	                @Override
+	                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	                    checkBox.setSelected((boolean) value);
+	                    return checkBox;
+	                }
+	            };
+
+	            // Asignar el renderer a la columna "Favoritas"
+	            tablaResultados.getColumnModel().getColumn(4).setCellRenderer(favoritasRenderer);
+
+	            // Agregar un listener para manejar los cambios en la columna de Favoritas
+	            tablaResultados.getModel().addTableModelListener(new TableModelListener() {
+	                @Override
+	                public void tableChanged(TableModelEvent e) {
+	                    if (e.getType() == TableModelEvent.UPDATE) {
+	                        int row = e.getFirstRow();
+	                        int column = e.getColumn();
+	                        if (column == 4) { // Si la columna cambiada es "Favoritas"
+	                            int idCancion = (int) tablaResultados.getValueAt(row, 0);
+	                            controlador.invertirFavoritosID(idCancion);
+	                        }
+	                    }
+	                }
+	            });
+	        }
 	    });
 	    panelBuscar.add(btnRealizarBusqueda);
 	 
@@ -354,7 +527,7 @@ public class VentanaMain extends JFrame {
 		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
 	    tablaResultados.setFillsViewportHeight(true);
 	    JScrollPane scrollPane = new JScrollPane(tablaResultados);
-	    panelBuscar.add(scrollPane);
+	    panelBuscar.add(scrollPane);*/
 	
 	    //TODO cómo añadir la cancion que salga en el panel buscar a la lista temporal.
 	    //pones la ID en una de los campos y luego paso la ID al catálogo
