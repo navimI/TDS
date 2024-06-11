@@ -164,6 +164,8 @@ public class Controlador implements CancionesListener{
 		return playListActual;
     }
 	
+	
+	
 	public List<Cancion> getCancionesPlayListActual(){
 		return playListActual.getPlayList();
 	}
@@ -578,21 +580,19 @@ public class Controlador implements CancionesListener{
 	/**
 	 * <h1> Quitar canción de la playlist de favoritos con id.</h1>
 	 * @param idCancion Id de la canción a quitar.
-	 * @throws IllegalArgumentException Si la canción no existe.
 	 */
 
     public void quitarCancionDePlayListFavoritosPorID(int idCancion) {
-        Cancion cancion = catalogoCanciones.getCancion(idCancion);
-        if (cancion != null) {
-            removeCancionPlayListFavoritos(cancion);
-        }
-		else
-			throw new IllegalArgumentException("La canción no existe");
+        playListActual.removeCancion(posicionFavorita(idCancion));
     }
     
     public void invertirFavoritosID(int idCancion) {
     	if(esFavorita(idCancion)) quitarCancionDePlayListFavoritosPorID(idCancion);
     	else agregarCancionAPlayListFavoritosPorID(idCancion);
+    }
+    
+    public boolean generarPDF(String rutaFichero) {
+    	return usuarioActual.generarPDF(rutaFichero);
     }
 
    //------------------ metodos auxiliares -----------------------------

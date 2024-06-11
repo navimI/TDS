@@ -65,17 +65,22 @@ public class GeneradorPDF {
         
     }
 
+    private String generaCabecera(String nombrePlayList, int numReproducciones) {
+    	return "PlayList" + nombrePlayList + " con "+numReproducciones+" canciones";
+    }
+    
     private void imprimePlayList(Document documento, PlayList p) throws DocumentException {
-        documento.add(new Paragraph("PlayList" + p.getNombre()+ " con "+p.getNumCanciones(), new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD)));
+        documento.add(new Paragraph(generaCabecera(p.getNombre(),p.getNumCanciones()), new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD)));
         documento.add(Chunk.NEWLINE);
         documento.add(tablaCanciones(p.getPlayList()));
+        documento.add(Chunk.NEWLINE);
     }
 	
     private PdfPTable tablaCanciones(List<Cancion> canciones){
         PdfPTable tabla = new PdfPTable(3);
-        tabla.addCell(new PdfPCell(new Paragraph("Titulo")));
-        tabla.addCell(new PdfPCell(new Paragraph("Estilo")));
-        tabla.addCell(new PdfPCell(new Paragraph("Intérpretes")));
+        tabla.addCell(new PdfPCell(new Paragraph("Titulo", new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD))));
+        tabla.addCell(new PdfPCell(new Paragraph("Estilo", new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD))));
+        tabla.addCell(new PdfPCell(new Paragraph("Intérpretes", new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD))));
         tabla.setHeaderRows(1);
         for (Cancion cancion : canciones) {
             tabla.addCell(new PdfPCell(new Paragraph(cancion.getTitulo())));
