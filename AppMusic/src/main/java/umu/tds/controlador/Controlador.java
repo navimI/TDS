@@ -20,8 +20,8 @@ import umu.tds.dao.IAdaptadorUsuarioDAO;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.CatalogoCancion;
 import umu.tds.dominio.CatalogoUsuarios;
+import umu.tds.dominio.Descuento;
 import umu.tds.dominio.PlayList;
-import umu.tds.dominio.TipoDescuentos;
 import umu.tds.dominio.Usuario;
 import umu.tds.utils.CancionCargadorAdapter;
 import umu.tds.utils.Player;
@@ -71,7 +71,6 @@ public class Controlador implements CancionesListener{
 	
 	private String usuarioTemporal;
 	
-	private TipoDescuentos descuentoAplicado;
 	
 	/**
 	 * <h1>Constructor de la clase Controlador.</h1>
@@ -85,7 +84,6 @@ public class Controlador implements CancionesListener{
 		usuarioActual = null;
 		cancionActual = null;
 		playListActual = new PlayList("");
-		descuentoAplicado = TipoDescuentos.NINGUNO;
 		playListFavoritos = new LinkedList<Cancion>();
 		cargadorCanciones = new CargadorCanciones();
 		cargadorCanciones.addListener(this);
@@ -593,6 +591,25 @@ public class Controlador implements CancionesListener{
     
     public boolean generarPDF(String rutaFichero) {
     	return usuarioActual.generarPDF(rutaFichero);
+    }
+    
+    //TODO: Add persistencia
+    public String activarPremium() {
+    	usuarioActual.setPremium(true);
+    	Descuento desc = usuarioActual.obtenerDescuento();
+    	catalogoUsuarios.updateUsuario(usuarioActual);
+    	adaptadorUsuario.modificarUsuario(usuarioActual);
+    	return "El usuario "+usuarioActual.getUser()+" ha activado la funcionalidad Premium y ha sido aplicado "+desc.asString()+"\n"
+    			+"El precio de la funcionalidad es de "+desc.precioFinal()+" €";
+    	
+    	
+    }
+    
+    //TODO: Add persistencia
+    public void desactivarPremium() {
+    	usuarioActual.setPremium(false);
+    	catalogoUsuarios.updateUsuario(usuarioActual);
+    	adaptadorUsuario.modificarUsuario(usuarioActual);
     }
 
    //------------------ metodos auxiliares -----------------------------

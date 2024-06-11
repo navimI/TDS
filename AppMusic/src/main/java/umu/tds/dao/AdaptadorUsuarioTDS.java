@@ -138,7 +138,7 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			} else if (prop.getNombre().equals(USER)) {
 				prop.setValor(usuario.getUser());
 			} else if (prop.getNombre().equals(FECHA_NACIMIENTO)) {
-				prop.setValor(dateFormat.format(usuario.getFechaNacim()));
+				prop.setValor(usuario.getFechaNacim());
 			}else if (prop.getNombre().equals(PREMIUM)) {
 				prop.setValor(Boolean.valueOf(usuario.isPremiun()).toString());
 			}else if (prop.getNombre().equals(LISTAUSUARIO)) {

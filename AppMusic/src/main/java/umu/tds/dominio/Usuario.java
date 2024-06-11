@@ -1,7 +1,10 @@
 package umu.tds.dominio;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,8 +23,10 @@ public class Usuario {
 	private String password;
 	private boolean premium;
 
+	static final double PRECIO_PREMIUM = 15;
 	private static final int ULTCANCIONES = 5;
 	private static final int TOPCANCIONES = 10;
+
 
 	private List<PlayList> playListUsuario;
 	private PlayList recientes;
@@ -85,6 +90,11 @@ public class Usuario {
 	public String getFechaNacim() {
 		return fechaNacim;
 	}
+	
+	public LocalDate getDateNacimiento() {
+
+		return LocalDate.parse(fechaNacim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
 
 	public boolean isPremiun() {
 		return premium;
@@ -104,6 +114,13 @@ public class Usuario {
 	
 	public boolean addPlayListUsuarios(PlayList listaC) {
 		return this.playListUsuario.add(listaC);
+	}
+	
+	public Descuento obtenerDescuento() {
+		return Descuento.descuetos().stream()
+				.filter(d -> d.isApplicable(this))
+				.reduce((d1,d2) -> d1.precioFinal() < d2.precioFinal() ? d1 : d2)
+				.orElse(new NoDescuento());
 	}
 
 

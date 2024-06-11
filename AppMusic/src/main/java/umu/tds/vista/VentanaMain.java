@@ -266,6 +266,19 @@ public class VentanaMain extends JFrame {
 		panel.add(lblBienvenido);
 		
 		JButton btnPremium = new JButton("Premium");
+		btnPremium.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(controlador.esUsuarioActualPremium()){
+					controlador.desactivarPremium();
+					JOptionPane.showMessageDialog(contentPane, "Funcionalidad Premium desactivada", "Activar Premium", JOptionPane.INFORMATION_MESSAGE);
+					}
+				else{
+					String activarPremium = controlador.activarPremium();
+					JOptionPane.showMessageDialog(contentPane, activarPremium, "Activar Premium", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}
+		});
 		panel.add(btnPremium);
 		
 		JButton btnSalir = new JButton("Salir");
