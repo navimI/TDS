@@ -589,6 +589,11 @@ public class Controlador implements CancionesListener{
 		else
 			throw new IllegalArgumentException("La canción no existe");
     }
+    
+    public void invertirFavoritosID(int idCancion) {
+    	if(esFavorita(idCancion)) quitarCancionDePlayListFavoritosPorID(idCancion);
+    	else agregarCancionAPlayListFavoritosPorID(idCancion);
+    }
 
    //------------------ metodos auxiliares -----------------------------
    

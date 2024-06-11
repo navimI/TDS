@@ -52,7 +52,10 @@ public class Cancion {
 		return titulo;
 	}
 	 
-	
+	public boolean containsInterprete(String interprete) {
+		return listaInterpretes.contains(interprete);
+	}
+
 	//No existe un método setTitulo() porque no tiene sentido poder editar el titulo una vez que la cancion ya esta creada
 
 	public String getRutaFichero() {
@@ -109,6 +112,12 @@ public class Cancion {
 	public String getEstilo() {
 		return estilo;
 	}
+
+	public String getStringInterpretes(){
+		String interpretes = "";
+		interpretes+=listaInterpretes.stream().collect(Collectors.joining(", "));
+		return interpretes;
+	}
 	// Los unicos metodos que permiten la modificacion de valores son los que se encargan de la reproduccion de la cancion
 	// y el setID, que es necesario para la persistencia de la cancion en la base de datos
 	// El resto de metodos son de consulta y no permiten la modificacion de los valores de los atributos
@@ -121,7 +130,7 @@ public class Cancion {
 	@Override
 	public String toString() {
 		return "Cancion [ID=" + ID + ", url=" + getRutaFichero() + ", titulo=" + getTitulo() + ", numReproducciones=" + getNumReproducciones()
-				+ ", listaInterpretes=" + getListaInterpretes() + "]";
+				+ ", listaInterpretes=" + getStringInterpretes() + "]";
 	}
 	
 	

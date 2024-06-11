@@ -89,33 +89,12 @@ public class CatalogoCancion {
 		}
 
 		public List<Cancion> realizarBusqueda(String interprete, String titulo, String estilo) {
-	        List<Cancion> cancionesEncontradas = new LinkedList<>();
-	        try {
-	            List<Cancion> todasLasCanciones = getCanciones();
-
-	            for (Cancion cancion : todasLasCanciones) {
-	                if ((titulo.isEmpty() || cancion.getTitulo().equalsIgnoreCase(titulo)) &&
-	                    (estilo.isEmpty() || cancion.getEstilo().equalsIgnoreCase(estilo)) 
-	                    ) {
-	                    // Verificar si algún intérprete de la canción coincide con algún intérprete de la lista
-	                    boolean coincidenciaInterprete = false;
-	                    for (String interpreteCancion : cancion.getListaInterpretes()) {
-	                        if (interpreteCancion.equalsIgnoreCase(interprete)) {
-	                            coincidenciaInterprete = true;
-	                            break;
-	                        }
-	                    }
-	                    // Si hay coincidencia con el intérprete, agregar la canción a la lista de canciones encontradas
-	                    if (coincidenciaInterprete) {
-	                        cancionesEncontradas.add(cancion);
-	                    }
-	                }
-	            }
-	        } catch (DAOException e) {
-	            // Manejar la excepción, por ejemplo, imprimir un mensaje de error
-	            e.printStackTrace();
-	        }
-	        return cancionesEncontradas;
+			List<Cancion> resultado = canciones.values().stream()
+				.filter(c -> interprete.isEmpty() || c.containsInterprete(interprete))
+				.filter(c -> titulo.isEmpty() || c.getTitulo().equalsIgnoreCase(titulo))
+				.filter(c -> estilo.isEmpty() || c.getEstilo().equalsIgnoreCase(estilo))
+				.collect(Collectors.toList());
+			return resultado;
 	    }
 
 

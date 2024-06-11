@@ -50,6 +50,7 @@ public class PlayList {
 		return new LinkedList<Cancion>(playList); 
 	}
 	
+	
 	//Las canciones que estan al final de la lista son las canciones añadidas recientemente
 	//El orden de la playlist es de más antiguedad en la introducción de la lista a la más reciente.
 	public void addCancion(Cancion cancion) {
