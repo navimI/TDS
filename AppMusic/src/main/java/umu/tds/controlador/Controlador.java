@@ -484,13 +484,15 @@ public class Controlador implements CancionesListener{
 	 * @return True si la playlist se ha eliminado correctamente, False en caso contrario.
 	 */
 	
-	public boolean removePlaylist(PlayList playlistSeleccionada) {
-	    String nombrePlaylist = playlistSeleccionada.getNombre(); // obtener el nombre de la playlist seleccionada
-	    PlayList playlist = adaptadorPlayList.buscarPlayListPorNombre(nombrePlaylist); // buscar la playlist por su nombre
-	    if (playlist != null) {
-	        adaptadorPlayList.borrarPlayList(playlist); // eliminar la playlist del adaptador
+	public boolean removePlaylist(String playlistSeleccionada) {
 
-	        usuarioActual.removePlayListUsuarios(playlist); // eliminar la playlist del usuario actual
+		PlayList selectedPlaylist = usuarioActual.getPlayListNamed(playlistSeleccionada);
+	    
+	    if (selectedPlaylist != null) {
+
+	        adaptadorPlayList.borrarPlayList(selectedPlaylist); // eliminar la playlist del adaptador
+
+	        usuarioActual.removePlayListUsuarios(selectedPlaylist); // eliminar la playlist del usuario actual
 	        adaptadorUsuario.modificarUsuario(usuarioActual); // guardar los cambios en el adaptador de usuario
 			catalogoUsuarios.updateUsuario(usuarioActual); // actualizar el usuario en el catálogo de usuarios
 	        return true;
@@ -530,7 +532,7 @@ public class Controlador implements CancionesListener{
 				.collect(Collectors.toList());
 
 			selectedPlaylist.addCanciones(songList);
-			
+			adaptadorPlayList.modificarPlayList(selectedPlaylist);
 			
 		}
 
