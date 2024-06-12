@@ -3,7 +3,6 @@ package umu.tds.vista;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -15,8 +14,9 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +42,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import pulsador.IEncendidoListener;
@@ -551,12 +550,22 @@ public class VentanaMain extends JFrame {
 		panelBotonesPlaylist.add(btnEliminarPlaylist);
 		panelGestion.add(panelBotonesPlaylist); // Agregar el panel de botones en la parte superior
 
-		// Para mostrar canciones seleccionadas, la tabla:
-		DefaultTableModel modeloTablaCanciones = new DefaultTableModel();
+		// Para mostrar canciones seleccionadas, la tabla: //TODO revisar los cheks
+		DefaultTableModel modeloTablaCanciones = new DefaultTableModel() {
+		    @Override
+		    public Class<?> getColumnClass(int columnIndex) {
+		        if (columnIndex == 4) {
+		            return Boolean.class; // La columna "Check" maneja Boolean
+		        }
+		        return super.getColumnClass(columnIndex);
+		    }
+		};
+
 		modeloTablaCanciones.setColumnIdentifiers(new String[]{"ID", "Título", "Intérprete", "Estilo", "Check"});
 		JTable tablaCanciones = new JTable(modeloTablaCanciones);
 		tablaCanciones.getColumnModel().getColumn(0).setPreferredWidth(50); // Ajustar el ancho de la columna ID
-		tablaCanciones.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(new JCheckBox())); // Asegurar que la columna Check sea editable como casilla
+		tablaCanciones.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(new JCheckBox())); // Editor para la columna "Check"
+		tablaCanciones.getColumnModel().getColumn(4).setCellRenderer(tablaCanciones.getDefaultRenderer(Boolean.class)); // Renderer para la columna "Check"
 		JScrollPane scrollPaneTabla = new JScrollPane(tablaCanciones);
 		panelGestion.add(scrollPaneTabla); // Agregar la tabla al panel
 
@@ -566,6 +575,7 @@ public class VentanaMain extends JFrame {
 
 		// AtomicBoolean para verificar si las canciones han sido cargadas
 		AtomicBoolean cancionesCargadas = new AtomicBoolean(false);
+		AtomicBoolean todasMarcadas = new AtomicBoolean(false); // Variable de estado para marcar/desmarcar todo
 
 		// Lógica para manejar las acciones del botón "Crear/Guardar Playlist":
 		btnCrearPlaylist.addActionListener(new ActionListener() {
@@ -629,8 +639,35 @@ public class VentanaMain extends JFrame {
 		    }
 		});
 		
-		//RECIENTES: 
+		// Lógica para manejar las acciones del botón "Marcar/Desmarcar todo":
+		btnMarcarTodo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        boolean marcar = !todasMarcadas.get();
+		        for (int i = 0; i < modeloTablaCanciones.getRowCount(); i++) {
+		            modeloTablaCanciones.setValueAt(marcar, i, 4);
+		        }
+		        todasMarcadas.set(marcar);
+		    }
+		});
 		
+		// Para el botón eliminar:
+		btnEliminarPlaylist.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String tituloPlaylist = textFieldTituloPlaylist.getText();
+		        if (!tituloPlaylist.isEmpty()) {
+		            boolean eliminado = controlador.removePlaylist(tituloPlaylist);
+		            if (eliminado) {
+		                JOptionPane.showMessageDialog(null, "Playlist eliminada exitosamente.");
+		            } else {
+		                JOptionPane.showMessageDialog(null, "Error al eliminar la playlist.");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Por favor, introduce un título para la playlist.");
+		        }
+		    }
+		});
+
+		//RECIENTES:
 		JPanel panelRecientes = new JPanel();
 		//panelCardLayout.add(panelRecientes, "panelRecientes");
 		panelRecientes.setLayout(new BorderLayout());
@@ -685,12 +722,62 @@ public class VentanaMain extends JFrame {
 		panelRecientes.add(lblpanelRecientes);
 		
 		
-		//PANEL PLAYLISTS
+		//PANEL PLAYLISTS //TODO
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
 		panelPlaylists.setLayout(new BorderLayout());
 		
+		// Obtener la lista de playlists asociadas al usuario
+		List<PlayList> playlistsUsuario = controlador.getPlayListUsuario();
+
+		// Configurar el panel "panelPlaylists" para mostrar los nombres de las playlists
+		panelPlaylists.setLayout(new GridLayout(playlistsUsuario.size(), 1)); // Establecer un diseño de cuadrícula
+
+		// Crear un ActionListener para las etiquetas de playlists
+		ActionListener playlistClickListener = new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener el nombre de la playlist seleccionada
+		        String nombrePlaylist = ((JLabel) e.getSource()).getText();
+		        
+		        // Obtener la playlist completa utilizando el controlador
+		        PlayList playlistSeleccionada = controlador.existePlayList(nombrePlaylist);
+		        
+		        // Verificar si la playlist existe
+		        if (playlistSeleccionada != null) {
+		            // Obtener las canciones de la playlist
+		            List<Cancion> cancionesPlaylist = playlistSeleccionada.getPlayList();
+		            
+		            // Limpiar la tabla antes de agregar nuevas filas
+		            modeloTablaCanciones.setRowCount(0);
+		            
+		            // Agregar las canciones a la tabla
+		            for (Cancion cancion : cancionesPlaylist) {
+		                modeloTablaCanciones.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo()});
+		            }
+		        } else {
+		            // La playlist no existe
+		            JOptionPane.showMessageDialog(null, "La playlist seleccionada no existe.");
+		        }
+		    }
+		};
+
+		// Agregar etiquetas de playlists al panel y configurar el ActionListener
+		for (PlayList playlist : playlistsUsuario) {
+		    JLabel labelPlaylist = new JLabel(playlist.getNombre()); // Obtener el nombre de la playlist
+		    labelPlaylist.addMouseListener(new MouseAdapter() {
+		        @Override
+		        public void mouseClicked(MouseEvent e) {
+		            playlistClickListener.actionPerformed(new ActionEvent(labelPlaylist, ActionEvent.ACTION_PERFORMED, null));
+		        }
+		    });
+		    panelPlaylists.add(labelPlaylist); // Agregar la etiqueta al panel
+		}
+
 		
+
+		
+		/*
 		// Crear el campo para introducir el título de la playlist
 		JTextField textFieldTituloPlaylist1 = new JTextField(20);
 
@@ -819,5 +906,6 @@ public class VentanaMain extends JFrame {
 		
 		JLabel lblpanelPlaylists = new JLabel("PanelPlaylists");
 		panelPlaylists.add(lblpanelPlaylists);
+		*/
 	}
 }
