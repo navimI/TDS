@@ -166,6 +166,9 @@ public class Controlador implements CancionesListener{
 		return new LinkedList<Cancion>(playListFavoritos);
 	}
 	
+	public List<PlayList> getPlayListUsuario(){	
+		return usuarioActual.getPlayListUsuario();
+	}
 	
 	public List<Cancion> getCancionesPlayListActual(){
 		return playListActual.getPlayList();
