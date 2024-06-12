@@ -162,6 +162,9 @@ public class Controlador implements CancionesListener{
 		return playListActual;
     }
 	
+	public List<Cancion> getPlayListFavoritos(){
+		return new LinkedList<Cancion>(playListFavoritos);
+	}
 	
 	
 	public List<Cancion> getCancionesPlayListActual(){
@@ -507,9 +510,20 @@ public class Controlador implements CancionesListener{
 	 */
 	
 	
-	public boolean guardarPlayListDesdeVentana(String nombrePlaylist) {
+	public boolean guardarPlayListDesdeVentana(String nombrePlaylist,List<Integer> idCanciones) {
 		if (playListFavoritos.isEmpty())
 			return false;
+		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
+		if (pL == null) {
+			pL = new PlayList(nombrePlaylist, playListFavoritos);
+		}
+		else {
+			List<Cancion> aux = new LinkedList<Cancion>();
+			aux.addAll(playListFavoritos);
+			aux.addAll(pL.getPlayList());
+			pL.removeAllCanciones();
+			
+		}
 		PlayList aux = new PlayList(nombrePlaylist, playListFavoritos);
 		adaptadorPlayList.registrarPlayList(aux);
 		usuarioActual.addPlayListUsuarios(aux);
@@ -518,16 +532,15 @@ public class Controlador implements CancionesListener{
 		return true;
 	}
 	
-	public PlayList crearPlayList(String nombrePlaylist) {
+	public PlayList existePlayList(String nombrePlaylist) {
 		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
-		if (pL == null) {
-			return new PlayList("Favoritos", playListFavoritos);
-		}
-		else {
-			pL.addCanciones(playListFavoritos);
+		if (pL != null) {
 			return pL;
 		}
+		return null;
 	}
+	
+	
 	
 	public List<String> listarEstilos(){
 		return catalogoCanciones.listaEstilos();
@@ -559,17 +572,6 @@ public class Controlador implements CancionesListener{
 		}
 		else return aux;
 		
-		/*prueba:
-			//objetos de prueba Cancion
-	        Cancion cancion1 = new Cancion("Cancion 1", "Rock", "Interprete 1", "Interprete 2");
-	        Cancion cancion2 = new Cancion("Cancion 2", "Pop", "Interprete 3");
-	        Cancion cancion3 = new Cancion("Cancion 3", "Electrónica", Arrays.asList("Interprete 4", "Interprete 5"));
-	        List<Cancion> canciones = new ArrayList<>();
-	        canciones.add(cancion1);
-	        canciones.add(cancion2);
-	        canciones.add(cancion3);
-	        return canciones;
-	        */
     }
 
 	/**
