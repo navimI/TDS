@@ -116,6 +116,13 @@ public class Usuario {
 		return this.playListUsuario.add(listaC);
 	}
 	
+	public PlayList getPlayListNamed(String playListName) {
+		return playListUsuario.stream()
+				.filter(pl -> pl.getNombre().equals(playListName))
+				.findFirst()
+				.orElse(null);
+	}
+	
 	public Descuento obtenerDescuento() {
 		return Descuento.descuetos().stream()
 				.filter(d -> d.isApplicable(this))

@@ -518,6 +518,17 @@ public class Controlador implements CancionesListener{
 		return true;
 	}
 	
+	public PlayList crearPlayList(String nombrePlaylist) {
+		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
+		if (pL == null) {
+			return new PlayList("Favoritos", playListFavoritos);
+		}
+		else {
+			pL.addCanciones(playListFavoritos);
+			return pL;
+		}
+	}
+	
 	public List<String> listarEstilos(){
 		return catalogoCanciones.listaEstilos();
 	}
