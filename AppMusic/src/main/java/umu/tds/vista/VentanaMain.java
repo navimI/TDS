@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -294,7 +296,12 @@ public class VentanaMain extends JFrame {
 
 		// Crear una tabla vacía para mostrar los resultados
 		tablaResultados = new JTable() {
-		    @Override
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
 		    public Class<?> getColumnClass(int column) {
 		        if (column == 4) {
 		            return Boolean.class; // La columna Favoritas será un checkbox
@@ -360,7 +367,12 @@ public class VentanaMain extends JFrame {
 
 		        // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
 		        DefaultTableModel modeloTabla = new DefaultTableModel() {
-		            @Override
+		            /**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
 		            public boolean isCellEditable(int row, int column) {
 		                return column == 4; // Solo la columna de Favoritas será editable
 		            }
@@ -403,155 +415,7 @@ public class VentanaMain extends JFrame {
 		tablaResultados.setFillsViewportHeight(true);
 		JScrollPane scrollPane = new JScrollPane(tablaResultados);
 		panelBuscar.add(scrollPane);
-
-		/*
-		//PANEL BUSCAR:
-		panelBuscar = new JPanel();
-		panelCardLayout.add(panelBuscar, "panelBuscar");
-		
-		// Crear una tabla vacía para mostrar los resultados		
-		tablaResultados = new JTable() {
-		    @Override
-		    public Class<?> getColumnClass(int column) {
-		        if (column == 4) {
-		            return Boolean.class; // La columna Favoritas será un checkbox
-		        }
-		        return super.getColumnClass(column);
-		    }
-		};
-		// Configurar la tabla 
-		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
-		tablaResultados.setFillsViewportHeight(true);
-
-		// Añadir la tabla a un JScrollPane para permitir el desplazamiento
-		JScrollPane scrollPane1 = new JScrollPane(tablaResultados);
-		panelBuscar.add(scrollPane1);
-		//String[] columnas = {"Título", "Intérprete", "Estilo", "Favoritas"};
-	    String[] columnas = {"ID", "Título", "Intérprete", "Estilo", "Favoritas"};
-
-
-		//Componentes para el panel Buscar:
-		JLabel lblInterprete = new JLabel("Intérprete:");
-		panelBuscar.add(lblInterprete);
-		//Configurar el tamaño mínimo y máximo del panelBuscar
-		panelBuscar.setMinimumSize(new Dimension(600, 400));
-		panelBuscar.setMaximumSize(new Dimension(700, 500));
-
-		JTextField textFieldInterprete = new JTextField();
-		panelBuscar.add(textFieldInterprete);
-		textFieldInterprete.setColumns(15);
-
-		JLabel lblTitulo = new JLabel("Título:");
-		panelBuscar.add(lblTitulo);
-
-		JTextField textFieldTitulo = new JTextField();
-		panelBuscar.add(textFieldTitulo);
-		textFieldTitulo.setColumns(15);
-
-		JLabel lblEstilo = new JLabel("Estilo:");
-		panelBuscar.add(lblEstilo);
-			
-		List<String> estilosMusicalesList = controlador.listarEstilos();
-		estilosMusicalesList.add("");
-		//Lista desplegable (combobox) para el estilo musical	
-		DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(estilosMusicalesList.toArray(new String[0]));
-		JComboBox<String> comboBoxEstilo = new JComboBox<>(modeloComboBox);
-        panelBuscar.add(comboBoxEstilo);
-
-		JLabel lblFavoritas = new JLabel("Favoritas:");
-		panelBuscar.add(lblFavoritas);
-
-		//Casilla de marcado (checkbox) para favoritas
-		JCheckBox checkBoxFavoritas = new JCheckBox();
-		panelBuscar.add(checkBoxFavoritas);
-
-		
-		JButton btnRealizarBusqueda = new JButton("Buscar"); //TODO lista favoritos
-	    btnRealizarBusqueda.addActionListener(new ActionListener() {
-	        // Dentro del ActionListener del botón btnRealizarBusqueda
-	    	public void actionPerformed(ActionEvent e) {
-	    	    // Valores de los filtros
-	    	    String interprete = textFieldInterprete.getText();
-	    	    String titulo = textFieldTitulo.getText();
-	    	    String estilo = (String) comboBoxEstilo.getSelectedItem();
-	    	    boolean favoritas = checkBoxFavoritas.isSelected();
-	    	    
-	    	    // Llamamos al método realizarBusqueda a través del controlador
-	    	    List<Cancion> resultados = controlador.realizarBusqueda(interprete, titulo, estilo, favoritas);
-	    	    
-	    	    // Ahora actualizamos el modelo de la tabla con los resultados obtenidos
-	    	    //DefaultTableModel modeloTabla = new DefaultTableModel();
-	    	    
-	    	    DefaultTableModel modeloTabla = new DefaultTableModel() {
-	                @Override
-	                public boolean isCellEditable(int row, int column) {
-	                    return column == 4; // Solo la columna de Favoritas será editable
-	                }
-	            };
-	            
-	    	    // Añadir las columnas
-	    	    modeloTabla.setColumnIdentifiers(columnas);
-	    	    // Añadir las filas con los datos de las canciones encontradas
-	    	    for (Cancion cancion : resultados) {
-	                modeloTabla.addRow(new Object[]{
-	                    cancion.getID(), 
-	                    cancion.getTitulo(), 
-	                    cancion.getListaInterpretes(), 
-	                    cancion.getEstilo(), 
-	                    controlador.esFavorita(cancion.getID())
-	                });
-	            }
-	    	    // Asignar el nuevo modelo a la tabla
-	    	    tablaResultados.setModel(modeloTabla);
-	            
-	            // Crear un renderer para la columna "Favoritas"
-	            DefaultTableCellRenderer favoritasRenderer = new DefaultTableCellRenderer() {
-	                private final JCheckBox checkBox = new JCheckBox();
-
-	                @Override
-	                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-	                    checkBox.setSelected((boolean) value);
-	                    return checkBox;
-	                }
-	            };
-
-	            // Asignar el renderer a la columna "Favoritas"
-	            tablaResultados.getColumnModel().getColumn(4).setCellRenderer(favoritasRenderer);
-
-	            // Agregar un listener para manejar los cambios en la columna de Favoritas
-	            tablaResultados.getModel().addTableModelListener(new TableModelListener() {
-	                @Override
-	                public void tableChanged(TableModelEvent e) {
-	                    if (e.getType() == TableModelEvent.UPDATE) {
-	                        int row = e.getFirstRow();
-	                        int column = e.getColumn();
-	                        if (column == 4) { // Si la columna cambiada es "Favoritas"
-	                            int idCancion = (int) tablaResultados.getValueAt(row, 0);
-	                            controlador.invertirFavoritosID(idCancion);
-	                        }
-	                    }
-	                }
-	            });
-	        }
-	    });
-	    panelBuscar.add(btnRealizarBusqueda);
-	 
 	    
-		tablaResultados.setPreferredScrollableViewportSize(new Dimension(400, 200));
-	    tablaResultados.setFillsViewportHeight(true);
-	    JScrollPane scrollPane = new JScrollPane(tablaResultados);
-	    panelBuscar.add(scrollPane);*/
-	
-	    //TODO cómo añadir la cancion que salga en el panel buscar a la lista temporal.
-	    //pones la ID en una de los campos y luego paso la ID al catálogo
-	    //con el panel buscar, donde set column, añadir otra columna que sea id, cuando se recuperen los datos, que aparezca el valor de id, en el for cancion resultados
-	    //añadir otra columna que sea un seleccionable, que si esta activado, esa cancion la cargue a la playlist temporal, y si estaba seleccionada y la deselecciona, que la quite
-	    //estas funciones aún no están en el Controlador. 
-	    
-	    //TODO - cambiar las llamadas al Controlador para que sean con Controlador.getUnicaInstancia()... 
-	    //TODO - chequear los runeables de lo sbotones de reproduccion, son realmente necesarios????
-	    
-
 	  //PANEL PARA LOS BOTONES DE REPRODUCCIÓN:
 	    JPanel panelBotonesReproduccion = new JPanel();
 
@@ -621,12 +485,7 @@ public class VentanaMain extends JFrame {
         
         //Hacer visible la ventana
         setVisible(true);
-    
 
-            
-        
-        
-            
         btnAnterior.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtiene el objeto que puede invocar previousSong() y lo ejecuta
@@ -668,7 +527,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(lblPanelbuscar);
 		
 		
-		//GESTIÓN:
+		//GESTIÓN: //TODO para pasar al controlador la nueva lista, le paso una lista de los id de las canciones y el nombre de la playlist
 		// Para crear y editar playlists:
 		JPanel panelGestion = new JPanel();
 		panelCardLayout.add(panelGestion, "panelGestion");
@@ -681,104 +540,94 @@ public class VentanaMain extends JFrame {
 		panelGestion.add(textFieldTituloPlaylist);
 
 		// Botones para crear y eliminar playlists:
-		JButton btnCrearPlaylist = new JButton("Crear");
-		JButton btnEliminarPlaylist = new JButton("Eliminar");
-		JPanel panelBotonesPlaylist = new JPanel();
+		JButton btnCrearPlaylist = new JButton("Crear/Guardar Playlist");
+		btnCrearPlaylist.setMinimumSize(new Dimension(80, 30)); // Establecer tamaño mínimo
+		JButton btnEliminarPlaylist = new JButton("Eliminar Playlist");
+		btnEliminarPlaylist.setMinimumSize(new Dimension(80, 30)); // Establecer tamaño mínimo
+		JPanel panelBotonesPlaylist = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Usar FlowLayout y alinear a la izquierda
+		panelBotonesPlaylist.setPreferredSize(new Dimension(200, 50));
+		panelGestion.setPreferredSize(new Dimension(300, 400));
 		panelBotonesPlaylist.add(btnCrearPlaylist);
 		panelBotonesPlaylist.add(btnEliminarPlaylist);
 		panelGestion.add(panelBotonesPlaylist); // Agregar el panel de botones en la parte superior
 
 		// Para mostrar canciones seleccionadas, la tabla:
 		DefaultTableModel modeloTablaCanciones = new DefaultTableModel();
-		modeloTablaCanciones.setColumnIdentifiers(new String[]{"Título", "Intérprete", "Estilo", "Favoritas"});
+		modeloTablaCanciones.setColumnIdentifiers(new String[]{"ID", "Título", "Intérprete", "Estilo", "Check"});
 		JTable tablaCanciones = new JTable(modeloTablaCanciones);
+		tablaCanciones.getColumnModel().getColumn(0).setPreferredWidth(50); // Ajustar el ancho de la columna ID
+		tablaCanciones.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(new JCheckBox())); // Asegurar que la columna Check sea editable como casilla
 		JScrollPane scrollPaneTabla = new JScrollPane(tablaCanciones);
 		panelGestion.add(scrollPaneTabla); // Agregar la tabla al panel
 
 		// Para eliminar canciones de la lista, el botón:
-		JButton btnEliminarCancion = new JButton("Eliminar de la Lista");
-		panelGestion.add(btnEliminarCancion);
+		JButton btnMarcarTodo = new JButton("Marcar/Desmarcar todo");
+		panelGestion.add(btnMarcarTodo);
 
-		// Lógica para manejar las acciones de los botones:
-		
+		// AtomicBoolean para verificar si las canciones han sido cargadas
+		AtomicBoolean cancionesCargadas = new AtomicBoolean(false);
+
+		// Lógica para manejar las acciones del botón "Crear/Guardar Playlist":
 		btnCrearPlaylist.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        String tituloPlaylist = textFieldTituloPlaylist.getText();
 		        if (!tituloPlaylist.isEmpty()) {
-		            boolean creado = controlador.guardarPlayListDesdeVentana(tituloPlaylist);
-		            if (creado) {
-		                // Playlist creada exitosamente
-		                JOptionPane.showMessageDialog(null, "Playlist creada exitosamente.");
+		            if (!cancionesCargadas.get()) {
+		                // Primera vez que se pulsa el botón, cargar canciones
+		                PlayList playlist = controlador.existePlayList(tituloPlaylist);
+		                List<Cancion> cancionesFavoritos = controlador.getPlayListFavoritos();
+
+		                // Limpiar la tabla antes de cargar nuevas canciones
+		                modeloTablaCanciones.setRowCount(0);
+
+		                // Cargar canciones de la playlist especificada
+		                if (playlist != null) {
+		                    for (Cancion cancion : playlist.getPlayList()) {
+		                        modeloTablaCanciones.addRow(new Object[]{
+		                            cancion.getID(),
+		                            cancion.getTitulo(),
+		                            String.join(", ", cancion.getListaInterpretes()),
+		                            cancion.getEstilo(),
+		                            true
+		                        });
+		                    }
+		                }
+
+		                // Cargar canciones de favoritos
+		                for (Cancion cancion : cancionesFavoritos) {
+		                    modeloTablaCanciones.addRow(new Object[]{
+		                        cancion.getID(),
+		                        cancion.getTitulo(),
+		                        String.join(", ", cancion.getListaInterpretes()),
+		                        cancion.getEstilo(),
+		                        false
+		                    });
+		                }
+
+		                cancionesCargadas.set(true);
 		            } else {
-		                // No se pudo crear la playlist
-		                JOptionPane.showMessageDialog(null, "Error al crear la playlist.");
+		                // Segunda vez que se pulsa el botón, guardar cambios
+		                List<Integer> idCancionesSeleccionadas = new LinkedList<>();
+		                for (int i = 0; i < modeloTablaCanciones.getRowCount(); i++) {
+		                    boolean check = (boolean) modeloTablaCanciones.getValueAt(i, 4);
+		                    if (check) {
+		                        int idCancion = (int) modeloTablaCanciones.getValueAt(i, 0);
+		                        idCancionesSeleccionadas.add(idCancion);
+		                    }
+		                }
+		                boolean creado = controlador.guardarPlayListDesdeVentana(tituloPlaylist, idCancionesSeleccionadas);
+		                if (creado) {
+		                    JOptionPane.showMessageDialog(null, "Playlist creada/guardada exitosamente.");
+		                } else {
+		                    JOptionPane.showMessageDialog(null, "Error al guardar la playlist.");
+		                }
+		                cancionesCargadas.set(false);
 		            }
 		        } else {
-		            // El campo del título de la playlist está vacío
 		            JOptionPane.showMessageDialog(null, "Por favor, introduce un título para la playlist.");
 		        }
 		    }
 		});
-
-		btnEliminarPlaylist.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Obtener la fila seleccionada
-		        int filaSeleccionada = tablaCanciones.getSelectedRow();
-		        if (filaSeleccionada != -1) {
-		            // Obtener el título de la playlist seleccionada
-		            String tituloPlaylist = (String) tablaCanciones.getValueAt(filaSeleccionada, 0);
-		            
-		            // Obtener la instancia actual de la lista de reproducción
-		            PlayList listaSeleccionada = controlador.getPlayListActual();
-		            
-		            // Llamar al método removePlaylist del controlador con la instancia de PlayList
-		            boolean eliminado = controlador.removePlaylist(listaSeleccionada);
-		            if (eliminado) {
-		                // Playlist eliminada exitosamente
-		                JOptionPane.showMessageDialog(null, "Playlist eliminada exitosamente.");
-		            } else {
-		                // No se pudo eliminar la playlist
-		                JOptionPane.showMessageDialog(null, "Error al eliminar la playlist.");
-		            }
-		        } else {
-		            // No se seleccionó ninguna fila
-		            JOptionPane.showMessageDialog(null, "Por favor, selecciona una playlist.");
-		        }
-		    }
-		});
-
-
-		btnEliminarCancion.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        int[] filasSeleccionadas = tablaCanciones.getSelectedRows();
-		        if (filasSeleccionadas.length > 0) {
-		            // Obtener las canciones seleccionadas directamente de la tabla
-		            LinkedList<Cancion> cancionesSeleccionadas = new LinkedList<>();
-		            for (int fila : filasSeleccionadas) {
-		                String tituloCancion = (String) tablaCanciones.getValueAt(fila, 0);
-		                String interpreteCancion = (String) tablaCanciones.getValueAt(fila, 1);
-		                String estiloCancion = (String) tablaCanciones.getValueAt(fila, 2);
-		                boolean favorita = (boolean) tablaCanciones.getValueAt(fila, 3);
-		                // Crear la canción y agregarla a la lista
-		                Cancion cancion = new Cancion(tituloCancion, interpreteCancion);
-		                cancionesSeleccionadas.add(cancion);
-		            }
-		            // Llamar al método removeCancionesDePlaylist del controlador
-		            boolean eliminado = controlador.removeCancionesDePlaylistFavoritos(cancionesSeleccionadas);
-		            if (eliminado) {
-		                JOptionPane.showMessageDialog(null, "Canciones eliminadas exitosamente de la playlist.");
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Error al eliminar las canciones de la playlist.");
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Por favor, selecciona al menos una canción.");
-		        }
-		    }
-		});
-
-		JLabel lblPanelgestion = new JLabel("PanelGestion");
-		panelGestion.add(lblPanelgestion);
-		
 		
 		//RECIENTES: 
 		
@@ -851,11 +700,11 @@ public class VentanaMain extends JFrame {
 		// Botón para eliminar la playlist
 		JButton btnEliminarPlaylist1 = new JButton("Eliminar Playlist");
 
-		// Botón para eliminar canciones de la lista
+		// Botón para eliminar canciones de la lista //TODO POR QUÉ ESTÁ ESTA FUNCIONALIDAD AQUÍ??!!
 		JButton btnEliminarCancion1 = new JButton("Eliminar de la Lista");
-		btnCrearPlaylist.setPreferredSize(new Dimension(12, 30));
-		btnEliminarPlaylist.setPreferredSize(new Dimension(12, 30));
-		btnEliminarCancion.setPreferredSize(new Dimension(12, 30));
+		//btnCrearPlaylist.setPreferredSize(new Dimension(12, 30));
+		//btnEliminarPlaylist.setPreferredSize(new Dimension(12, 30));
+		//btnEliminarCancion.setPreferredSize(new Dimension(12, 30));
 		
 
 		// Añadir acciones a los botones
