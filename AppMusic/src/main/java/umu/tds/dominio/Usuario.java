@@ -108,11 +108,11 @@ public class Usuario {
 		return new LinkedList<PlayList>(playListUsuario);
 	}
 	
-	public boolean addPlayListUsuarios(List<PlayList> listaC) {
+	public boolean addUserPlaylists(List<PlayList> listaC) {
 		return this.playListUsuario.addAll(listaC);
 	}
 	
-	public boolean addPlayListUsuarios(PlayList listaC) {
+	public boolean addPlayList(PlayList listaC) {
 		return this.playListUsuario.add(listaC);
 	}
 	

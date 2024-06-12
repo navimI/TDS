@@ -63,7 +63,7 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		usuario.setPremium(Boolean.valueOf(premium)==Boolean.TRUE);
 		
 		playList = obtenerListasUsuarioDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTAUSUARIO));
-		usuario.addPlayListUsuarios(playList);
+		usuario.addUserPlaylists(playList);
 
 		return usuario;
 	}

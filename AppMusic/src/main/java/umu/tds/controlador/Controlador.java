@@ -513,20 +513,28 @@ public class Controlador implements CancionesListener{
 	public boolean guardarPlayListDesdeVentana(String nombrePlaylist,List<Integer> idCanciones) {
 		if (playListFavoritos.isEmpty())
 			return false;
-		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
-		if (pL == null) {
-			pL = new PlayList(nombrePlaylist, playListFavoritos);
+		PlayList selectedPlaylist = usuarioActual.getPlayListNamed(nombrePlaylist);
+		if (selectedPlaylist == null) {
+			selectedPlaylist = new PlayList(nombrePlaylist, playListFavoritos);
+			usuarioActual.addPlayList(selectedPlaylist);
+			adaptadorPlayList.registrarPlayList(selectedPlaylist);
+
 		}
 		else {
-			List<Cancion> aux = new LinkedList<Cancion>();
-			aux.addAll(playListFavoritos);
-			aux.addAll(pL.getPlayList());
-			pL.removeAllCanciones();
+			List<Cancion> songList = new LinkedList<Cancion>();
+			songList.addAll(playListFavoritos);
+			songList.addAll(selectedPlaylist.getPlayList());
+			selectedPlaylist.removeAllCanciones();
+			songList = songList.stream()
+				.filter(c -> idCanciones.contains(c.getID()))
+				.collect(Collectors.toList());
+
+			selectedPlaylist.addCanciones(songList);
+			
 			
 		}
-		PlayList aux = new PlayList(nombrePlaylist, playListFavoritos);
-		adaptadorPlayList.registrarPlayList(aux);
-		usuarioActual.addPlayListUsuarios(aux);
+
+		
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		playListFavoritos.clear();
 		return true;
