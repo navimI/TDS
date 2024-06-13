@@ -14,9 +14,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -126,8 +125,8 @@ public class VentanaMain extends JFrame {
         luz.setColorApagado(Color.RED);     // Establecer el color apagado
         luz.setNombre("Luz Principal");     // Establecer el nombre de la luz
 
-        // Establecer la posición y tamaño del componente Luz
-        luz.setBounds(25, 250, 50, 50); // Posición (x, y) y tamaño (ancho, alto)
+        // Posición y tamaño del componente Luz
+        luz.setBounds(25, 250, 50, 50);
         
         luz.addEncendidoListener(new IEncendidoListener() {
         	@Override
@@ -146,16 +145,16 @@ public class VentanaMain extends JFrame {
                     if (returnValue == JFileChooser.APPROVE_OPTION) {
                     	
                         controlador.cargarCanciones(jfc.getSelectedFile().getAbsolutePath());
-                        contentPane.revalidate();
-                        
+                        List<String> estilosMusicalesList = controlador.listarEstilos();
+                		estilosMusicalesList.add("");
+                		revalidate();
+                		repaint();
                         JOptionPane.showMessageDialog(contentPane, 
                                 "Canciones cargadas con éxito.\n", "", JOptionPane.INFORMATION_MESSAGE);
                         
                      //color de la luz a rojo después de mostrar el mensaje:
                         luz.setColorEncendido(Color.RED);
                         luz.repaint();
-                        List<String> estilosMusicalesList = controlador.listarEstilos();
-                		estilosMusicalesList.add("");
                     }
                    luz.setEncendido(false);
                    luz.repaint(); //repintada después de cambiar el estado
@@ -205,6 +204,7 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelGestion");
+				
 			}
 		});
 		btnGestionPlaylists.setHorizontalAlignment(SwingConstants.LEFT);
@@ -262,8 +262,8 @@ public class VentanaMain extends JFrame {
 		panelCentro.add(panel, BorderLayout.NORTH);
 		
 		// Cambiar comentario entre las 2 siguientes lineas dependiendo de si se va a ejecutar el todo el lanzador o solo la ventana main
-		//JLabel lblBienvenido = new JLabel("Bienvenido, "+Controlador.getUnicaInstancia().getUsuarioActualField("user"));
-		JLabel lblBienvenido = new JLabel("Bienvenido, [usuario]");
+		JLabel lblBienvenido = new JLabel("Bienvenido, "+ controlador.getUsuarioActualField("user"));
+		//JLabel lblBienvenido = new JLabel("Bienvenido, [usuario]");
 		panel.add(lblBienvenido);
 		
 		JButton btnPremium = new JButton("Premium");
@@ -526,7 +526,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(lblPanelbuscar);
 		
 		
-		//GESTIÓN: //TODO para pasar al controlador la nueva lista, le paso una lista de los id de las canciones y el nombre de la playlist
+		//GESTIÓN: 
 		// Para crear y editar playlists:
 		JPanel panelGestion = new JPanel();
 		panelCardLayout.add(panelGestion, "panelGestion");
@@ -614,6 +614,8 @@ public class VentanaMain extends JFrame {
 		                    });
 		                }
 
+		                JOptionPane.showMessageDialog(null, "Entrando en modo edición de playLists");
+		                textFieldTituloPlaylist.setEditable(false);
 		                cancionesCargadas.set(true);
 		            } else {
 		                // Segunda vez que se pulsa el botón, guardar cambios
@@ -632,9 +634,10 @@ public class VentanaMain extends JFrame {
 		                    JOptionPane.showMessageDialog(null, "Error al guardar la playlist.");
 		                }
 		                cancionesCargadas.set(false);
+		                textFieldTituloPlaylist.setEditable(true);
 		            }
 		        } else {
-		            JOptionPane.showMessageDialog(null, "Por favor, introduce un título para la playlist.");
+		            JOptionPane.showMessageDialog(null, "Por favor, introduce un título para la playlist."); //TODO cambiar a etiqueta + campo de texto
 		        }
 		    }
 		});
@@ -723,56 +726,30 @@ public class VentanaMain extends JFrame {
 		
 		
 		//PANEL PLAYLISTS //TODO
-		JPanel panelPlaylists = new JPanel();
+		// PANEL PLAYLISTS
+		JPanel panelPlaylists = new JPanel(new BorderLayout());
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
-		panelPlaylists.setLayout(new BorderLayout());
-		
+
 		// Obtener la lista de playlists asociadas al usuario
 		List<PlayList> playlistsUsuario = controlador.getPlayListUsuario();
 
-		// Configurar el panel "panelPlaylists" para mostrar los nombres de las playlists
-		panelPlaylists.setLayout(new GridLayout(playlistsUsuario.size(), 1)); // Establecer un diseño de cuadrícula
+		// Crear un panel para contener las etiquetas de playlists
+		JPanel contenedorPlaylists = new JPanel();
+		contenedorPlaylists.setLayout(new GridLayout(playlistsUsuario.size(), 1));
 
-		// Crear un ActionListener para las etiquetas de playlists
-		ActionListener playlistClickListener = new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        // Obtener el nombre de la playlist seleccionada
-		        String nombrePlaylist = ((JLabel) e.getSource()).getText();
-		        
-		        // Obtener la playlist completa utilizando el controlador
-		        PlayList playlistSeleccionada = controlador.existePlayList(nombrePlaylist);
-		        
-		        // Verificar si la playlist existe
-		        if (playlistSeleccionada != null) {
-		            // Obtener las canciones de la playlist
-		            List<Cancion> cancionesPlaylist = playlistSeleccionada.getPlayList();
-		            
-		            // Limpiar la tabla antes de agregar nuevas filas
-		            modeloTablaCanciones.setRowCount(0);
-		            
-		            // Agregar las canciones a la tabla
-		            for (Cancion cancion : cancionesPlaylist) {
-		                modeloTablaCanciones.addRow(new Object[]{cancion.getTitulo(), cancion.getListaInterpretes(), cancion.getEstilo()});
-		            }
-		        } else {
-		            // La playlist no existe
-		            JOptionPane.showMessageDialog(null, "La playlist seleccionada no existe.");
-		        }
-		    }
-		};
-
-		// Agregar etiquetas de playlists al panel y configurar el ActionListener
+		// Crear una lista de strings para almacenar los nombres de las playlists y agregar etiquetas al contenedor
 		for (PlayList playlist : playlistsUsuario) {
-		    JLabel labelPlaylist = new JLabel(playlist.getNombre()); // Obtener el nombre de la playlist
-		    labelPlaylist.addMouseListener(new MouseAdapter() {
-		        @Override
-		        public void mouseClicked(MouseEvent e) {
-		            playlistClickListener.actionPerformed(new ActionEvent(labelPlaylist, ActionEvent.ACTION_PERFORMED, null));
-		        }
-		    });
-		    panelPlaylists.add(labelPlaylist); // Agregar la etiqueta al panel
+		    String nombrePlaylist = playlist.getNombre();
+		    JLabel labelPlaylist = new JLabel(nombrePlaylist); // Crear una etiqueta con el nombre de la playlist
+		    contenedorPlaylists.add(labelPlaylist); // Agregar la etiqueta al contenedor
 		}
+
+		// Agregar el contenedor al panel principal
+		panelPlaylists.add(new JScrollPane(contenedorPlaylists), BorderLayout.CENTER);
+
+		// Etiqueta del panel
+		JLabel lblPanelPlaylists = new JLabel("Playlists del Usuario", SwingConstants.CENTER);
+		panelPlaylists.add(lblPanelPlaylists, BorderLayout.NORTH);
 
 		
 
