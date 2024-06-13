@@ -57,14 +57,13 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
 		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
 		List<PlayList> playList = new LinkedList<PlayList>();
-		
-		Usuario usuario = new Usuario(nombre, email, user, password, fechaNacimiento);
-		usuario.setId(eUsuario.getId());
-		usuario.setPremium(Boolean.valueOf(premium)==Boolean.TRUE);
-		
+		Boolean premiumBool = Boolean.valueOf(premium)==Boolean.TRUE;
+		int id = eUsuario.getId();
 		playList = obtenerListasUsuarioDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTAUSUARIO));
-		usuario.addUserPlaylists(playList);
+		
 
+		Usuario usuario = new Usuario(id,nombre, email, user, password, fechaNacimiento,premiumBool,playList);
+		
 		return usuario;
 	}
 

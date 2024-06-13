@@ -50,6 +50,17 @@ public class Usuario {
 		 
 	}
 
+	public Usuario(int id, String nombre, String email, String user, String password, String fechaNacim, boolean premium, List<PlayList> playListUsuario) {
+		this.id = id;
+		this.nombre = nombre;
+		this.email = email;
+		this.user = user;
+		this.password = password;
+		this.fechaNacim = fechaNacim;
+		this.premium = premium;
+		this.playListUsuario = playListUsuario;
+	}
+
 	
 	public int getId() {
 		return id;
@@ -122,6 +133,8 @@ public class Usuario {
 				.findFirst()
 				.orElse(null);
 	}
+
+
 	
 	public Descuento obtenerDescuento() {
 		return Descuento.descuetos().stream()
