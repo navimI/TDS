@@ -1,4 +1,4 @@
-package umu.tds.vista;
+package umu.tds.vista.login;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -14,7 +14,6 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -52,23 +51,23 @@ public class RegistroPanel   {
 	 */
 	
 
-	public RegistroPanel(JFrame frmAppmusic) {
+	public RegistroPanel(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
-		crearPanel(frmAppmusic);
+		crearPanel(frmLogin);
 
 		crearPanelLogo();
 		
 		crearPanelFormulario();
 		
-		crearPanelBoton(frmAppmusic);
+		crearPanelBoton(frmLogin);
 		
 	}
 	
-	private void crearPanel(JFrame frmAppmusic) {
+	private void crearPanel(VentanaLoginRegistro frmLogin) {
 		panelRegistro = new JPanel();
-		frmAppmusic.getContentPane().add(panelRegistro, "panelRegistro");
+		frmLogin.getContentPane().add(panelRegistro, "panelRegistro");
 		
 		GridBagLayout gbl_panelRegistro = new GridBagLayout();
 		gbl_panelRegistro.columnWeights = new double[]{1.0};
@@ -200,7 +199,7 @@ public class RegistroPanel   {
 		
 	}
 	
-	private void crearPanelBoton(JFrame frmAppmusic) {
+	private void crearPanelBoton(VentanaLoginRegistro frmLogin) {
 		JPanel panel_1 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.gridwidth = 4;
@@ -223,24 +222,22 @@ public class RegistroPanel   {
 							new String(passwordField.getPassword()), 
 							dateFormat.format(dateField.getDate()));
 					if (registrado) {
-						JOptionPane.showMessageDialog(frmAppmusic, "Usuario registrado correctamente.", "Registro",
+						JOptionPane.showMessageDialog(frmLogin, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);
-						
-						VentanaMain main = new VentanaMain();
-						main.setVisible(true);
-						frmAppmusic.setVisible(false);
+								emptyFields();
+								frmLogin.lanzarVentanaMain();
 					} else {
-						JOptionPane.showMessageDialog(frmAppmusic, "El usuario ya existe.\n",
+						JOptionPane.showMessageDialog(frmLogin, "El usuario ya existe.\n",
 								"Registro", JOptionPane.ERROR_MESSAGE);
-						frmAppmusic.setTitle("Registro Erroneo");
+						frmLogin.setTitle("Registro Erroneo");
 						lblUsuario.setForeground(Color.RED);
 						userField.setBackground(Color.RED);
 						userField.setFont(userField.getFont().deriveFont(Font.BOLD));
 					}
 				} else {
-					JOptionPane.showMessageDialog(frmAppmusic, fieldsStatus,
+					JOptionPane.showMessageDialog(frmLogin, fieldsStatus,
 							"Registro", JOptionPane.ERROR_MESSAGE);
-					frmAppmusic.setTitle("Registro Erroneo");
+					frmLogin.setTitle("Registro Erroneo");
 				}
 				
 			}
@@ -251,8 +248,9 @@ public class RegistroPanel   {
 		btnIrALogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				resetFields();
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelLogin");
+				emptyFields();
+				CardLayout card = (CardLayout) frmLogin.getContentPane().getLayout();
+				card.show(frmLogin.getContentPane(), "panelLogin");
 				
 			}
 		});
@@ -274,7 +272,7 @@ public class RegistroPanel   {
 		if (!isValidPassword(new String(passwordField.getPassword()))) {
 			lblPass.setForeground(Color.RED);
 			passwordField.setBackground(Color.RED);
-			status = status + "La contraseña no es válida.\n";
+			status = status + "La contraseña no es válida, minimo 7 caracteres.\n";
 		}
 		if (!isValidName(nombreField.getText())) {
 			lblNombre.setForeground(Color.RED);
@@ -316,6 +314,14 @@ public class RegistroPanel   {
 		
 		lblFecha.setForeground(Color.BLACK);
 		dateField.setBackground(Color.WHITE);
+	}
+
+	private void emptyFields() {
+		userField.setText("");
+		passwordField.setText("");
+		nombreField.setText("");
+		emailField.setText("");
+		dateField.setDate(null);
 	}
 		  
 	

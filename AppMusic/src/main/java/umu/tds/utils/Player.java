@@ -27,6 +27,9 @@ public class Player {
 		switch (boton) { 
 		case "play":
 			try {
+				if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+					mediaPlayer.stop(); // Detener la reproducción actual
+				}
 				setCancionActual(cancion);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

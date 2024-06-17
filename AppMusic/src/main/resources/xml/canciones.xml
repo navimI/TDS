@@ -63,4 +63,16 @@
 		<interprete>Melendi</interprete>
 	</cancion>
 
+	<cancion titulo="Fly me to the moon">
+		<URL><![CDATA[https://archive.org/download/07-fly-me-to-the-moon-in-other-words/08%20Fly%20Me%20To%20The%20Moon%20%28In%20Other%20Words%29.mp3]]></URL>
+		<estilo>Jazz</estilo>
+		<interprete>Frank Sinatra</interprete>
+	</cancion>
+
+	<cancion titulo="Oregano Mirage">
+		<URL><![CDATA[https://archive.org/download/pizza-tower-early-ost_202302/03%20Oregano%20Mirage.mp3]]></URL>
+		<estilo>Videogames</estilo>
+		<interprete>Frostic</interprete>
+	</cancion>
+
 </canciones>

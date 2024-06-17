@@ -123,6 +123,13 @@ public class Controlador implements CancionesListener{
 		adaptadorPlayList = factoria.getPlayListDAO();
 		
 	}
+	
+	public void salirUsuario() {
+		usuarioActual = null;
+		cancionActual = null;
+		playListActual = new PlayList("");
+		playListFavoritos = new LinkedList<Cancion>();
+	}
 
 	/**
 	 * <h1>Inicializa catálogos.</h1>
@@ -153,6 +160,10 @@ public class Controlador implements CancionesListener{
 		return usuarioActual;
 	}
 	
+	public String getNombreUsuarioActual() {
+		return usuarioActual.getUser();
+	}
+	
 	/**
 	 * <h1>Obtener la playlist actual.</h1>
 	 * @return Playlist actual.
@@ -169,9 +180,27 @@ public class Controlador implements CancionesListener{
 	public List<PlayList> getPlayListUsuario(){	
 		return usuarioActual.getPlayListUsuario();
 	}
+
+	public List<String> stringPlayListUsuario(){
+		return usuarioActual.getUsablePlayList().stream()
+			.map(p -> p.getNombre())
+			.collect(Collectors.toList());
+	}
+		
+	
 	
 	public List<Cancion> getCancionesPlayListActual(){
 		return playListActual.getPlayList();
+	}
+
+	public List<String> stringCancionesPlayListActual(){
+		return playListActual.getPlayList().stream()
+			.map(c -> c.getTitulo())
+			.collect(Collectors.toList());
+	}
+	
+	public List<PlayList> getPlayListUsuarioUsable(){
+		return usuarioActual.getUsablePlayList();
 	}
 	
 	public boolean isEmptyPlayListActual() {
@@ -266,6 +295,15 @@ public class Controlador implements CancionesListener{
 			return true;
 		} else return false;
 	}
+
+	public boolean addminAcceso() {
+		if(catalogoUsuarios.login("admin", "admin")) {
+			setUsuarioActual("admin");
+			return true;
+		}else{
+			return registrarUsuario("admin", "admin@admin.com", "admin", "admin", "01/01/2000");
+		}
+	}
 	
 	/**
 	 * <h1>Registra un nuevo usuario en la la base.</h1>
@@ -318,6 +356,13 @@ public class Controlador implements CancionesListener{
 		return catalogoCanciones.topCanciones();
 	}
 
+	public void setTopCancionesPlayListActual() {
+		playListActual = new PlayList("Top 10",getTopCanciones());
+		
+	}
+
+	
+
 	/**
 	 * <h1>Carga las canciones de un fichero en la aplicación.</h1>
 	 * Para cargar las canciones de un fichero en la aplicación, se llama al método cargarCanciones del componente cargador de canciones.
@@ -345,6 +390,26 @@ public class Controlador implements CancionesListener{
 		cancionActual = cancion;
 	}
 
+	public void setCancion(String nombreCancion) {
+		Cancion cancion = playListActual.getCancion(nombreCancion);
+		if (cancion != null) {
+			setCancion(cancion);
+		}
+	}
+	
+	//TODO: Eliminar las siguientes funciones setFirstCancion(), setFirstCU()
+	public void setFirstCancion() {
+		if(!playListActual.isEmpty()) setCancion(playListActual.getPlayList().get(0));
+	}
+
+	public void setLastCancion(){
+		if(!playListActual.isEmpty())setCancion(playListActual.getPlayList().get(playListActual.getPlayList().size()-1));
+	}
+	
+	
+
+	
+
 	/**
 	 * <h1>Establece la playlist actual.</h1>
 	 * @param playList Playlist actual.
@@ -352,6 +417,18 @@ public class Controlador implements CancionesListener{
 	
 	private void setPlayList(PlayList playList) {
 		playListActual = playList;
+	}
+
+	public void setPlayList(String nombrePlayList) {
+		PlayList playList = usuarioActual.getPlayListNamed(nombrePlayList);
+		if (playList != null) {
+			setPlayList(playList);
+			setFirstCancion();
+		}
+	}
+
+	public void setCancionesRecientes(){
+		playListActual = usuarioActual.getRecientes();
 	}
 
 	/**
@@ -370,6 +447,7 @@ public class Controlador implements CancionesListener{
 	
 	/**
 	 * <h1> Detiene la cancion actual.</h1>
+	 * @return True si la canción se ha parado correctamente, False en caso contrario.
 	 */
 	public boolean stopSong() {
 		if(cancionActual != null) {
@@ -386,10 +464,12 @@ public class Controlador implements CancionesListener{
 	
 	public boolean nextSong() {
 		if(playListActual != null || !playListActual.isEmpty()) {
+			stopSong();
 			setCancion(playListActual.getSiguienteCancion(cancionActual));
 		}
 		
 		if(cancionActual != null) {
+			stopSong();
 			reproductorActual.play("play",cancionActual);
 			return true;
 		}
@@ -403,9 +483,11 @@ public class Controlador implements CancionesListener{
 	
 	public boolean previousSong() {
 		if(playListActual != null || playListActual.isEmpty()) {
+			stopSong();
 			setCancion(playListActual.getAnteriorCancion(cancionActual));
 		}
 		if(cancionActual != null) {
+			stopSong();
 			reproductorActual.play("play",cancionActual);
 			return true;
 		}
@@ -498,6 +580,7 @@ public class Controlador implements CancionesListener{
 	        usuarioActual.removePlayListUsuarios(selectedPlaylist); // eliminar la playlist del usuario actual
 	        adaptadorUsuario.modificarUsuario(usuarioActual); // guardar los cambios en el adaptador de usuario
 			catalogoUsuarios.updateUsuario(usuarioActual); // actualizar el usuario en el catálogo de usuarios
+			
 	        return true;
 	    } else {
 	        System.out.println("No se encontró la PlayList");
@@ -511,21 +594,23 @@ public class Controlador implements CancionesListener{
 	 * Guarda la playlist de favoritos en el usuario actual.
 	 * Guarda los cambios en el adaptador de usuario.
 	 * @param nombrePlaylist Nombre de la playlist.
-	 * @return True si la playlist se ha guardado correctamente, False en caso contrario.
+	 * @param idCanciones Lista de los ids de las canciones a establecer en la PlayList
 	 */
 	
 	
-	public boolean guardarPlayListDesdeVentana(String nombrePlaylist,List<Integer> idCanciones) {
-		if (playListFavoritos.isEmpty())
-			return false;
+	public void guardarPlayListDesdeVentana(String nombrePlaylist,List<Integer> idCanciones) {
 		PlayList selectedPlaylist = usuarioActual.getPlayListNamed(nombrePlaylist);
-		if (selectedPlaylist == null) {
-			selectedPlaylist = new PlayList(nombrePlaylist, playListFavoritos);
+		if (selectedPlaylist == null && playListFavoritos.size() > 0) {
+			List<Cancion> songList = new LinkedList<Cancion>();
+			playListFavoritos.stream()
+				.filter(c -> idCanciones.contains(c.getID()))
+				.forEach(c -> songList.add(c));
+			selectedPlaylist = new PlayList(nombrePlaylist, songList);
 			usuarioActual.addPlayList(selectedPlaylist);
 			adaptadorPlayList.registrarPlayList(selectedPlaylist);
 
 		}
-		else {
+		else if(selectedPlaylist != null && playListFavoritos.size() > 0){
 			List<Cancion> songList = new LinkedList<Cancion>();
 			songList.addAll(playListFavoritos);
 			songList.addAll(selectedPlaylist.getPlayList());
@@ -537,18 +622,27 @@ public class Controlador implements CancionesListener{
 			selectedPlaylist.addCanciones(songList);
 			adaptadorPlayList.modificarPlayList(selectedPlaylist);
 			
+		}else if(selectedPlaylist != null){
+			selectedPlaylist.removeNotInclued(idCanciones);
 		}
 
-		
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		playListFavoritos.clear();
-		return true;
+		
 	}
 	
 	public PlayList existePlayList(String nombrePlaylist) {
 		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
 		if (pL != null) {
 			return pL;
+		}
+		return null;
+	}
+	
+	public List<Cancion> existeListPlayList(String nombrePlayList){
+		PlayList pL = usuarioActual.getPlayListNamed(nombrePlayList);
+		if (pL != null) {
+			return pL.getPlayList();
 		}
 		return null;
 	}
@@ -607,10 +701,11 @@ public class Controlador implements CancionesListener{
 	 */
 
     public void quitarCancionDePlayListFavoritosPorID(int idCancion) {
-        playListActual.removeCancion(posicionFavorita(idCancion));
+        playListFavoritos.remove(posicionFavorita(idCancion));
     }
     
     public void invertirFavoritosID(int idCancion) {
+		System.out.println(idCancion);
     	if(esFavorita(idCancion)) quitarCancionDePlayListFavoritosPorID(idCancion);
     	else agregarCancionAPlayListFavoritosPorID(idCancion);
     }

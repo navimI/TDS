@@ -1,4 +1,4 @@
-package umu.tds.vista;
+package umu.tds.vista.login;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -12,7 +12,6 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +20,7 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.Controlador;
+import umu.tds.vista.VentanaMain;
 
 public class RegistroGHPanel {
 	
@@ -41,23 +41,23 @@ public class RegistroGHPanel {
 	private SimpleDateFormat dateFormat;
 	
 	
-	public RegistroGHPanel(JFrame frmAppmusic) {
+	public RegistroGHPanel(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
-		crearPanel(frmAppmusic);
+		crearPanel(frmLogin);
 		
 		crearPanelLogo();
 		
 		crearPanelFormulario();
 		
-		crearPanelBoton(frmAppmusic);
+		crearPanelBoton(frmLogin);
 		
 	}
 	
-	private void crearPanel(JFrame frmAppmusic) {
+	private void crearPanel(VentanaLoginRegistro frmLogin) {
 		panelRegistroGH = new JPanel();
-		frmAppmusic.getContentPane().add(panelRegistroGH, "panelRegistroGH");
+		frmLogin.getContentPane().add(panelRegistroGH, "panelRegistroGH");
 		
 		GridBagLayout gbl_panelRegistroGH = new GridBagLayout();
 		gbl_panelRegistroGH.columnWidths = new int[] {0, 0, 0};
@@ -144,7 +144,7 @@ public class RegistroGHPanel {
 		panelFormularioGH.add(dateChooserGH, gbc_dateChooserGH);
 	}
 	
-	private void crearPanelBoton(JFrame frmAppmusic) {
+	private void crearPanelBoton(VentanaLoginRegistro frmLogin) {
 		btnLoginGH = new JButton("Login Con GitHub");
 		GridBagConstraints gbc_btnLoginGH = new GridBagConstraints();
 		gbc_btnLoginGH.insets = new Insets(0, 0, 0, 5);
@@ -162,17 +162,15 @@ public class RegistroGHPanel {
 							fieldEmailGH.getText(), usuario, "",
 							dateFormat.format(dateChooserGH.getDate()));
 					if (registrado) {
-						JOptionPane.showMessageDialog(frmAppmusic, "Usuario registrado correctamente.", "Registro",
+						JOptionPane.showMessageDialog(frmLogin, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);
 						
-						VentanaMain main = new VentanaMain();
-						main.setVisible(true);
-						frmAppmusic.setVisible(false);
+								frmLogin.lanzarVentanaMain();
 					} 
 				} else {
-					JOptionPane.showMessageDialog(frmAppmusic, fieldsStatus,
+					JOptionPane.showMessageDialog(frmLogin, fieldsStatus,
 							"Registro", JOptionPane.ERROR_MESSAGE);
-					frmAppmusic.setTitle("Registro Erroneo");
+					frmLogin.setTitle("Registro Erroneo");
 				}
 				
 			}

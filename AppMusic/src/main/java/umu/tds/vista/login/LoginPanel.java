@@ -1,4 +1,4 @@
-package umu.tds.vista;
+package umu.tds.vista.login;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -14,7 +14,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,26 +40,26 @@ public class LoginPanel {
 	
 	
 	
-	public LoginPanel(JFrame frmAppmusic) {
+	public LoginPanel(VentanaLoginRegistro frmLogin) {
 		
 		controlador = Controlador.getUnicaInstancia();
 
-		crearPanel(frmAppmusic);
+		crearPanel(frmLogin);
 
 		crearPanelLogo();
 		
 		crearPanelFormulario();
 		
-		crearPanelBoton(frmAppmusic);
+		crearPanelBoton(frmLogin);
 		
 		
 	}
 	
-	private void crearPanel(JFrame frmAppmusic) {
+	private void crearPanel(VentanaLoginRegistro frmLogin) {
 		panelLogin = new JPanel();
 		panelLogin.setPreferredSize(new Dimension(400, 300));
 		panelLogin.setMinimumSize(new Dimension(300, 200));
-		frmAppmusic.getContentPane().add(panelLogin, "panelLogin");
+		frmLogin.getContentPane().add(panelLogin, "panelLogin");
 		panelLogin.setLayout(new BorderLayout(0, 0));
 	}
 	
@@ -118,7 +118,7 @@ public class LoginPanel {
 		panelFormularioLogin.add(passwordValue, gbc_passwordValue);
 	}
 	
-	private void crearPanelBoton(JFrame frmAppmusic) {
+	private void crearPanelBoton(VentanaLoginRegistro frmLogin) {
 		JPanel botonPanel = new JPanel();
 		panelLogin.add(botonPanel, BorderLayout.SOUTH);
 
@@ -129,12 +129,11 @@ public class LoginPanel {
 				boolean login = controlador.loginUsuario(userField.getText(), 
 						new String(passwordValue.getPassword()));
 				if(login) {
-					JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
-					VentanaMain main = new VentanaMain();
-					main.setVisible(true);
-					frmAppmusic.setVisible(false);
+					emptyFields();
+					JOptionPane.showMessageDialog(frmLogin, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
+					frmLogin.lanzarVentanaMain();
 				} else
-					JOptionPane.showMessageDialog(frmAppmusic, "Nombre de usuario o contraseña no valido","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frmLogin, "Nombre de usuario o contraseña no valido","Error",JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		botonPanel.add(btnLogin);
@@ -143,8 +142,9 @@ public class LoginPanel {
 		JButton btnRegistro = new JButton("Ir a Registro");
 		btnRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelRegistro");
+				emptyFields();
+				CardLayout card = (CardLayout) frmLogin.getContentPane().getLayout();
+				card.show(frmLogin.getContentPane(), "panelRegistro");
 				
 			}
 		});
@@ -172,7 +172,7 @@ public class LoginPanel {
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				File workingDirectory = new File(System.getProperty("user.dir"));
 				fileChooser.setCurrentDirectory(workingDirectory);
-				int result = fileChooser.showOpenDialog(frmAppmusic);
+				int result = fileChooser.showOpenDialog(frmLogin);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
@@ -181,21 +181,20 @@ public class LoginPanel {
 						boolean registred = controlador.esUsuarioRegistrado(userField.getText());
 						if(registred) {
 							controlador.setUsuarioActual(userField.getText());
-							JOptionPane.showMessageDialog(frmAppmusic, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
-							VentanaMain main = new VentanaMain();
-							main.setVisible(true);
-							frmAppmusic.setVisible(false);
+							JOptionPane.showMessageDialog(frmLogin, "Bienvenido "+userField.getText(),"Login Correcto",JOptionPane.INFORMATION_MESSAGE);
+							emptyFields();
+							frmLogin.lanzarVentanaMain();
 						} else {
-							JOptionPane.showMessageDialog(frmAppmusic, "Usuario no registrado", "Login",
+							JOptionPane.showMessageDialog(frmLogin, "Usuario no registrado", "Login",
 									JOptionPane.INFORMATION_MESSAGE);
 							controlador.setUsuarioTemporal(userField.getText());
-							CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-							card.show(frmAppmusic.getContentPane(), "panelRegistroGH");
+							CardLayout card = (CardLayout) frmLogin.getContentPane().getLayout();
+							card.show(frmLogin.getContentPane(), "panelRegistroGH");
 						}
 						
 					} else {
 						
-						JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido, clave de GH no corresponde a usuario", "Login", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(frmLogin, "Login Fallido, clave de GH no corresponde a usuario", "Login", JOptionPane.WARNING_MESSAGE);
 						
 						
 					}
@@ -208,6 +207,13 @@ public class LoginPanel {
 			
 		});
 		botonPanel.add(btnGH);
+	}
+	
+	//-----------metodos auxiliares-------
+	
+	private void emptyFields() {
+		userField.setText("");
+		passwordValue.setText("");
 	}
 	
 }

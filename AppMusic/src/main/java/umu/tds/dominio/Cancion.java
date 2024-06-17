@@ -102,8 +102,7 @@ public class Cancion {
 	public boolean cancionesIguales(Object obj) {
 		
 		Cancion other = (Cancion) obj;
-		return getNumReproducciones() == other.getNumReproducciones() &&
-			Objects.equals(getTitulo(), other.getTitulo()) &&
+		return Objects.equals(getTitulo(), other.getTitulo()) &&
 			Objects.equals(getEstilo(), other.getEstilo()) &&
 			Objects.equals(getListaInterpretes(), other.getListaInterpretes());
 }

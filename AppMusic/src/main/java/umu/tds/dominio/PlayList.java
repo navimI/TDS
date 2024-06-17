@@ -49,6 +49,13 @@ public class PlayList {
 	public List<Cancion> getPlayList(){
 		return new LinkedList<Cancion>(playList); 
 	}
+
+	public Cancion getCancion(String nombre) {	
+		return playList.stream()
+				.filter(c -> c.getTitulo().equals(nombre))
+				.findFirst()
+				.orElse(null);
+	}
 	
 	
 	//Las canciones que estan al final de la lista son las canciones añadidas recientemente
@@ -62,6 +69,7 @@ public class PlayList {
 			playList.add(cancion);
 		}
 	}
+
 	
 	// Usamos el stream que nos añade todas las canciones de la lista pasada por el argumento
 	// haciendo uso de la función definida de añadir canción
@@ -91,6 +99,13 @@ public class PlayList {
 	
 	public boolean isEmpty() {
 		return playList.size() == 0;
+	}
+
+	public void removeFirst(){
+
+		if(playList.size() > 0) {
+			playList.remove(0);
+		}
 	}
 
 	@Override
@@ -126,5 +141,14 @@ public class PlayList {
 	public void ponerPrimera(Cancion cancion) {
 		addCancion(cancion);
 	}
+
+    public void removeNotInclued(List<Integer> idCanciones) {
+		if(idCanciones != null && !idCanciones.isEmpty()){
+			playList.removeIf(c -> !idCanciones.contains(c.getID()));
+		}
+			
+    }
+
+	
 	
 }

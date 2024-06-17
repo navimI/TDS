@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.itextpdf.text.DocumentException;
 
@@ -29,7 +30,6 @@ public class Usuario {
 
 
 	private List<PlayList> playListUsuario;
-	private PlayList recientes;
 	private static final String RECIENTES = "Canciones Recientes";
 	//TO-DO: Mirar si es interesante dejar esto asi o que se crea la lista de canciones y se almecene
 	
@@ -119,6 +119,10 @@ public class Usuario {
 		return new LinkedList<PlayList>(playListUsuario);
 	}
 	
+	public List<PlayList> getUsablePlayList(){
+		return new LinkedList<PlayList>(playListUsuario.stream().filter(pl -> !pl.getNombre().equals(RECIENTES)).collect(Collectors.toList()));
+	}
+	
 	public boolean addUserPlaylists(List<PlayList> listaC) {
 		return this.playListUsuario.addAll(listaC);
 	}
@@ -197,6 +201,13 @@ public class Usuario {
 		}
     }
 
+	public PlayList getRecientes() {
+		return playListUsuario.stream()
+				.filter(pl -> pl.getNombre().equals(RECIENTES))
+				.findFirst()
+				.orElse(null);
+	}
+
 
 
 	/*
@@ -214,15 +225,21 @@ public class Usuario {
 
     
 	 public boolean actualizarRecientes(Cancion cancion) {
-		if (recientes.getPlayList().size() < ULTCANCIONES) {
-			recientes.addCancion(cancion);
+		if (getRecientes().getNumCanciones() < ULTCANCIONES) {
+			getRecientes().addCancion(cancion);
+			System.out.println("Cancion añadida a recientes"+cancion.getTitulo());
+
 			return true;
 		}
-		else if (recientes.getPlayList().size() == ULTCANCIONES) {
-			if (-1==recientes.hasCancion(cancion.getID())) {
-				recientes.getPlayList().remove(ULTCANCIONES-1);
+		else if (getRecientes().getNumCanciones() == ULTCANCIONES) {
+			int i = getRecientes().hasCancion(cancion.getID());
+			if(i >= 0) {
+				getRecientes().addCancion(cancion);
+			}else {
+				getRecientes().removeFirst();
+				getRecientes().addCancion(cancion);
 			}
-			recientes.addCancion(cancion);
+			System.out.println("Cancion añadida a recientes"+cancion.getTitulo());
 			return true;
 		}
 		return false;
