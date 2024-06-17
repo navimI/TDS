@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.Controlador;
-import umu.tds.vista.VentanaMain;
+
 
 public class RegistroGHPanel {
 	

@@ -384,17 +384,23 @@ public class Controlador implements CancionesListener{
 	 */
 
 	private void setCancion(Cancion cancion) {
+		if(cancion!=null) {
 		cancion.addReproduccion();
 		adaptadorCancion.modificarCancion(cancion);
 		usuarioActual.actualizarRecientes(cancion);
 		cancionActual = cancion;
-	}
+	}}
 
 	public void setCancion(String nombreCancion) {
 		Cancion cancion = playListActual.getCancion(nombreCancion);
 		if (cancion != null) {
 			setCancion(cancion);
 		}
+	}
+	
+	public void setCancionSinPlayList(String nombreCancion) {
+		Cancion cancion = catalogoCanciones.getCancion(nombreCancion);
+		setCancion(cancion);
 	}
 	
 	//TODO: Eliminar las siguientes funciones setFirstCancion(), setFirstCU()
@@ -463,7 +469,7 @@ public class Controlador implements CancionesListener{
 	 */
 	
 	public boolean nextSong() {
-		if(playListActual != null || !playListActual.isEmpty()) {
+		if(playListActual != null && !playListActual.isEmpty()) {
 			stopSong();
 			setCancion(playListActual.getSiguienteCancion(cancionActual));
 		}
@@ -482,7 +488,7 @@ public class Controlador implements CancionesListener{
 	 */
 	
 	public boolean previousSong() {
-		if(playListActual != null || playListActual.isEmpty()) {
+		if(playListActual != null && !playListActual.isEmpty()) {
 			stopSong();
 			setCancion(playListActual.getAnteriorCancion(cancionActual));
 		}

@@ -44,6 +44,10 @@ public class CatalogoCancion {
 		public Cancion getCancion(int id) {
 			return canciones.get(id);
 		}
+
+		public Cancion getCancion(String titulo){
+			return canciones.values().stream().filter(c -> c.getTitulo().equals(titulo)).findFirst().orElse(null);
+		}
 		
 		public void addCancion(Cancion cancion) {
 			

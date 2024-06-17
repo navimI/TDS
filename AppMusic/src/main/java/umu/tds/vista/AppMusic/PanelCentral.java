@@ -109,6 +109,10 @@ public class PanelCentral extends JPanel {
         listenerBtnBuscar();
         listenerTablaBuscar();
 
+        //reproducirCancionTabla(tablaBuscar);
+
+        
+
     }
 
     private void crearPanelGestion() {
@@ -243,6 +247,23 @@ public class PanelCentral extends JPanel {
         };
     }
 
+    private void reproducirCancionTabla(JTable tabla){
+        tabla.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Obtener la fila seleccionada
+                    String cancionSeleccionada = (String) target.getValueAt(row, 1); // Obtener el nombre de la playlist
+
+                    // seleccionada
+                    controlador.setCancion(cancionSeleccionada);
+                    controlador.playSong();
+
+                }
+            }
+        });
+    }
+
     // Metodos Auxiliares para el panelBuscar
 
     private JPanel addPanelFiltros() {
@@ -316,35 +337,6 @@ public class PanelCentral extends JPanel {
 
     }
 
-    private void rellenarTablaGestion(List<Cancion> canciones, List<Cancion> cancionesPlayList) {
-        modeloTablaGestion = (DefaultTableModel) tablaGestion.getModel();
-        modeloTablaGestion.setRowCount(0);
-
-        if (canciones != null) {
-            canciones.forEach(c -> {
-                Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
-                        true };
-                modeloTablaGestion.addRow(fila);
-            });
-        }
-
-        if (canciones == null) {
-            cancionesPlayList.forEach(c -> {
-                Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
-                        false };
-                modeloTablaGestion.addRow(fila);
-            });
-        } else {
-            cancionesPlayList.stream().filter(c -> !canciones.stream()
-                    .anyMatch(cancion -> cancion.getID() == c.getID()))
-                    .forEach(c -> {
-                        Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
-                                false };
-                        modeloTablaGestion.addRow(fila);
-                    });
-        }
-    }
-
     private void listenerTablaBuscar() {
         tablaBuscar.getModel().addTableModelListener(new TableModelListener() {
             @Override
@@ -356,6 +348,21 @@ public class PanelCentral extends JPanel {
                         int idCancion = (int) tablaBuscar.getValueAt(row, 0);
                         controlador.invertirFavoritosID(idCancion);
                     }
+                }
+            }
+        });
+        tablaBuscar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Obtener la fila seleccionada
+                    String cancionSeleccionada = (String) target.getValueAt(row, 1); // Obtener el nombre de la playlist
+                    System.out.println(cancionSeleccionada);
+
+                    // seleccionada
+                    controlador.setCancionSinPlayList(cancionSeleccionada);
+                    controlador.playSong();
+
                 }
             }
         });
@@ -372,6 +379,9 @@ public class PanelCentral extends JPanel {
                 List<Cancion> canciones = controlador.realizarBusqueda(interprete, titulo, estilo, favoritos);
 
                 rellenarTablaBuscar(canciones);
+
+                tablaBuscar.setModel(modeloTablaBuscar);
+                
             }
         });
     }
@@ -451,6 +461,35 @@ public class PanelCentral extends JPanel {
         btnCancelar.setVisible(false);
         btnMarcarDesmarcar.setVisible(false);
         btnEliminar.setVisible(false);
+    }
+
+    private void rellenarTablaGestion(List<Cancion> canciones, List<Cancion> cancionesPlayList) {
+        modeloTablaGestion = (DefaultTableModel) tablaGestion.getModel();
+        modeloTablaGestion.setRowCount(0);
+
+        if (canciones != null) {
+            canciones.forEach(c -> {
+                Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
+                        true };
+                modeloTablaGestion.addRow(fila);
+            });
+        }
+
+        if (canciones == null) {
+            cancionesPlayList.forEach(c -> {
+                Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
+                        false };
+                modeloTablaGestion.addRow(fila);
+            });
+        } else {
+            cancionesPlayList.stream().filter(c -> !canciones.stream()
+                    .anyMatch(cancion -> cancion.getID() == c.getID()))
+                    .forEach(c -> {
+                        Object[] fila = new Object[] { c.getID(), c.getTitulo(), c.getListaInterpretes(), c.getEstilo(),
+                                false };
+                        modeloTablaGestion.addRow(fila);
+                    });
+        }
     }
 
     private void listenersPanelGestion() {
@@ -629,20 +668,7 @@ public class PanelCentral extends JPanel {
         panelCancion.setLayout(new BorderLayout());
 
         refrescarTablaCanciones(tabla);
-        tabla.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Obtener la fila seleccionada
-                    String selectedPlaylist = (String) target.getValueAt(row, 1); // Obtener el nombre de la playlist
-
-                    // seleccionada
-                    controlador.setCancion(selectedPlaylist);
-                    controlador.playSong();
-
-                }
-            }
-        });
+        reproducirCancionTabla(tabla);
 
         // Añadir la tabla a un JScrollPane y luego al panel correspondiente
         JScrollPane scrollPane = new JScrollPane(tabla);

@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import umu.tds.vista.VentanaMain;
+
 import umu.tds.vista.AppMusic.VentanaAppMusic;
 
 public class VentanaLoginRegistro extends JFrame {

@@ -23,7 +23,7 @@ import java.util.EventObject;
 import pulsador.IEncendidoListener;
 import pulsador.Luz;
 import umu.tds.controlador.Controlador;
-import umu.tds.vista.VentanaMain;
+
 
 public class PanelMenu extends JPanel {
 
@@ -141,7 +141,7 @@ public class PanelMenu extends JPanel {
         gbc.gridy = posicion;
         boton.setPreferredSize(buttonSize);
         boton.setHorizontalAlignment(SwingConstants.LEFT);
-        boton.setIcon(new ImageIcon(VentanaMain.class.getResource("/vista/imagenes/" + nombreIcono + ".png")));
+        boton.setIcon(new ImageIcon(getClass().getResource("/vista/imagenes/" + nombreIcono + ".png")));
         boton.setFont(new Font("Tahoma", Font.BOLD, 14));
     }
 
