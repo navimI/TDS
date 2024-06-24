@@ -175,7 +175,7 @@ public class LoginPanel {
 				int result = fileChooser.showOpenDialog(frmLogin);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+					
 					//Comprueba si el fichero es valido la clave de Gh o no
 					if (LoginGitHub.INSTANCE.verificar(userField.getText(), selectedFile.getAbsolutePath())) {
 						boolean registred = controlador.esUsuarioRegistrado(userField.getText());

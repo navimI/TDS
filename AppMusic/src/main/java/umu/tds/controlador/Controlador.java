@@ -589,7 +589,6 @@ public class Controlador implements CancionesListener{
 			
 	        return true;
 	    } else {
-	        System.out.println("No se encontró la PlayList");
 	        return false;
 	    }
 	}
@@ -711,7 +710,6 @@ public class Controlador implements CancionesListener{
     }
     
     public void invertirFavoritosID(int idCancion) {
-		System.out.println(idCancion);
     	if(esFavorita(idCancion)) quitarCancionDePlayListFavoritosPorID(idCancion);
     	else agregarCancionAPlayListFavoritosPorID(idCancion);
     }

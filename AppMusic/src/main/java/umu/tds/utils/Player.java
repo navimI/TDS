@@ -20,7 +20,7 @@ public class Player {
 			com.sun.javafx.application.PlatformImpl.startup(()->{});			
 		} catch(Exception ex) {
 			ex.printStackTrace();
-			System.out.println("Exception: " + ex.getMessage());
+			
 		}
 	}
 	public void play(String boton, Cancion cancion){
@@ -48,7 +48,7 @@ public class Player {
 		if (cancionActual != cancion){
 			cancionActual = cancion;
 			String rutaCancion = cancion.getRutaFichero();
-		    System.out.println(rutaCancion);
+		    
 			URL resourceURL = getClass().getResource(carpetaCanciones + rutaCancion);
 
 			if (resourceURL == null) {

@@ -66,7 +66,7 @@ public class CancionCargadorAdapter extends Cancion{
         Path outputFilePath = Paths.get(outputPath, getRutaFichero());
 
         if (Files.exists(outputFilePath)) {
-            System.out.println("File already exists: " + outputFilePath);
+            
             return true;
         }
 
@@ -74,7 +74,7 @@ public class CancionCargadorAdapter extends Cancion{
             Files.copy(stream, outputFilePath, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        System.out.println("Finished downloading: " + outputFilePath);
+        
         return true;
     } catch (IOException e) {
         e.printStackTrace();

@@ -227,7 +227,7 @@ public class Usuario {
 	 public boolean actualizarRecientes(Cancion cancion) {
 		if (getRecientes().getNumCanciones() < ULTCANCIONES) {
 			getRecientes().addCancion(cancion);
-			System.out.println("Cancion añadida a recientes"+cancion.getTitulo());
+			
 
 			return true;
 		}
@@ -239,7 +239,7 @@ public class Usuario {
 				getRecientes().removeFirst();
 				getRecientes().addCancion(cancion);
 			}
-			System.out.println("Cancion añadida a recientes"+cancion.getTitulo());
+			
 			return true;
 		}
 		return false;

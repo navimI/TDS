@@ -357,7 +357,7 @@ public class PanelCentral extends JPanel {
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow(); // Obtener la fila seleccionada
                     String cancionSeleccionada = (String) target.getValueAt(row, 1); // Obtener el nombre de la playlist
-                    System.out.println(cancionSeleccionada);
+                    
 
                     // seleccionada
                     controlador.setCancionSinPlayList(cancionSeleccionada);
@@ -596,7 +596,7 @@ public class PanelCentral extends JPanel {
     private DefaultTableModel crearModeloPlayList() {
         // Obtener la lista de playlists del usuario
         List<String> playlists = controlador.stringPlayListUsuario();
-        System.out.println(playlists);
+        
 
         // Convertir la List a un modelo de tabla
         String[] columnNames = { "Playlist" };
@@ -610,7 +610,7 @@ public class PanelCentral extends JPanel {
 
     private JPanel crearPanelPL() {
         JPanel panelPL = new JPanel();
-        System.out.println("Creando panel de PlayLists");
+        
         panelPL.setLayout(new BorderLayout());
 
         tablaPlayList.setModel(crearModeloPlayList());
