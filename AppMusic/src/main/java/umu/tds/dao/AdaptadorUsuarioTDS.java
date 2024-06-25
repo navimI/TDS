@@ -1,6 +1,5 @@
 package umu.tds.dao;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,8 +14,14 @@ import umu.tds.dominio.PlayList;
 import umu.tds.dominio.Usuario;
 
 /**
+ * Clase que implementa el Adaptador de Usuario para el servicio de persistencia.
+ * <p>
+ * Implementa la interfaz IAdaptadorUsuarioDAO y se encarga de realizar las operaciones
+ * de registro, modificación, borrado y recuperación de usuarios en el servicio de persistencia.
  * 
- * Clase que implementa el Adaptador DAO concreto de Usuario para el tipo H2.
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see IAdaptadorUsuarioDAO
  * 
  */
 public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
@@ -32,15 +37,25 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 
 	private ServicioPersistencia servPersistencia;
-	private SimpleDateFormat dateFormat;
+	
 	
 	private static AdaptadorUsuarioTDS unicaInstancia;
 
+	/**
+	 * Constructor de la clase AdaptadorUsuarioTDS.
+	 * La clase AdaptadorUsuarioTDS es un singleton.
+	 */
+
 	public AdaptadorUsuarioTDS() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
 	}
 	
+	/**
+	 * Devuelve la única instancia de la clase AdaptadorUsuarioTDS.
+	 * @return unicaInstancia que es un objeto de tipo AdaptadorUsuarioTDS.
+	 */
+
 	public static AdaptadorUsuarioTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
 			return new AdaptadorUsuarioTDS();
@@ -48,6 +63,11 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			return unicaInstancia;
 	}
 
+	/**
+	 * Convierte una entidad Usuario en un objeto Usuario
+	 * @param eUsuario Entidad de Usuario
+	 * @return Objeto de tipo Usuario
+	 */
 	private Usuario entidadToUsuario(Entidad eUsuario) {
 
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
@@ -66,6 +86,12 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 		return usuario;
 	}
+	
+	/**
+	 * Convierte un objeto Usuario en una entidad Usuario
+	 * @param usuario Objeto de tipo Usuario
+	 * @return Entidad de Usuario
+	 */
 
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		Entidad eUsuario = null;
@@ -91,6 +117,11 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return eUsuario;
 	}
 
+	/**
+	 * Registra un Usuario en el servicio de persistencia
+	 * @param usuario Objeto de tipo Usuario
+	 */
+
 	public void registrarUsuario(Usuario usuario) {
 		Entidad eUsuario = null;
 		
@@ -110,6 +141,11 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		usuario.setId(eUsuario.getId());
 	}
 
+	/**
+	 * Borra un Usuario del servicio de persistencia
+	 * @param usuario Objeto de tipo Usuario
+	 */
+
 	public boolean borrarUsuario(Usuario usuario) {
 		Entidad eUsuario;
 		AdaptadorPlayListTDS adaptadorLV = AdaptadorPlayListTDS.getUnicaInstancia();
@@ -122,7 +158,8 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	/**
-	 * Permite que un Usuario modifique su perfil: password y email
+	 * Permite modificar un Usuario en el servicio de persistencia
+	 * @param usuario Objeto de tipo Usuario
 	 */
 	public void modificarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
@@ -153,11 +190,22 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, EMAIL, usuario.getEmail());
 	}
 
+	/**
+	 * Recupera un Usuario del servicio de persistencia
+	 * @param id Identificador del Usuario
+	 * @return Objeto de tipo Usuario
+	 */
+
 	public Usuario recuperarUsuario(int id) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(id);
 
 		return entidadToUsuario(eUsuario);
 	}
+
+	/**
+	 * Recupera todos los Usuarios del servicio de persistencia
+	 * @return Lista de objetos de tipo Usuario
+	 */
 	
 	public List<Usuario> recuperarTodosUsuarios() {
 		List<Entidad> entidades = servPersistencia.recuperarEntidades(USUARIO);
@@ -172,6 +220,11 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	
 	// -------------------Funciones auxiliares-----------------------------
 
+	/**
+	 * Obtiene los códigos de las PlayList de un usuario
+	 * @param listasUsuario PlayList de un usuario
+	 * @return Códigos de las PlayList de un usuario
+	 */
 	private String obtenerCodigosListasUsuario (List<PlayList> listasUsuario) {
 		String lineas = "";
 		for (PlayList playList: listasUsuario) {
@@ -179,6 +232,12 @@ public final class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		return lineas.trim();
 	}
+
+	/**
+	 * Obtiene las PlayList de un usuario a partir de sus códigos
+	 * @param lineas Códigos de las PlayList de un usuario
+	 * @return PlayLists de un usuario
+	 */
 	
 	private List<PlayList> obtenerListasUsuarioDesdeCodigos (String lineas){
 		List<PlayList> listasUsuarios = new LinkedList<PlayList>();

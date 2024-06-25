@@ -13,74 +13,90 @@ import java.util.stream.Collectors;
 
 import umu.tds.dominio.Cancion;
 
+/**
+ * Clase que adapta las canciones del cargador de canciones a las canciones de
+ * la aplicacion
+ * esta clase es un adaptador de la clase Cancion del dominio
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see Cancion
+ * @see umu.tds.CargadorCanciones.Cancion
+ */
 
-
-public class CancionCargadorAdapter extends Cancion{
+public class CancionCargadorAdapter extends Cancion {
 
     private tds.CargadorCanciones.Cancion cancion;
-    
-    
-    
+
+    /**
+     * Constructor de la clase CancionCargadorAdapter
+     * 
+     * @param cancion Objeto Cancion del cargador de canciones
+     */
+
     public CancionCargadorAdapter(tds.CargadorCanciones.Cancion cancion) {
-    	super();
-    	this.cancion = cancion;
-    	
+        super();
+        this.cancion = cancion;
+
     }
-    
-    
+
     @Override
     public String getTitulo() {
         return cancion.getTitulo();
     }
-    
+
     @Override
-    public List<String> getListaInterpretes(){
+    public List<String> getListaInterpretes() {
         return Arrays.asList(cancion.getInterprete().split(","));
     }
-    
+
     @Override
     public String getEstilo() {
-    	return cancion.getEstilo();
+        return cancion.getEstilo();
     }
-    
+
     @Override
     public String getRutaFichero() {
         String url = getEstilo() + "/";
-		url += getListaInterpretes().stream().collect(Collectors.joining("&"));
-		url += "-" + getTitulo() + ".mp3";
+        url += getListaInterpretes().stream().collect(Collectors.joining("&"));
+        url += "-" + getTitulo() + ".mp3";
         return url;
     }
-    
-    public boolean descargarCancion(){
+
+    /**
+     * Descarga la cancion en la ruta especificada por getRutaFichero
+     * 
+     * @return true si la cancion se ha descargado correctamente, false en caso
+     *         contrario
+     */
+    public boolean descargarCancion() {
         try {
-        URL uri = new URL(cancion.getURL());
-        String outputPath = "src/main/resources/canciones";
-        if (!Files.exists(Paths.get(outputPath, getEstilo()))) {
-            try {
-                Files.createDirectories(Paths.get(outputPath, getEstilo()));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+            URL uri = new URL(cancion.getURL());
+            String outputPath = "src/main/resources/canciones";
+            if (!Files.exists(Paths.get(outputPath, getEstilo()))) {
+                try {
+                    Files.createDirectories(Paths.get(outputPath, getEstilo()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
-        }
-        Path outputFilePath = Paths.get(outputPath, getRutaFichero());
+            Path outputFilePath = Paths.get(outputPath, getRutaFichero());
 
-        if (Files.exists(outputFilePath)) {
-            
+            if (Files.exists(outputFilePath)) {
+
+                return true;
+            }
+
+            try (InputStream stream = uri.openStream()) {
+                Files.copy(stream, outputFilePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
             return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-
-        try (InputStream stream = uri.openStream()) {
-            Files.copy(stream, outputFilePath, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        
-        return true;
-    } catch (IOException e) {
-        e.printStackTrace();
-        return false;
     }
-    }
-    
-    
+
 }

@@ -7,13 +7,25 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import umu.tds.dominio.Cancion;
 
+/**
+ * Clase que permite la reproducción de canciones.
+ * La clase utiliza JavaFX para la reproducción de canciones.
+ * La carpeta de las canciones se encuentra en src/main/resources/canciones.
+ * 
+ * @version 1.0
+ * @see <a href="https://openjfx.io/">JavaFX</a>
+ */
+
 @SuppressWarnings("restriction")
 public class Player {
-	// canciones almacenadas en src/main/resources
 	private Cancion cancionActual = null;
 	private MediaPlayer mediaPlayer;
 	private String carpetaCanciones = "/canciones/";
 	
+	/**
+	 * Constructor de la clase.
+	 * Inicializa la reproducción de canciones.
+	 */
 	public Player(){
 		//existen otras formas de lanzar JavaFX desde Swing
 		try {
@@ -23,12 +35,23 @@ public class Player {
 			
 		}
 	}
+
+	/**
+	 * Reproduce una canción.
+	 * 
+	 * La canción se reproduce en función del botón pulsado.
+	 * Los botones pueden ser: play, stop o pause.
+	 * 
+	 * @param boton   Botón de reproducción.
+	 * @param cancion Canción a reproducir.
+	 */
 	public void play(String boton, Cancion cancion){
 		switch (boton) { 
 		case "play":
 			try {
+				// Si hay una canción en reproducción, se detiene
 				if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-					mediaPlayer.stop(); // Detener la reproducción actual
+					mediaPlayer.stop();
 				}
 				setCancionActual(cancion);
 			} catch (FileNotFoundException e) {
@@ -44,6 +67,12 @@ public class Player {
 			break;
 	}
 	}
+
+	/**
+	 * Establece la canción actual.
+	 * @param cancion Canción a establecer.
+	 * @throws FileNotFoundException
+	 */
 	private void setCancionActual(Cancion cancion) throws FileNotFoundException {
 		if (cancionActual != cancion){
 			cancionActual = cancion;

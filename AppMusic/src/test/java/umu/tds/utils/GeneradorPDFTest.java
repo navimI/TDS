@@ -13,7 +13,15 @@ import com.itextpdf.text.DocumentException;
 
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
-import umu.tds.utils.GeneradorPDF;
+
+/**
+ * Clase de test de la clase GeneradorPDF
+ * En la clase se prueba que se genera correctamente un pdf con las playlist
+ * La ruta del fichero sera el directorio de documentos del usuario de 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see  umu.tds.utils.GeneradorPDF
+ */
 
 public class GeneradorPDFTest {
 
@@ -36,8 +44,14 @@ public class GeneradorPDFTest {
 	List<PlayList> lp;
 	
 	GeneradorPDF generador;
+
+	/**
+	 * Inicializa el generador y las listas de canciones y playlist
+	 * @see umu.tds.utils.GeneradorPDF
+	 */
 	
 	private void inicializarGenerador() {
+		
 		lcancion1 = new LinkedList<Cancion>();
 		lcancion1.add(c1);
 		lcancion1.add(c2);
@@ -68,15 +82,26 @@ public class GeneradorPDFTest {
 		generador = new GeneradorPDF();
 		
 	}
+
+	/**
+	 * Test del método generarFichero de la clase GeneradorPDF
+	 * Se comprueba que se genera un fichero pdf en la carpeta de documentos del usuario
+	 * @see umu.tds.utils.GeneradorPDF#generarFichero(String, String, List)
+	 * @throws FileNotFoundException
+	 * @throws DocumentException
+	 */
 	
 	
 	@Test
 	public void testGenerarFichero() throws FileNotFoundException, DocumentException {
 		inicializarGenerador();
 		
-		generador.generarFichero("C:\\TDS", "Ivan", lp);
-		
-		assertTrue(new File("C:\\TDS\\Ivan.pdf").exists());
+		String userHome = System.getProperty("user.home");
+		String filePath = userHome + File.separator + "Documents" + File.separator ;
+
+		generador.generarFichero(filePath, "Ivan", lp);
+
+		assertTrue(new File(filePath).exists());
 		
 	}
 

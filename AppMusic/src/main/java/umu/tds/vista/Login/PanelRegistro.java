@@ -1,4 +1,4 @@
-package umu.tds.vista.login;
+package umu.tds.vista.Login;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import com.toedter.calendar.JDateChooser;
 import umu.tds.controlador.Controlador;
 
 
-public class RegistroPanel   {
+public class PanelRegistro   {
 	
 	private JPanel panelRegistro;
 	private JPanel panelFormulario;
@@ -51,7 +51,7 @@ public class RegistroPanel   {
 	 */
 	
 
-	public RegistroPanel(VentanaLoginRegistro frmLogin) {
+	public PanelRegistro(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		

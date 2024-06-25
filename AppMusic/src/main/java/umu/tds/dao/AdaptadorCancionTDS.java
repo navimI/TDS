@@ -12,6 +12,17 @@ import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.dominio.Cancion;
 
+/**
+ * Clase que implementa el Adaptador de Cancion para el servicio de persistencia.
+ * <p>
+ * Implementa la interfaz IAdaptadorCancionDAO y se encarga de realizar las operaciones
+ * de registro, modificación, borrado y recuperación de canciones en el servicio de persistencia.
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see IAdaptadorCancionDAO
+ */
+
 public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	private static final String CANCION = "Cancion";
@@ -24,9 +35,19 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	private static AdaptadorCancionTDS unicaInstancia;
 
+	/**
+	 * Constructor de la clase AdaptadorCancionTDS.
+	 * La clase AdaptadorCancionTDS es un singleton.
+	 */
+
 	public AdaptadorCancionTDS() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
+
+	/**
+	 * Devuelve la única instancia de la clase AdaptadorCancionTDS.
+	 * @return unicaInstancia que es un objeto de tipo AdaptadorCancionTDS.
+	 */
 
 	public static AdaptadorCancionTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
@@ -35,7 +56,12 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 			return unicaInstancia;
 	}
 
-	/* metodo para transformar las entidades en cancion */
+	/**
+	 * Convierte una entidad de tipo Cancion en un objeto de tipo Cancion.
+	 * @param eCancion Entidad de tipo Cancion.
+	 * @return Cancion que es el objeto de tipo Cancion.
+	 */
+
 	private Cancion entidadToCancion(Entidad eCancion) {
 		String titulo = servPersistencia.recuperarPropiedadEntidad(eCancion, TITULO);
 		String numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, NUMREPRODUCCIONES);
@@ -54,7 +80,11 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		return cancion;
 	}
 
-	/* cuando se registra un interprete se le asigna un identificador unico */
+	/**
+	 * Convierte un objeto de tipo Cancion en una entidad de tipo Cancion.
+	 * @param cancion Objeto de tipo cancion.
+	 * @return Entidad de tipo cancion.
+	 */
 	private Entidad cancionToEntidad(Cancion cancion) {
 		Entidad eCancion = null;
 
@@ -70,6 +100,11 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		return eCancion;
 	}
 
+	/**
+	 * Registra una cancion en el servicio de persistencia.
+	 * Si la cancion se registra por primera vez asigna un identificador unico.
+	 * @param cancion Objeto de tipo cancion.
+	 */
 	public void registrarCancion(Cancion cancion) {
 
 		Entidad eCancion = null;
@@ -90,12 +125,22 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		cancion.setID(eCancion.getId());
 	}
 
+	/**
+	 * Borra una cancion del servicio de persistencia.
+	 * @param cancion Objeto de tipo cancion.
+	 * @return true si se ha borrado la cancion, false en caso contrario.
+	 */
+
 	public boolean borrarCancion(Cancion cancion) {
 		// recupera entidad
 		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getID());
 		// borra entidad
 		return servPersistencia.borrarEntidad(eCancion);
 	}
+
+	/**
+	 * Modifica una cancion del servicio de persistencia.
+	 */
 
 	public void modificarCancion(Cancion cancion) {
 		// recupera entidad
@@ -116,12 +161,23 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		}
 	}
 
+	/**
+	 * Recupera una cancion del servicio de persistencia.
+	 * @param id Identificador de la cancion.
+	 * @return Objeto de tipo cancion.
+	 */
 	public Cancion recuperarCancion(int id) {
 		// recupera entidad
 		Entidad eCancion = servPersistencia.recuperarEntidad(id);
 		// devuelve cancion
 		return entidadToCancion(eCancion);
 	}
+
+	/**
+	 * Recupera todas las canciones del servicio de persistencia.
+	 * @return Lista de canciones.
+	 
+	 */
 
 	public List<Cancion> recuperarTodasCanciones() {
 		// recupera todas las entidades de tipo cancion
@@ -137,12 +193,24 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	// -------------------Funciones auxiliares-----------------------------
 
+	/**
+	 * Obtiene una lista de interpretes a partir de un string.
+	 * @param interpretes String con los interpretes.
+	 * @return Lista de interpretes.
+	 */
+
 	private List<String> obtenerListaInterpretes(String interpretes) {
 		return Arrays.stream(interpretes.split("&"))
 				.map(s -> s.replace("_", " "))
 				.collect(Collectors.toList());
 		
 	}
+
+	/**
+	 * Obtiene un string con los interpretes a partir de una lista de interpretes.
+	 * @param cancion Lista de interpretes.
+	 * @return String con los interpretes.
+	 */
 
 	private String obtenerStringInterpretes(List<String> cancion) {
 		String listaInterpretes = cancion.stream()

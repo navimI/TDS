@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import umu.tds.controlador.Controlador;
-import umu.tds.vista.login.VentanaLoginRegistro;
+import umu.tds.vista.Login.VentanaLoginRegistro;
 
 public class PanelSesion extends JPanel {
 

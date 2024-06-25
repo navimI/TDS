@@ -27,7 +27,7 @@ import umu.tds.utils.CancionCargadorAdapter;
 import umu.tds.utils.Player;
 
 /**
- * <h1>Clase Controlador</h1>
+ * Clase Controlador
  * Clase Controlador que actúa como intermediario entre el frontend y el backend de la aplicación.
  * Las funciones de esta clase son:
  * 
@@ -42,7 +42,10 @@ import umu.tds.utils.Player;
  * 
  * 
  * @version 1.0
- * @since   2023-06-06
+
+ * @author Ivan Garcia Alcaraz
+ * @see umu.tds.vista.Login para usos de controlador
+ * @see umu.tds.vista.AppMusic para usos de controlador
  * 
  */
 
@@ -73,7 +76,7 @@ public class Controlador implements CancionesListener{
 	
 	
 	/**
-	 * <h1>Constructor de la clase Controlador.</h1>
+	 * Constructor de la clase Controlador.
 	 * Constructor de la clase Controlador que inicializa los atributos de la clase.
 	 * Inicializa el componente cargador de canciones.
 	 * Además, inicializa los catalogos de usuarios y canciones, y los adaptadores de usuario, canción y playlist.
@@ -93,7 +96,7 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Obtener la instancia única del controlador.</h1>
+	 * Obtener la instancia única del controlador.
 	 * Método que devuelve la instancia única del controlador.
 	 * Si no existe, crea una nueva instancia.
 	 * 
@@ -107,8 +110,11 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Inicializa servicio de persistencia.</h1>
+	 * Inicializa los servicios de persistencia.
 	 * Método que inicializa los adaptadores de persistencia de usuario, canción y playlist.
+	 * @see umu.tds.dao.AdaptadorCancionTDS
+	 * @see umu.tds.dao.AdaptadorPlayListTDS
+	 * @see umu.tds.dao.AdaptadorUsuarioTDS
 	 */
 
 	private void iniciarAdaptadores() {
@@ -123,6 +129,11 @@ public class Controlador implements CancionesListener{
 		adaptadorPlayList = factoria.getPlayListDAO();
 		
 	}
+
+	/**
+	 * Usuario sale de la aplicacion.
+	 * Tras salir de la aplicacion se salen de los atributos usuarioActual, cancionActual y playListActual.
+	 */
 	
 	public void salirUsuario() {
 		usuarioActual = null;
@@ -132,8 +143,10 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Inicializa catálogos.</h1>
+	 * Inicializa catálogos.
 	 * Método que inicializa los catálogos de usuarios y canciones.
+	 * @see umu.tds.dominio.CatalogoUsuarios
+	 * @see umu.tds.dominio.CatalogoCancion
 	 */
 	
 	private void inicializarCatalogos() {
@@ -142,44 +155,43 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1>Inicializa el reproductor.</h1>
+	 * Inicializa el reproductor.
 	 * Método que inicializa el reproductor de música.
+	 * @see umu.tds.utils.Player
 	 */
 
 	private void iniciarReproductor() {
 		reproductorActual = new Player();
 	}
 
+
 	/**
-	 * <h1>Obtener el usuario actual.</h1>
-	 * @return Usuario actual.
+	 * Obtener el nombre del usuario actual.
+	 * @return Nombre del usuario actual.
 	 */
-
-
-	public Usuario getUsuarioActual() {
-		return usuarioActual;
-	}
 	
 	public String getNombreUsuarioActual() {
 		return usuarioActual.getUser();
 	}
 	
+	
+	
 	/**
-	 * <h1>Obtener la playlist actual.</h1>
-	 * @return Playlist actual.
+	 * Obtener una lista de canciones favoritas del usuario.
+	 * La playlist de favoritos es una lista de canciones que el usuario ha marcado como favoritas.
+	 * El uso de esta lista es para añadir nuevas canciones a una playlist o crear una nueva playlist.
+	 * @return Lista de canciones de la playlist de favoritos.
 	 */
 
-	public  PlayList getPlayListActual() {
-		return playListActual;
-    }
-	
 	public List<Cancion> getPlayListFavoritos(){
 		return new LinkedList<Cancion>(playListFavoritos);
 	}
 	
-	public List<PlayList> getPlayListUsuario(){	
-		return usuarioActual.getPlayListUsuario();
-	}
+	/**
+	 * Obtener una lista de PlayList del usuario actual.
+	 *  Las playlist que se obtienen son las playlist validas para mostrar del usuario actual.
+	 * @return Lista de playlist vaalidas del usuario actual.
+	 */
 
 	public List<String> stringPlayListUsuario(){
 		return usuarioActual.getUsablePlayList().stream()
@@ -187,58 +199,17 @@ public class Controlador implements CancionesListener{
 			.collect(Collectors.toList());
 	}
 		
-	
+	/**
+	 * Obtiene las canciones de la playlist actual.
+	 * @return Lista de canciones de la playlist actual.
+	 */
 	
 	public List<Cancion> getCancionesPlayListActual(){
 		return playListActual.getPlayList();
 	}
 
-	public List<String> stringCancionesPlayListActual(){
-		return playListActual.getPlayList().stream()
-			.map(c -> c.getTitulo())
-			.collect(Collectors.toList());
-	}
-	
-	public List<PlayList> getPlayListUsuarioUsable(){
-		return usuarioActual.getUsablePlayList();
-	}
-	
-	public boolean isEmptyPlayListActual() {
-		
-		return playListActual.isEmpty();
-	}
-
 	/**
-	 * <h1>Obtiene un valor del usuario actual.</h1>
-	 * Método que obtiene un valor del usuario actual.
-	 * @param field Campo del usuario.
-	 * @return Valor del campo del usuario.
-	 */
-	
-	public String getUsuarioActualField(String field) {
-		String value = null;
-		switch (field) {
-			case "nombre":
-				value = usuarioActual.getNombre();
-				break;
-			case "email":
-				value = usuarioActual.getEmail();
-				break;
-			case "user":
-				value = usuarioActual.getUser();
-				break;
-			case "fechaNacim":
-				value = usuarioActual.getFechaNacim();
-				break;
-			default:
-				value = null;
-				break;
-		}
-		return value;
-	}
-
-	/**
-	 * <h1>Informa si el usuario esta registrado en el sistema.</h1>
+	 * Informa si el usuario esta registrado en el sistema.
 	 * @param user Nombre de usuario.
 	 * @return True si el usuario esta registrado, False en caso contrario.
 	 */
@@ -248,7 +219,7 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Establece el usuario actual.</h1>
+	 * Establece el usuario actual.
 	 * @param user Nombre de usuario.
 	 */
 	
@@ -257,7 +228,7 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1>Obtiene si el usuario actual es premium.</h1>
+	 * Obtiene si el usuario actual es premium.
 	 * @return True si el usuario es premium, False en caso contrario.
 	 */
 	public boolean esUsuarioActualPremium() {
@@ -266,7 +237,7 @@ public class Controlador implements CancionesListener{
 
 
 	/**
-	 * <h1>Devuelve el usuario temporal cargado en la aplicacion.</h1>
+	 * Devuelve el usuario temporal cargado en la aplicacion.
 	 * @param user Nombre del usuario.
 	 */
 	public void setUsuarioTemporal(String user) {
@@ -274,7 +245,7 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Obtiene el usuario temporal cargado en la aplicacion.</h1>
+	 * Obtiene el usuario temporal cargado en la aplicacion.
 	 * @return Nombre del usuario temporal.
 	 */
 
@@ -283,7 +254,7 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1>Loguea al usuario en la aplicación.</h1>
+	 * Loguea al usuario en la aplicación.
 	 * @param user Nombre de usuario.
 	 * @param password Contraseña del usuario.
 	 * @return True si el usuario se ha logueado correctamente, False en caso contrario.
@@ -296,17 +267,10 @@ public class Controlador implements CancionesListener{
 		} else return false;
 	}
 
-	public boolean addminAcceso() {
-		if(catalogoUsuarios.login("admin", "admin")) {
-			setUsuarioActual("admin");
-			return true;
-		}else{
-			return registrarUsuario("admin", "admin@admin.com", "admin", "admin", "01/01/2000");
-		}
-	}
+	
 	
 	/**
-	 * <h1>Registra un nuevo usuario en la la base.</h1>
+	 * Registra un nuevo usuario en el servicio de persistencia y en el catalogo.
 	 * @param nombre Nombre del usuario.
 	 * @param email Email del usuario.
 	 * @param user Nombre de usuario.
@@ -315,7 +279,6 @@ public class Controlador implements CancionesListener{
 	 * @return True si el usuario se ha registrado correctamente, False en caso contrario.
 	 */
 
-	//TODO: mejora decir que error a la hora de registrar se tiene
 	public boolean registrarUsuario(String nombre, String email, String user, String password,
 			String fechaNacim) {
 
@@ -332,7 +295,8 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Borra un usuario de la base de datos.</h1>
+	 * Borra un usuario de la base de datos.
+	 * Borra un usuario de la base de datos y del catálogo de usuarios.
 	 * @param usuario Usuario a borrar.
 	 * @return True si el usuario se ha borrado correctamente, False en caso contrario.
 	 */
@@ -348,13 +312,18 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1>Obtener top 10 canciones.</h1>
+	 * Obtener top 10 canciones.
+	 * Obtiene las 10 canciones más reproducidas en la aplicación.
 	 * @return Lista de las 10 canciones más reproducidas en orde descendente.
 	 */
 
 	public List<Cancion> getTopCanciones() {
 		return catalogoCanciones.topCanciones();
 	}
+
+	/**
+	 * Establece la playlist actual con las 10 canciones más reproducidas.
+	 */
 
 	public void setTopCancionesPlayListActual() {
 		playListActual = new PlayList("Top 10",getTopCanciones());
@@ -364,9 +333,10 @@ public class Controlador implements CancionesListener{
 	
 
 	/**
-	 * <h1>Carga las canciones de un fichero en la aplicación.</h1>
+	 * Carga las canciones de un fichero en la aplicación.
 	 * Para cargar las canciones de un fichero en la aplicación, se llama al método cargarCanciones del componente cargador de canciones.
 	 * @param fichero Ruta del fichero de canciones.
+	 * @see tds.CargadorCanciones.CargadorCanciones
 	 */
 
 	public void cargarCanciones(String fichero){
@@ -377,7 +347,7 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1>Establece la canción actual.</h1>
+	 * Establece la canción actual.
 	 * Establece la canción actual en la aplicación.
 	 * Este método es necesario para el reproductor de música.
 	 * @param cancion Canción actual.
@@ -391,54 +361,72 @@ public class Controlador implements CancionesListener{
 		cancionActual = cancion;
 	}}
 
+	/**
+	 * Establece la canción actual.
+	 * Esto es necesario para el reproductor de música.
+	 * @param nombreCancion Nombre de la canción.
+	 */
+
 	public void setCancion(String nombreCancion) {
 		Cancion cancion = playListActual.getCancion(nombreCancion);
 		if (cancion != null) {
 			setCancion(cancion);
 		}
 	}
+
+	/**
+	 * Establece la canción actual sin playList.
+	 * Esta funcion es usada para las canciones de la ventana de busqueda.
+	 * @param nombreCancion nombre de la cancion.
+	 */
 	
 	public void setCancionSinPlayList(String nombreCancion) {
 		Cancion cancion = catalogoCanciones.getCancion(nombreCancion);
 		setCancion(cancion);
 	}
 	
-	//TODO: Eliminar las siguientes funciones setFirstCancion(), setFirstCU()
+	/**
+	 * Establece la cancion actual en la primera posicion de la playlist.
+	 * Si la playlist esta vacia no hace nada.
+	 */
 	public void setFirstCancion() {
 		if(!playListActual.isEmpty()) setCancion(playListActual.getPlayList().get(0));
 	}
+
+	/**
+	 * Establece la cancion actual en la ultima posicion de la playlist.
+	 * Si la playlist esta vacia no hace nada.
+	 */
 
 	public void setLastCancion(){
 		if(!playListActual.isEmpty())setCancion(playListActual.getPlayList().get(playListActual.getPlayList().size()-1));
 	}
 	
-	
-
-	
-
 	/**
-	 * <h1>Establece la playlist actual.</h1>
-	 * @param playList Playlist actual.
+	 * Establece la playlist actual.
+	 * Tambien establece la cancion actual en la primera posicion de la playlist.
+	 * @param nombrePlayList Nombre de la PlayList.
 	 */
-	
-	private void setPlayList(PlayList playList) {
-		playListActual = playList;
-	}
 
 	public void setPlayList(String nombrePlayList) {
 		PlayList playList = usuarioActual.getPlayListNamed(nombrePlayList);
 		if (playList != null) {
-			setPlayList(playList);
+			playListActual = playList;
 			setFirstCancion();
 		}
 	}
+
+	/**
+	 * Establece la playlist actual a la playlist de canciones recientes.
+	 * La playlist de canciones recientes es una lista de canciones que el usuario ha escuchado recientemente.
+	 */
 
 	public void setCancionesRecientes(){
 		playListActual = usuarioActual.getRecientes();
 	}
 
 	/**
-	 * <h1> Reproduce la cancion actual.</h1>
+	 * Reproduce la cancion actual.
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
@@ -452,7 +440,7 @@ public class Controlador implements CancionesListener{
 
 	
 	/**
-	 * <h1> Detiene la cancion actual.</h1>
+	 * Detiene la cancion actual.
 	 * @return True si la canción se ha parado correctamente, False en caso contrario.
 	 */
 	public boolean stopSong() {
@@ -464,7 +452,7 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1> Reproduce la siguiente cancion.</h1>
+	 * Reproduce la siguiente cancion.
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
@@ -483,7 +471,7 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1> Reproduce la cancion anterior.</h1>
+	 * Reproduce la cancion anterior.
 	 * @return True si la canción se ha reproducido correctamente, False en caso contrario.
 	 */
 	
@@ -502,7 +490,7 @@ public class Controlador implements CancionesListener{
 	
 	
 	/**
-	 * <h1> Pausa la cancion actual.</h1>
+	 * Pausa la cancion actual.
 	 * @return True si la canción se ha pausado correctamente, False en caso contrario. 
 	*/
 	
@@ -515,7 +503,8 @@ public class Controlador implements CancionesListener{
 	}
 	
 	/**
-	 * <h1> Añade una cancion a la playlist de favoritos.</h1>
+	 * Añade una cancion a la playlist de favoritos.
+	 * 
 	 * @param cancion Canción a añadir.
 	 * @return True si la canción se ha añadido correctamente, False en caso contrario.
 	 */
@@ -524,50 +513,16 @@ public class Controlador implements CancionesListener{
 	private boolean addCancionPlayListFavoritos(Cancion cancion) {
 		if(cancion != null) {
 			int i = posicionFavorita(cancion.getID());
-			if (i>=0) {
-				playListFavoritos.remove(i);
-				playListFavoritos.add(cancion);
-			} else {
-				playListFavoritos.add(cancion);
-			}
+
+			if (i == -1) playListFavoritos.add(cancion);
+			
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * <h1>Elimina canciones de la playlist de favoritos.</h1>
-	 * @param canciones Lista de canciones a eliminar.
-	 * @return True si las canciones se han eliminado correctamente, False en caso contrario.
-	 */
-
-	public boolean removeCancionesDePlaylistFavoritos(List<Cancion> canciones) {
-	    boolean eliminado = false;
-	    for (Cancion cancion : canciones) {
-	        if (removeCancionPlayListFavoritos(cancion)) {
-	            eliminado = true;
-	        }
-	    }
-	    return eliminado;
-	}
-
-	/**
-	 * <h1>Elimina canciones de la playlist de favoritos.</h1>
-	 * @param cancion Nombre de la playlist.
-	 * @return True si la playlist se ha eliminado correctamente, False en caso contrario.
-	 */
-
-	public boolean removeCancionPlayListFavoritos(Cancion cancion) {
-        if(cancion != null) {
-        	int i = posicionFavorita(cancion.getID());
-        	if(i>=0) playListFavoritos.remove(i);
-            return true;
-        }
-        return false;
-    }
-
-	/**
-	 * <h1> Eliminar playlist del usuario actual.</h1>
+	 * Eliminar playlist del usuario actual.
 	 * Elimina la playlist del modelo de persistencia.
 	 * Elimina la playlist del usuario actual.
 	 * Guarda los cambios en el adaptador de usuario.
@@ -582,8 +537,7 @@ public class Controlador implements CancionesListener{
 	    if (selectedPlaylist != null) {
 
 	        adaptadorPlayList.borrarPlayList(selectedPlaylist); // eliminar la playlist del adaptador
-
-	        usuarioActual.removePlayListUsuarios(selectedPlaylist); // eliminar la playlist del usuario actual
+	        usuarioActual.removePlayList(selectedPlaylist); // eliminar la playlist del usuario actual
 	        adaptadorUsuario.modificarUsuario(usuarioActual); // guardar los cambios en el adaptador de usuario
 			catalogoUsuarios.updateUsuario(usuarioActual); // actualizar el usuario en el catálogo de usuarios
 			
@@ -594,18 +548,21 @@ public class Controlador implements CancionesListener{
 	}
 
 	/**
-	 * <h1> Guardar playlist de favoritos.</h1>
-	 * Guarda la playlist de favoritos en el modelo de persistencia.
-	 * Guarda la playlist de favoritos en el usuario actual.
-	 * Guarda los cambios en el adaptador de usuario.
+	 * Guardar playlist.
+	 * Si el usuario no tiene la playlist, se crea una nueva playlist con las canciones seleccionadas.
+	 * Si el usuario tiene la playlist, deja la playlist con las canciones seleccionadas en la ventana gestion.
+	 * Guarda la playlist en el modelo de persistencia.
+	 * Guarda la playlist en el usuario actual.
+	 * Guarda los cambios en el servicio de persistencia del usuario.
 	 * @param nombrePlaylist Nombre de la playlist.
 	 * @param idCanciones Lista de los ids de las canciones a establecer en la PlayList
 	 */
 	
 	
-	public void guardarPlayListDesdeVentana(String nombrePlaylist,List<Integer> idCanciones) {
+	public void guardarPlayList(String nombrePlaylist,List<Integer> idCanciones) {
 		PlayList selectedPlaylist = usuarioActual.getPlayListNamed(nombrePlaylist);
-		if (selectedPlaylist == null && playListFavoritos.size() > 0) {
+		//Crear nueva playlist con las canciones seleccionadas y la añade al usuario y al adaptador de playlist
+		if (selectedPlaylist == null && playListFavoritos.size() > 0 ) {
 			List<Cancion> songList = new LinkedList<Cancion>();
 			playListFavoritos.stream()
 				.filter(c -> idCanciones.contains(c.getID()))
@@ -615,6 +572,7 @@ public class Controlador implements CancionesListener{
 			adaptadorPlayList.registrarPlayList(selectedPlaylist);
 
 		}
+		//Modificar la playlist seleccionada con las canciones seleccionadas
 		else if(selectedPlaylist != null && playListFavoritos.size() > 0){
 			List<Cancion> songList = new LinkedList<Cancion>();
 			songList.addAll(playListFavoritos);
@@ -626,23 +584,21 @@ public class Controlador implements CancionesListener{
 
 			selectedPlaylist.addCanciones(songList);
 			adaptadorPlayList.modificarPlayList(selectedPlaylist);
-			
+		// Si el usuario tiene la playlist y el idCanciones no esta vacio se quitara las canciones que no esten en idCanciones
 		}else if(selectedPlaylist != null){
 			selectedPlaylist.removeNotInclued(idCanciones);
 		}
-
+		// Modifica el usuario actual en el servicio de persistencia
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		playListFavoritos.clear();
 		
 	}
-	
-	public PlayList existePlayList(String nombrePlaylist) {
-		PlayList pL = usuarioActual.getPlayListNamed(nombrePlaylist);
-		if (pL != null) {
-			return pL;
-		}
-		return null;
-	}
+
+	/**
+	 * Devuelve una lista de canciones si existe la playlist.
+	 * @param nombrePlayList Nombre de la playlist.
+	 * @return Lista de canciones de la playlist si existe, null en caso contrario.
+	 */
 	
 	public List<Cancion> existeListPlayList(String nombrePlayList){
 		PlayList pL = usuarioActual.getPlayListNamed(nombrePlayList);
@@ -652,14 +608,17 @@ public class Controlador implements CancionesListener{
 		return null;
 	}
 	
-	
+	/**
+	 * Devuelve una lista de estilos de canciones que hay en el catalogo de canciones.
+	 * @return Lista de estilos de canciones.
+	 */
 	
 	public List<String> listarEstilos(){
 		return catalogoCanciones.listaEstilos();
 	}
 
 	/**
-	 * <h1> Buscar canciones en el catálogo.</h1>
+	 * Buscar canciones en el catálogo.
 	 * Busca canciones en el catálogo de canciones usando los diferentes filtros que se pasen por parametro.
 	 * @param interprete Nombre del interprete.
 	 * @param titulo Titulo de la canción.
@@ -673,8 +632,6 @@ public class Controlador implements CancionesListener{
 		List<Cancion> aux;
 		
 		//llamando al método realizarBusqueda del CatalogoCancion, para respetar el patrón experto
-		
-		
 		aux = catalogoCanciones.realizarBusqueda(interprete, titulo, estilo);
 		
 		if (favoritas) {
@@ -687,38 +644,52 @@ public class Controlador implements CancionesListener{
     }
 
 	/**
-	 * <h1>Obtener las canciones de la playlist de favoritos.</h1>
+	 * Agrega la cancion a la lista de favoritos.
 	 * @param idCancion Id de la canción.
-	 * @throws IllegalArgumentException Si la canción no existe.
 	 */
 
-    public void agregarCancionAPlayListFavoritosPorID(int idCancion) {
+    public void addCancionFavoritos(int idCancion) {
         Cancion cancion = catalogoCanciones.getCancion(idCancion);
         if (cancion != null) {
             addCancionPlayListFavoritos(cancion);
-        }else 
-        	throw new IllegalArgumentException("La canción no existe");
+        }
     }
 
 	/**
-	 * <h1> Quitar canción de la playlist de favoritos con id.</h1>
+	 * Quitar canción de la playlist de favoritos.
 	 * @param idCancion Id de la canción a quitar.
 	 */
 
-    public void quitarCancionDePlayListFavoritosPorID(int idCancion) {
+    public void removeCancionFavoritos(int idCancion) {
         playListFavoritos.remove(posicionFavorita(idCancion));
     }
     
+	/**
+	 * Cambia el estado de la cancion en la playlist de favoritos.
+	 * Si la cancion esta en la playlist la elimina, si no esta la añade.
+	 * @param idCancion Id de la canción.
+	 */
     public void invertirFavoritosID(int idCancion) {
-    	if(esFavorita(idCancion)) quitarCancionDePlayListFavoritosPorID(idCancion);
-    	else agregarCancionAPlayListFavoritosPorID(idCancion);
+    	if(esFavorita(idCancion)) removeCancionFavoritos(idCancion);
+    	else addCancionFavoritos(idCancion);
     }
     
+	/**
+	 * Genera un fichero PDF en la direccion pasada por parametro.
+	 * El fichero PDF se genera con la informacion del usuario actual.
+	 * @param rutaFichero Ruta del fichero PDF.
+	 * @return True si el fichero se ha generado correctamente, False en caso contrario.
+	 */
     public boolean generarPDF(String rutaFichero) {
     	return usuarioActual.generarPDF(rutaFichero);
     }
     
-    //TODO: Add persistencia
+    /**
+	 * Activa la funcionalidad Premium del usuario actual.
+	 * Aplica el descuento correspondiente al usuario actual.
+	 * Actualiza el usuario en el catálogo de usuarios.
+	 * @return Mensaje de activación de la funcionalidad Premium con el descuento aplicado.
+	 */
     public String activarPremium() {
     	usuarioActual.setPremium(true);
     	Descuento desc = usuarioActual.obtenerDescuento();
@@ -730,7 +701,10 @@ public class Controlador implements CancionesListener{
     	
     }
     
-    //TODO: Add persistencia
+    /**
+	 * Desactiva la funcionalidad Premium del usuario actual.
+	 * Actualiza el usuario en el catálogo de usuarios.
+	 */
     public void desactivarPremium() {
     	usuarioActual.setPremium(false);
     	catalogoUsuarios.updateUsuario(usuarioActual);
@@ -740,7 +714,7 @@ public class Controlador implements CancionesListener{
    //------------------ metodos auxiliares -----------------------------
    
    /**
-	* <h1>Obtener la posición de una canción en la playlist de favoritos.</h1>
+	 * Obtener la posición de una canción en la playlist de favoritos.
 	* @param idCancion Id de la canción.
 	* @return Posición de la canción en la playlist de favoritos.
     */
@@ -752,7 +726,7 @@ public class Controlador implements CancionesListener{
 	}
     
 	/**
-	 * <h1>Comprueba si una canción es favorita.</h1>
+	 * Comprueba si una canción es favorita.
 	 * @param idCancion Id de la canción.
 	 * @return True si la canción es favorita, False en caso contrario.
 	 */
@@ -761,7 +735,7 @@ public class Controlador implements CancionesListener{
     }
 	
 	/**
-	 * <h1>Registra una cancion de tipo CargadorCanciones en la base de datos.</h1>
+	 * Registra una cancion de tipo CargadorCanciones en la base de datos.
 	 * Utiliza un adaptador de canción para registrar la canción en la base de datos.
 	 * Si la cancion no esta registrada en el catálogo de canciones, el método realiza las siguientes acciones:
 	 * <p>
@@ -771,6 +745,7 @@ public class Controlador implements CancionesListener{
 	 * <p>
 	 * Añade la canción al catálogo de canciones.
 	 * @param cancion Cancion a registrar.
+	 * @see umu.tds.utils.CancionCargadorAdapter
 	 */
 	
 	private void registrarCancionesCargador(tds.CargadorCanciones.Cancion cancion) {
@@ -795,9 +770,10 @@ public class Controlador implements CancionesListener{
 	//------------------ eventos del cargador de canciones -----------------------------
 
 	/**
-	 * <h1>Registra un listener en el cargador de canciones.</h1>
+	 * Registra un listener en el cargador de canciones.
 	 * Registra un listener en el cargador de canciones para escuchar los cambios en la lista de canciones.
 	 * @param e Evento del CargadorCanciones.
+	 * @see tds.CargadorCanciones.CancionesListener
 	 */
 	@Override
 	public void cambioNotificado(CancionesEvent e) {

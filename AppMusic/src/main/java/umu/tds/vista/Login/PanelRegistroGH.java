@@ -1,4 +1,4 @@
-package umu.tds.vista.login;
+package umu.tds.vista.Login;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -22,7 +22,7 @@ import com.toedter.calendar.JDateChooser;
 import umu.tds.controlador.Controlador;
 
 
-public class RegistroGHPanel {
+public class PanelRegistroGH {
 	
 	private JPanel panelRegistroGH;
 
@@ -41,7 +41,7 @@ public class RegistroGHPanel {
 	private SimpleDateFormat dateFormat;
 	
 	
-	public RegistroGHPanel(VentanaLoginRegistro frmLogin) {
+	public PanelRegistroGH(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		

@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que representa una cancion
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ */
+
 public class Cancion {
 	//ATRIBUTOS
 
@@ -17,10 +23,19 @@ public class Cancion {
 	// URL es un atributo calculado por el get
 	
 	//CONSTRUCTORES
-	
+	/**
+	 * Constructor de la clase Cancion
+	 */
 	public Cancion() {
 		this.numReproducciones = 0;
 	}
+
+	/**
+	 * Constructor de la clase Cancion
+	 * @param titulo Titulo de la cancion
+	 * @param estilo Estilo de la cancion
+	 * @param interpretes Lista de interpretes de la cancion
+	 */
 	
 	public Cancion(String titulo, String estilo, String ... interpretes) {
 		this.titulo = titulo;
@@ -28,6 +43,13 @@ public class Cancion {
 		this.listaInterpretes = new LinkedList<String>(Arrays.asList(interpretes));
 		this.numReproducciones = 0;
 	}
+
+	/**
+	 * Constructor de la clase Cancion
+	 * @param titulo Titulo de la cancion
+	 * @param estilo Estilo de la cancion
+	 * @param interpretes Lista de interpretes de la cancion
+	 */
 	
 	public Cancion(String titulo, String estilo, List<String>interpretes) {
 		this.titulo = titulo;
@@ -36,6 +58,12 @@ public class Cancion {
 		this.numReproducciones = 0;
 
 	}
+
+	/**
+	 * Constructor de la clase Cancion
+	 * @param titulo Titulo de la cancion
+	 * @param estilo Estilo de la cancion
+	 */
 	
 	public Cancion(String titulo, String estilo) {
 		this.titulo = titulo;
@@ -48,26 +76,30 @@ public class Cancion {
 
 	//MÉTODOS
 
+	/**
+	 * Devuelve el titulo de la cancion
+	 * @return Titulo de la cancion
+	 */
 	public String getTitulo() {
 		return titulo;
 	}
+
+	/**
+	 * Indica si la cancion contiene un interprete
+	 * @param interprete Interprete a buscar
+	 * @return true si la cancion contiene el interprete, false en caso contrario
+	 */
 	 
 	public boolean containsInterprete(String interprete) {
 		return listaInterpretes.contains(interprete);
 	}
 
-	//No existe un método setTitulo() porque no tiene sentido poder editar el titulo una vez que la cancion ya esta creada
-
+	/**
+	 * Devuelve la ruta del fichero de la cancion
+	 * @return Ruta del fichero de la cancion
+	 */
 	public String getRutaFichero() {
-		/* String url = estilo + "/";
-		url += listaInterpretes.get(0);
-		for (int i = 1; i < listaInterpretes.size(); i++) {
-			url += "&";
-			url += listaInterpretes.get(i);
-		}
-		url += "-" + titulo;
-		url += ".mp3"; */
-
+		
 		String url = estilo + "/";
 		url += listaInterpretes.stream().collect(Collectors.joining("&"));
 		url += "-" + titulo + ".mp3";
@@ -75,29 +107,64 @@ public class Cancion {
 		return url;
 	}
 
+	/**
+	 * Devuelve el numero de reproducciones de la cancion
+	 * @return Numero de reproducciones de la cancion
+	 */
+
 	public int getNumReproducciones() {
 		return numReproducciones;
 	}
+
+	/**
+	 * Establece el numero de reproducciones de la cancion
+	 * @param n Numero de reproducciones de la cancion
+	 */
 	
 	public void setNumReproducciones(int n) {
 		this.numReproducciones = n;
 	}
-
-	public void addReproduccion() {   //para añadir  una reproducción al vídeo
+	/**
+	 * Añade una reproduccion a la cancion
+	 */
+	public void addReproduccion() {
 		numReproducciones ++;
 	}
 
+	/**
+	 * Devuelve la lista de interpretes de la cancion
+	 * @return Lista de interpretes de la cancion
+	 */
+
 	public List<String> getListaInterpretes() {
-		return new LinkedList<String>(listaInterpretes);  //copia defensiva para evitar aliasing
+		List<String> listaInterpretes = new LinkedList<String>();
+		this.listaInterpretes.forEach(interprete -> listaInterpretes.add(interprete));
+		return listaInterpretes;
 	}
+
+	/**
+	 * Devuelve el ID de la cancion
+	 * @return ID de la cancion
+	 */
 	
-	public int getID(){ //PROPIEDAD CALCULADA
+	public int getID(){
 		return ID;
 	}
+
+	/**
+	 * Establece el ID de la cancion
+	 * @param ID ID de la cancion
+	 */
 	
 	public void setID(int ID) {
 		this.ID = ID;
 	}
+
+	/**
+	 * Comprueba si dos canciones son iguales
+	 * @param obj Cancion a comparar
+	 * @return true si las canciones son iguales, false en caso contrario
+	 */
 
 	public boolean cancionesIguales(Object obj) {
 		
@@ -105,12 +172,21 @@ public class Cancion {
 		return Objects.equals(getTitulo(), other.getTitulo()) &&
 			Objects.equals(getEstilo(), other.getEstilo()) &&
 			Objects.equals(getListaInterpretes(), other.getListaInterpretes());
-}
+	}
 	
+	/**
+	 * Devuelve el estilo de la cancion
+	 * @return Estilo de la cancion
+	 */
 
 	public String getEstilo() {
 		return estilo;
 	}
+
+	/**
+	 * Devuelve los interpretes de la cancion en formato String
+	 * @return Interpretes de la cancion en formato String
+	 */
 
 	public String getStringInterpretes(){
 		String interpretes = "";
@@ -124,7 +200,12 @@ public class Cancion {
 	// para asegurar que el atributo listaInterpretes no pueda ser modificado desde fuera de la clase
 	// se devuelve una copia defensiva en el metodo getListaInterpretes()
 	
+	//METODOS SOBREESCRITOS
 
+	/**
+	 * Formatea la cancion en formato String
+	 * @return String con la informacion de la cancion
+	 */
 
 	@Override
 	public String toString() {

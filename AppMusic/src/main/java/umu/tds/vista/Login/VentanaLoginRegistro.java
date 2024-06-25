@@ -1,4 +1,4 @@
-package umu.tds.vista.login;
+package umu.tds.vista.Login;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -44,13 +44,13 @@ public class VentanaLoginRegistro extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new CardLayout(0, 0));
 
-		new LoginPanel(this);
+		new PanelLogin(this);
 
-		new RegistroPanel(this);
+		new PanelRegistro(this);
 
 		// Definicion del panel registro con GitHub
 
-		new RegistroGHPanel(this);
+		new PanelRegistroGH(this);
 
 	}
 

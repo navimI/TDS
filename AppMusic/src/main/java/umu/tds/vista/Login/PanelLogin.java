@@ -1,4 +1,4 @@
-package umu.tds.vista.login;
+package umu.tds.vista.Login;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -25,7 +25,7 @@ import javax.swing.filechooser.FileFilter;
 import umu.tds.controlador.Controlador;
 import umu.tds.utils.LoginGitHub;
 
-public class LoginPanel {
+public class PanelLogin {
 
 	private static Controlador controlador;
 	
@@ -40,7 +40,7 @@ public class LoginPanel {
 	
 	
 	
-	public LoginPanel(VentanaLoginRegistro frmLogin) {
+	public PanelLogin(VentanaLoginRegistro frmLogin) {
 		
 		controlador = Controlador.getUnicaInstancia();
 

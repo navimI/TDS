@@ -57,7 +57,7 @@ public class VentanaAppMusic extends JFrame{
         panelMenu = new PanelMenu(this, controlador);
         add(panelMenu, BorderLayout.WEST);
 
-        panelCentral = new PanelCentral(this, controlador);
+        panelCentral = new PanelCentral(controlador);
         add(panelCentral, BorderLayout.CENTER);
     
     }

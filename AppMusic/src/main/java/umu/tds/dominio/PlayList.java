@@ -5,6 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que representa una PlayList
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ */
+
 public class PlayList {
 	//Properties	
 	private int id;
@@ -12,12 +18,22 @@ public class PlayList {
 	List<Cancion> playList;
 	
 	//Constructor
+	/**
+	 * Constructor de la clase PlayList
+	 * Constructor con la PlayList vacía
+	 * @param nombre Nombre de la PlayList
+	 */
 	public PlayList(String nombre) {
 		id = 0;
 		this.nombre = nombre;
 		this.playList = new LinkedList<Cancion>();
 	}
 	
+	/**
+	 * Constructor de la clase PlayList
+	 * @param nombre Nombre de la PlayList
+	 * @param canciones Lista de canciones de la PlayList
+	 */
 	public PlayList(String nombre, List<Cancion> canciones) {
 		id = 0;
 		this.nombre = nombre;
@@ -25,27 +41,54 @@ public class PlayList {
 	}
 	
 	//Methods
-	
+	/**
+	 * Devuelve el identificador de la PlayList
+	 * @return Identificador de la PlayList
+	 */
 	public int getId() {
 		return id;
 	}
+
+	/**
+	 * Establece el identificador de la PlayList
+	 * @param codigo Identificador de la PlayList
+	 */
 	
 	public void setId(int codigo) {
 		this.id = codigo;
 	}
 	
+	/**
+	 * Devuelve el nombre de la PlayList
+	 * @return Nombre de la PlayList
+	 */
+
 	public String getNombre() {
 		return nombre;
 	}
+
+	/**
+	 * Establece el nombre de la PlayList
+	 * @param nombre Nombre de la PlayList
+	 */
 	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	/**
+	 * Devuelve el número de canciones de la PlayList
+	 * @return Número de canciones de la PlayList
+	 */
 	
 	public int getNumCanciones() {
 		return playList.size();
 	}
 	
+	/**
+	 * Devuelve una Lista con las canciones de la PlayList
+	 * @return Lista con las canciones de la PlayList
+	 */
 	public List<Cancion> getPlayList(){
 		return new LinkedList<Cancion>(playList); 
 	}
@@ -58,8 +101,12 @@ public class PlayList {
 	}
 	
 	
-	//Las canciones que estan al final de la lista son las canciones añadidas recientemente
-	//El orden de la playlist es de más antiguedad en la introducción de la lista a la más reciente.
+	/**
+	 * Añade una canción a la PlayList
+	 * Las canciones no se pueden repetir en la PlayList
+	 * Si la canción ya está en la PlayList, se pone en la última posición
+	 * @param cancion Canción a añadir
+	 */
 	public void addCancion(Cancion cancion) {
 		int i = hasCancion(cancion.getID());
 		if (i>=0) {
@@ -71,20 +118,37 @@ public class PlayList {
 	}
 
 	
-	// Usamos el stream que nos añade todas las canciones de la lista pasada por el argumento
-	// haciendo uso de la función definida de añadir canción
+	/**
+	 * Añade una lista de canciones a la PlayList
+	 * @param canciones Lista de canciones a añadir
+	 */
 	public void addCanciones(List<Cancion> canciones) {
 		canciones.forEach(c -> addCancion(c));
 	}
 	
+	/**
+	 * Elimina una canción de la PlayList
+	 * @param cancion Canción a eliminar
+	 */
 	public void removeCancion(Cancion cancion) {
 		int i = hasCancion(cancion.getID());
 		if(i>=0)playList.remove(i);
 	}
 	
+	/**
+	 * Elimina una canción de la PlayList
+	 * @param idCancion Identificador de la canción a eliminar
+	 * @return true si la canción se ha eliminado, false en caso contrario
+	 */
 	public boolean removeCancion(int idCancion) {
 		return playList.removeIf(c -> c.getID() == idCancion);
 	}
+
+	/**
+	 * Comprueba si una canción está en la PlayList
+	 * @param idCancion Identificador de la canción a comprobar
+	 * @return Posición de la canción en la PlayList, -1 si no está
+	 */
 	
 	public int hasCancion(int idCancion) {
 		return IntStream.range(0, playList.size())
@@ -93,13 +157,27 @@ public class PlayList {
 			.orElse(-1);
 	}
 
+	/**
+	 * Elimina todas las canciones de la PlayList
+	 */
+
 	public void removeAllCanciones() {
 		playList.clear();
 	}
+
+	/**
+	 * Comprueba si la PlayList está vacía
+	 * @return true si la PlayList está vacía, false en caso contrario
+	 */
 	
 	public boolean isEmpty() {
 		return playList.size() == 0;
 	}
+
+	/**
+	 * Elimina la primera canción de la PlayList
+	 * Si la PlayList está vacía, no hace nada
+	 */
 
 	public void removeFirst(){
 
@@ -108,11 +186,22 @@ public class PlayList {
 		}
 	}
 
+	/**
+	 * Formatea la PlayList en formato String
+	 * @return String con la información de la PlayList
+	 */
+
 	@Override
 	public String toString() {
 		return "PlayList [id=" + id + ", nombre=" + nombre + ", getNumCanciones()="
 				+ getNumCanciones() + ", PlayList=" + playList  + "]"; 
 	}
+
+	/**
+	 * Devuelve la siguiente canción de la PlayList
+	 * @param cancion Canción actual
+	 * @return Siguiente canción de la PlayList
+	 */
 
 	public Cancion getSiguienteCancion(Cancion cancion) {
 		boolean found = false;
@@ -127,6 +216,11 @@ public class PlayList {
 		return found ? playList.get(0) : null;
 	}
 
+	/**
+	 * Devuelve la canción anterior de la PlayList
+	 * @param cancion Canción actual
+	 * @return Canción anterior de la PlayList
+	 */
 	public Cancion getAnteriorCancion(Cancion cancion) {
 		Cancion preCancion = playList.get(playList.size() - 1);
 		for (Cancion c : playList) {
@@ -138,9 +232,10 @@ public class PlayList {
 		return null;
 	}
 
-	public void ponerPrimera(Cancion cancion) {
-		addCancion(cancion);
-	}
+	/**
+	 * Elimina las canciones que no están en la lista de canciones
+	 * @param idCanciones Lista de identificadores de las canciones a mantener
+	 */
 
     public void removeNotInclued(List<Integer> idCanciones) {
 		if(idCanciones != null && !idCanciones.isEmpty()){

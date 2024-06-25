@@ -2,6 +2,13 @@ package umu.tds.dominio;
 
 import java.time.LocalDate;
 
+/**
+ * Descuento para el primer dia del mes
+ * Aplica un 20% de descuento a los usuarios el primer dia del mes
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see Descuento
+ */
 public class DescuentoDiaUno implements Descuento{
 	@Override
 	public double precioFinal() {

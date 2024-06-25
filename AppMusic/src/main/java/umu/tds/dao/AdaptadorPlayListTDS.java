@@ -13,6 +13,17 @@ import tds.driver.ServicioPersistencia;
 import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 
+/**
+ * Clase que implementa el Adaptador de PlayList para el servicio de persistencia.
+ * <p>
+ * Implementa la interfaz IAdaptadorPlayListDAO y se encarga de realizar las operaciones
+ * de registro, modificación, borrado y recuperación de listas de reproducción en el servicio de persistencia.
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see IAdaptadorPlayListDAO
+ */
+
 public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 	// Declaración de constantes
 	
@@ -25,10 +36,19 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 	
 	private static AdaptadorPlayListTDS unicaInstancia;
 
-	
+	/**
+	 * Constructor de la clase AdaptadorPlayListTDS.
+	 * La clase AdaptadorPlayListTDS es un singleton.
+	 */
+
 	public AdaptadorPlayListTDS() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
+	
+	/**
+	 * Devuelve la única instancia de la clase AdaptadorPlayListTDS.
+	 * @return unicaInstancia que es un objeto de tipo AdaptadorPlayListTDS.
+	 */
 	
 	public static AdaptadorPlayListTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
@@ -37,7 +57,11 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 			return unicaInstancia;
 	}
 	
-	// Metodos para transformar entre entidad y la clase PlayList
+	/**
+	 * Convierte una entidad en una PlayList.
+	 * @param ePlayList Entidad de tipo PlayList.
+	 * @return PlayList que es el objeto de tipo PlayList.
+	 */
 	
 	private PlayList entidadToPlayList(Entidad ePlayList) {
 		// Recuperación de propiedades que no son objetos
@@ -54,6 +78,12 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		
 		return listaCanciones;
 	}
+
+	/**
+	 * Convierte una PlayList en una entidad.
+	 * @param playList
+	 * @return
+	 */
 	
 	private Entidad playListToEntidad(PlayList playList) {
 		Entidad ePlayList = null;
@@ -72,6 +102,10 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		return ePlayList;
 	}
 	
+	/**
+	 * Registra una PlayList en el servicio de persistencia.
+	 * @param playList PlayList que se va a registrar.
+	 */
 	public void registrarPlayList(PlayList playList) {
 		Entidad ePlayList = null;
 		
@@ -89,10 +123,20 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 				playList.setId(ePlayList.getId());
 	}
 
+	/**
+	 * Borra una PlayList del servicio de persistencia.
+	 * @param listaV PlayList que se va a borrar.
+	 */
+
 	public boolean borrarPlayList(PlayList listaV) {
 		Entidad ePlayList = servPersistencia.recuperarEntidad(listaV.getId());
 		return servPersistencia.borrarEntidad(ePlayList);
 	}
+
+	/**
+	 * Modifica una PlayList en el servicio de persistencia.
+	 * @param listaV PlayList que se va a modificar.
+	 */
 	
 	public void modificarPlayList(PlayList listaV) {
 		Entidad ePlayList = servPersistencia.recuperarEntidad(listaV.getId());
@@ -110,12 +154,22 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		}
 	}
 	
+	/**
+	 * Recupera una PlayList del servicio de persistencia.
+	 * @param id Identificador de la PlayList que se va a recuperar.
+	 * @return PlayList que es el objeto de tipo PlayList.
+	 */
+
 	public PlayList recuperarPlayList(int id) {
 		Entidad ePlayList = servPersistencia.recuperarEntidad(id);
 		
 		return entidadToPlayList(ePlayList);
 	}
 	
+	/**
+	 * Recupera todas las PlayList del servicio de persistencia.
+	 * @return List<PlayList> que es una lista de objetos de tipo PlayList.
+	 */
 	public List<PlayList> recuperarTodosPlayList() {
 		List<Entidad> entidades = servPersistencia.recuperarEntidades(PLAYLIST);
 		
@@ -129,6 +183,11 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 	
 	// -------------------Funciones auxiliares-----------------------------
 
+	/**
+	 * Obtiene los codigos de las canciones de una lista de reproducción.
+	 * @param playList PlayList de la que se quieren obtener los códigos.
+	 * @return String que contiene los códigos de las canciones.
+	 */
 	private String obtenerCodigosCancion(List<Cancion> playList) {
 		String lineas = "";
 		for (Cancion cancion : playList) {
@@ -137,6 +196,11 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		return lineas.trim();
 	}
 	
+	/**
+	 * Obtiene una lista de canciones a partir de una cadena de códigos.
+	 * @param cancion String que contiene los códigos de las canciones.
+	 * @return Lista de objetos de tipo Cancion.
+	 */
 	private List<Cancion> obtenerCancionDesdeCodigos(String cancion){
 		List<Cancion> playList = new LinkedList<Cancion>();
 		StringTokenizer strTok = new StringTokenizer(cancion, " ");
@@ -146,17 +210,5 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 		}
 		return playList;
 	}
-
-	@Override
-	public PlayList buscarPlayListPorNombre(String nombre) {
-	    List<PlayList> todasLasListas = recuperarTodosPlayList();
-	    for (PlayList lista : todasLasListas) {
-	        if (lista.getNombre().equals(nombre)) {
-	            return lista;
-	        }
-	    }
-	    return null; //Devolver null si no se encuentra ninguna lista con ese nombre
-	}
-
 
 }

@@ -17,10 +17,15 @@ import umu.tds.dominio.Cancion;
 import umu.tds.dominio.PlayList;
 
 /**
- * <h1>Clase Generado de PDF</h1>
+ * Clase Generado de PDF
  * Genera un pdf con la lista de canciones de un usuario.
  * <p>
  * El fichero sera generado en la ruta pasada por parametro a la función generarFichero()
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see Cancion
+ * @see PlayList
  */
 public class GeneradorPDF {
 	
@@ -65,16 +70,35 @@ public class GeneradorPDF {
         
     }
 
+    /**
+     * Genera la cabecera de la PlayList
+     * @param nombrePlayList Nombre de la PlayList
+     * @param numReproducciones Numero de reproducciones de la lista
+     * @return Cadena con la cabecera
+     */
+
     private String generaCabecera(String nombrePlayList, int numReproducciones) {
     	return "PlayList" + nombrePlayList + " con "+numReproducciones+" canciones";
     }
     
+    /**
+     * Imprime una PlayList en el documento
+     * @param documento Documento en el que se imprime la lista
+     * @param p PlayList a imprimir
+     * @throws DocumentException 
+     */
     private void imprimePlayList(Document documento, PlayList p) throws DocumentException {
         documento.add(new Paragraph(generaCabecera(p.getNombre(),p.getNumCanciones()), new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD)));
         documento.add(Chunk.NEWLINE);
         documento.add(tablaCanciones(p.getPlayList()));
         documento.add(Chunk.NEWLINE);
     }
+
+    /**
+     * Genera una tabla con las canciones de la PlayList
+     * @param canciones Lista de canciones a incluir en la tabla
+     * @return Tabla con las canciones
+     */
 	
     private PdfPTable tablaCanciones(List<Cancion> canciones){
         PdfPTable tabla = new PdfPTable(3);

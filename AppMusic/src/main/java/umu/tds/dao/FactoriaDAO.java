@@ -1,7 +1,9 @@
 package umu.tds.dao;
 
 /**
- * Factoria abstracta DAO.
+ * Factoria abstracta que devuelve los adaptadores DAO concretos a utilizar.
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
  */
 
 public abstract class FactoriaDAO {
@@ -12,7 +14,7 @@ public abstract class FactoriaDAO {
 	
 	/** 
 	 * Crea un tipo de factoria DAO.
-	 * Solo existe el tipo TDSFactoriaDAO
+	 * La factoria es un singleton.
 	 */
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException{
 		if (unicaInstancia == null)
@@ -24,16 +26,34 @@ public abstract class FactoriaDAO {
 		return unicaInstancia;
 	}
 	
+	/**
+	 * Devuelve la única instancia de la clase FactoriaDAO.
+	 * @return unicaInstancia que es un objeto de tipo FactoriaDAO.
+	 */
 
 	public static FactoriaDAO getInstancia() throws DAOException{
 		return getInstancia(FactoriaDAO.DAO_TDS);
 	}
 
+	/**
+	 * Constructor de la clase FactoriaDAO.
+	 */
+
 	protected FactoriaDAO (){}
 	
-	// Metodos factoria para obtener adaptadores
-	
+	/**
+	 * Devuelve el adaptador DAO de Usuario.
+	 * @return Objeto de tipo IAdaptadorUsuarioDAO.
+	 */
 	public abstract IAdaptadorUsuarioDAO getUsuarioDAO();	
+	/**
+	 * Devuelve el adaptador DAO de Cancion.
+	 * @return Objeto de tipo IAdaptadorCancionDAO.
+	 */
 	public abstract IAdaptadorCancionDAO getCancionDAO();
+	/**
+	 * Devuelve el adaptador DAO de PlayList.
+	 * @return Objeto de tipo IAdaptadorPlayListDAO.
+	 */
 	public abstract IAdaptadorPlayListDAO getPlayListDAO();
 }

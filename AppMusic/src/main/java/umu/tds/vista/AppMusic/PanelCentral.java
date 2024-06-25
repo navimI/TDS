@@ -2,7 +2,6 @@ package umu.tds.vista.AppMusic;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -34,6 +33,18 @@ import java.io.File;
 
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
+
+/**
+ * Panel central de la aplicación.
+ * En el panel central se encuentran los paneles de búsqueda, gestión de
+ * canciones, canciones recientes, mis playlists y top canciones.
+ * 
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcarz
+ * @see umu.tds.controlador.Controlador
+ * @see umu.tds.dominio.Cancion
+ */
 
 public class PanelCentral extends JPanel {
     private Controlador controlador;
@@ -71,21 +82,34 @@ public class PanelCentral extends JPanel {
     private JPanel panelRecientes;
     private JPanel panelTopCanciones;
 
-    private VentanaAppMusic frame;
-
     private JTable tablaCancionesTop;
 
-    public PanelCentral(VentanaAppMusic frame, Controlador controlador) {
-        this.frame = frame;
+    /**
+     * Constructor de la clase.
+     * La clase crea el panel inicial e inicia los paneles de búsqueda, gestión de
+     * canciones, canciones recientes, mis playlists y top canciones.
+     * @param controlador Controlador de la aplicación.
+     */
+
+    public PanelCentral(Controlador controlador) {
         this.controlador = controlador;
         crearPanelInicial();
         iniciarPaneles();
     }
 
+    /**
+     * Método que crea el panel inicial.
+     * El panel inicial se compone de un CardLayout.
+     */
+
     private void crearPanelInicial() {
         setLayout(new CardLayout(0, 0));
     }
 
+    /**
+     * Método que inicia los paneles de búsqueda, gestión de canciones, canciones
+     * recientes, mis playlists y top canciones.
+     */
     private void iniciarPaneles() {
         crearPanelBuscar();
         crearPanelGestion();
@@ -94,6 +118,7 @@ public class PanelCentral extends JPanel {
         crearPanelTopCanciones();
     }
 
+    
     private void crearPanelBuscar() {
         panelBuscar = new JPanel();
         add(panelBuscar, "panelBuscar");
@@ -213,6 +238,7 @@ public class PanelCentral extends JPanel {
 
     private JPanel crearTablas(JTable tabla, String checkColumna) {
         JPanel panelTabla = new JPanel();
+        @SuppressWarnings("rawtypes")
         final Class[] tiposColumnas = new Class[] { Integer.class, String.class, String.class, String.class,
                 Boolean.class };
         String[] columnas = { "ID", "Título", "Intérprete", "Estilo", checkColumna };
@@ -497,7 +523,7 @@ public class PanelCentral extends JPanel {
         btnCrear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nombrePlayList = txtPlayList.getText();
-                if (!nombrePlayList.isEmpty() && !nombrePlayList.equals("Canciones Recientes")) {
+                if (!nombrePlayList.isEmpty() && !nombrePlayList.equals("Canciones Recientes") && !nombrePlayList.equals("Top 10")) {
                     if (!creando) {
 
                         List<Cancion> cancionesFavoritas = controlador.getPlayListFavoritos();
@@ -527,7 +553,7 @@ public class PanelCentral extends JPanel {
                         }
 
                         if (canciones.size() > 0) {
-                            controlador.guardarPlayListDesdeVentana(nombrePlayList, canciones);
+                            controlador.guardarPlayList(nombrePlayList, canciones);
                             JOptionPane.showMessageDialog(null, "PlayList guardada correctamente");
                             vaciarCamposGestionar();
 
