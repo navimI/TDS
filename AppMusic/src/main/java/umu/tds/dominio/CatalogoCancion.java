@@ -60,6 +60,7 @@ public class CatalogoCancion {
 		/**
 		 * Devuelve una lista con todas las canciones del catalogo
 		 * @return Lista de canciones
+		 * @throws DAOException Excepcion lanzada si no se pueden recuperar las canciones
 		 */
 		public List<Cancion> getCanciones() throws DAOException{
 			return new LinkedList<Cancion>(canciones.values());

@@ -32,8 +32,8 @@ public class GeneradorPDF {
 
     /**
      * Inicializa un generador de pdf.
-     * @throws FileNotFoundException 
-     * @throws DocumentException 
+     * @throws FileNotFoundException Excepcion lanzada si no se encuentra el fichero
+     * @throws DocumentException Excepcion lanzada si no se puede crear el documento
      */
 
      private Document inicializaDocumento(String rutaFichero) throws FileNotFoundException, DocumentException{
@@ -47,9 +47,10 @@ public class GeneradorPDF {
     /**
      * Genera un fichero pdf con la lista de canciones de un usuario.
      * @param rutaFichero Ruta donde se guardará el fichero.
+     * @param usuario Nombre del usuario que genera el PDF
      * @param listaCanciones Lista de canciones a incluir en el fichero.
-     * @throws DocumentException 
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException Excepcion lanzada si no se encuentra el fichero
+     * @throws DocumentException Excepcion lanzada si no se puede crear el documento
      */
     public void generarFichero(String rutaFichero, String usuario,List<PlayList> listaCanciones) throws FileNotFoundException, DocumentException {
         Document documento = inicializaDocumento(rutaFichero+"\\"+usuario+".pdf");
@@ -85,7 +86,7 @@ public class GeneradorPDF {
      * Imprime una PlayList en el documento
      * @param documento Documento en el que se imprime la lista
      * @param p PlayList a imprimir
-     * @throws DocumentException 
+     * @throws DocumentException Excepcion lanzada si no se puede añadir la PlayList al documento
      */
     private void imprimePlayList(Document documento, PlayList p) throws DocumentException {
         documento.add(new Paragraph(generaCabecera(p.getNombre(),p.getNumCanciones()), new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD)));

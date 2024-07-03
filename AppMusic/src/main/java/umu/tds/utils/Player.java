@@ -20,7 +20,7 @@ import umu.tds.dominio.Cancion;
 public class Player {
 	private Cancion cancionActual = null;
 	private MediaPlayer mediaPlayer;
-	private String carpetaCanciones = "/canciones/";
+	private String carpetaCanciones = "/canciones/"; //Carpeta donde busca los ficheros de las canciones.
 	
 	/**
 	 * Constructor de la clase.
@@ -77,6 +77,8 @@ public class Player {
 		if (cancionActual != cancion){
 			cancionActual = cancion;
 			String rutaCancion = cancion.getRutaFichero();
+			
+			
 		    
 			URL resourceURL = getClass().getResource(carpetaCanciones + rutaCancion);
 

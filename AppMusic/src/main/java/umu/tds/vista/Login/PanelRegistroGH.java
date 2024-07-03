@@ -21,6 +21,15 @@ import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.Controlador;
 
+/**
+ * Panel que contiene los campos de registro de la aplicación.
+ * <p>
+ * Se encarga de gestionar el registro de los usuarios que acceden a la aplicación con un fichero de propiedades de GitHub.
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see VentanaLoginRegistro
+ * @see Controlador
+*/
 
 public class PanelRegistroGH {
 	
@@ -40,7 +49,12 @@ public class PanelRegistroGH {
 	
 	private SimpleDateFormat dateFormat;
 	
-	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear los paneles y campos necesarios para el registro de un usuario por GitHub.
+	 * @param frmLogin Ventana de login y registro.
+	 */
 	public PanelRegistroGH(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -55,6 +69,12 @@ public class PanelRegistroGH {
 		
 	}
 	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear los paneles y el layout del panel de registro.
+	 * @param frmLogin Ventana de login y registro.
+	 */
 	private void crearPanel(VentanaLoginRegistro frmLogin) {
 		panelRegistroGH = new JPanel();
 		frmLogin.getContentPane().add(panelRegistroGH, "panelRegistroGH");
@@ -65,6 +85,11 @@ public class PanelRegistroGH {
 		panelRegistroGH.setLayout(gbl_panelRegistroGH);
 	}
 	
+	/**
+	 * Crea el panel de logo.
+	 * <p>
+	 * Se encarga de añadir el logo de la aplicación al panel.
+	 */
 	private void crearPanelLogo() {
 		JLabel lblLogoRegGH = new JLabel();
 		URL urlLogo = getClass().getResource("/vista/imagenes/logo.png");
@@ -75,6 +100,12 @@ public class PanelRegistroGH {
 		gbc_LogoRegGH.gridy = 0;
 		panelRegistroGH.add(lblLogoRegGH, gbc_LogoRegGH);
 	}
+
+	/**
+	 * Crea el panel de formulario.
+	 * <p>
+	 * Se encarga de añadir los campos necesarios para el registro de un usuario.
+	 */
 	private void crearPanelFormulario() {
 		panelFormularioGH = new JPanel();
 		GridBagConstraints gbc_panelFormularioGH = new GridBagConstraints();
@@ -144,6 +175,12 @@ public class PanelRegistroGH {
 		panelFormularioGH.add(dateChooserGH, gbc_dateChooserGH);
 	}
 	
+	/**
+	 * Crea el panel de botón.
+	 * <p>
+	 * Se encarga de añadir el botón de registro al panel.
+	 * @param frmLogin Ventana de login y registro.
+	 */
 	private void crearPanelBoton(VentanaLoginRegistro frmLogin) {
 		btnLoginGH = new JButton("Login Con GitHub");
 		GridBagConstraints gbc_btnLoginGH = new GridBagConstraints();
@@ -182,7 +219,12 @@ public class PanelRegistroGH {
 	
 	//--------------------------Auxiliares--------------------------
 	
-	
+	/**
+	 * Comprueba que los campos introducidos son válidos.
+	 * <p>
+	 * Si los campos no son válidos, se resaltan en rojo y se muestra un mensaje de error.
+	 * @return String con el estado de los campos.
+	 */
 	private String checkFields() { 
 		  
 		String status = "";
@@ -211,8 +253,12 @@ public class PanelRegistroGH {
 		return status.equals("") ? "OK" : status;
 	}
 	
+	/**
+	 * Resetea los campos del formulario.
+	 * <p>
+	 * Deja los elementos JLabel, los campos donde se rellena información y la font por defecto.
+	 */
 	private void resetFields() {
-		//Deja los elementos JLabel, los campos donde se rellena información y la font por defecto
 				
 		lblNombreGH.setForeground(Color.BLACK);
 		fieldNombreGH.setBackground(Color.WHITE);
@@ -224,16 +270,31 @@ public class PanelRegistroGH {
 		dateChooserGH.setBackground(Color.WHITE);
 	}
 
+	/**
+	 * Comprueba si el nombre introducido es válido.
+	 * @param input Nombre introducido.
+	 * @return true si el nombre es válido, false en caso contrario.
+	 */
 	private boolean isValidName(String input) {
 		String regex = "^[a-zA-Z\\s]+$";
 		return input.matches(regex);
 	}
 	
+	/**
+	 * Comprueba si el email introducido es válido.
+	 * @param input Email introducido.
+	 * @return true si el email es válido, false en caso contrario.
+	 */
 	private boolean isValidEmail(String input) {
 		String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 		return input.matches(regex);
 	}
 
+	/**
+	 * Comprueba si la fecha introducida es válida.
+	 * @param input Fecha introducida.
+	 * @return true si la fecha es válida, false en caso contrario.
+	 */
 	private boolean isValidDate(Date input) {
 		return input.before(new Date(System.currentTimeMillis()));
 		

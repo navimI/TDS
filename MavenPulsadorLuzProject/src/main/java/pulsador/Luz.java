@@ -12,6 +12,11 @@ import java.util.Vector;
 /**
  * La clase Luz representa una luz que puede ser encendida o apagada mediante un
  * pulsador. Hereda de Canvas y es Serializable.
+ * 
+ * @version 1.0
+ * @author Iván García Alcaraz
+ * @see Canvas
+ * @see Serializable
  */
 public class Luz extends Canvas implements Serializable {
 
@@ -29,6 +34,10 @@ public class Luz extends Canvas implements Serializable {
 
 	/**
 	 * Constructor de la clase Luz.
+	 * <p>
+	 * Establece el color verde para el evento de encendido y el color rojo para el
+	 * evento de apagado. Inicializa el tamaño del componente y añade los
+	 * listeners para el ratón.
 	 */
 	public Luz() { // constructor
 		setSize(20, 20); // tamañado inicial

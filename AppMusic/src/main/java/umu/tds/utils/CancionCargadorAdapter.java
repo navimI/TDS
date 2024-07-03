@@ -21,7 +21,7 @@ import umu.tds.dominio.Cancion;
  * @version 1.0
  * @author Ivan Garcia Alcaraz
  * @see Cancion
- * @see umu.tds.CargadorCanciones.Cancion
+ * @see tds.CargadorCanciones.Cancion
  */
 
 public class CancionCargadorAdapter extends Cancion {

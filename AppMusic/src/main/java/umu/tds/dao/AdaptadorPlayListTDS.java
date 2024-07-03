@@ -168,7 +168,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO{
 	
 	/**
 	 * Recupera todas las PlayList del servicio de persistencia.
-	 * @return List<PlayList> que es una lista de objetos de tipo PlayList.
+	 * @return Lista de objetos de tipo PlayList.
 	 */
 	public List<PlayList> recuperarTodosPlayList() {
 		List<Entidad> entidades = servPersistencia.recuperarEntidades(PLAYLIST);

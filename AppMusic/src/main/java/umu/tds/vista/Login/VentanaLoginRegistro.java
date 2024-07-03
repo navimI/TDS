@@ -8,16 +8,20 @@ import javax.swing.JFrame;
 
 import umu.tds.vista.AppMusic.VentanaAppMusic;
 
+/**
+ * Ventana principal de la aplicacion, donde se muestran los paneles de login y
+ * registro
+ */
 public class VentanaLoginRegistro extends JFrame {
 
-	//private JFrame frmAppmusic;
+	
 
 	/**
-	 * Launch the application.
+	 * Metodo que lanza la ventana de login y registro
 	 */
 	public void mostrarVentana() {
 		try {
-			// UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
+			
 			VentanaLoginRegistro window = new VentanaLoginRegistro();
 			window.setVisible(true);
 		} catch (Exception e) {
@@ -27,14 +31,17 @@ public class VentanaLoginRegistro extends JFrame {
 	}
 
 	/**
-	 * Create the application.
+	 * Inicializa la ventana
 	 */
 	public VentanaLoginRegistro() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Inicializa el contenido de la ventana
+	 * <p>
+	 * Se definen los paneles de login y registro
+	 * </p>
 	 */
 	private void initialize() {
 		//frmAppmusic = new JFrame();
@@ -54,13 +61,13 @@ public class VentanaLoginRegistro extends JFrame {
 
 	}
 
-	
-
+	/**
+	 * Metodo que lanza la ventana principal de la aplicacion
+	 * <p>
+	 * Se lanza la ventana principal de la aplicacion y se oculta la ventana de
+	 * login y registro
+	 */
 	public void lanzarVentanaMain() {
-
-//		VentanaMain main = new VentanaMain();
-//		main.setVisible(true);
-
 		VentanaAppMusic ventanaAppMusic = new VentanaAppMusic();
 		ventanaAppMusic.setVisible(true);
 		setVisible(false);

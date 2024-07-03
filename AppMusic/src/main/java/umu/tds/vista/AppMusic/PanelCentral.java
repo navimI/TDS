@@ -42,8 +42,8 @@ import umu.tds.dominio.Cancion;
  * 
  * @version 1.0
  * @author Ivan Garcia Alcarz
- * @see umu.tds.controlador.Controlador
- * @see umu.tds.dominio.Cancion
+ * @see Controlador
+ * @see Cancion
  */
 
 public class PanelCentral extends JPanel {
@@ -118,7 +118,24 @@ public class PanelCentral extends JPanel {
         crearPanelTopCanciones();
     }
 
-    
+    /**
+     * Método que crea el panel de búsqueda.
+     * El panel de búsqueda se compone de un panel de filtros y una tabla de
+     * canciones.
+     * <p>
+     * El panel de filtros esta compuesto de los diferentes campos de búsqueda
+     * (intérprete, título, estilo y favoritos) y un botón de búsqueda.
+     * <p>
+     * La tabla de canciones muestra las canciones que cumplen los filtros de
+     * búsqueda.
+     * <p>
+     * Si se hace doble clic en una canción de la tabla, se reproduce la canción.
+     * <p>
+     * Si se hace clic en la columna de favoritos, se marcará o desmarcará la
+     * canción como favorita.
+     * 
+     * @see umu.tds.controlador.Controlador#realizarBusqueda(String, String, String, boolean)
+     */
     private void crearPanelBuscar() {
         panelBuscar = new JPanel();
         add(panelBuscar, "panelBuscar");
@@ -140,6 +157,18 @@ public class PanelCentral extends JPanel {
 
     }
 
+    /**
+     * Método que crea el panel de gestión de canciones.
+     * El panel de gestión de canciones se compone de una botonera y una tabla de
+     * canciones.
+     * <p>
+     * La botonera contiene un campo de texto para el nombre de la playlist, un
+     * botón de marcar/desmarcar todas las canciones, un botón de crear/cargar una
+     * playlist, un botón de eliminar una playlist y un botón de cancelar operación.
+     * <p>
+     * La tabla de canciones muestra las canciones que se pueden añadir a la
+     * playlist.
+     */
     private void crearPanelGestion() {
         panelGestion = new JPanel();
         add(panelGestion, "panelGestion");
@@ -155,6 +184,16 @@ public class PanelCentral extends JPanel {
         listenersPanelGestion();
     }
 
+    /**
+     * Método que crea el panel de canciones recientes.
+     * El panel de canciones recientes se compone de una tabla de canciones.
+     * <p>
+     * La tabla de canciones muestra las canciones recientes.
+     * <p>
+     * Si se hace doble clic en una canción de la tabla, se reproduce la canción.
+     * <p>
+     * Las canciones recientes se cargan en una playlist para poder usar los botones de siguiente y anterior.
+     */
     private void crearPanelRecientes() {
         panelRecientes = new JPanel();
         add(panelRecientes, "panelRecientes");
@@ -168,6 +207,20 @@ public class PanelCentral extends JPanel {
         panelRecientes.add(panelCancion, BorderLayout.CENTER);
     }
 
+    /**
+     * Método que crea el panel de mis playlists.
+     * El panel de mis playlists se compone de un panel de playlists y un panel de
+     * canciones.
+     * <p>
+     * El panel de playlists muestra las playlists del usuario.
+     * <p>
+     * Una vez seleccionada una playlist, se muestra el panel de canciones de la
+     * playlist.
+     * <p>
+     * Las canciones de la playlist se pueden reproducir.
+     * <p>
+     * Para volver al panel de playlists, se puede hacer clic en el botón de volver.
+     */
     private void crearPanelMisPL() {
         panelMisPL = new JPanel();
         add(panelMisPL, "panelMisPL");
@@ -187,6 +240,14 @@ public class PanelCentral extends JPanel {
 
     }
 
+    /**
+     * Método que crea el panel de top canciones.
+     * El panel de top canciones se compone de una tabla de canciones.
+     * <p>
+     * La tabla de canciones muestra las top canciones.
+     * <p>
+     * Si se hace doble clic en una canción de la tabla, se reproduce la canción.
+     */
     private void crearPanelTopCanciones() {
         panelTopCanciones = new JPanel();
         add(panelTopCanciones, "panelTopCanciones");
@@ -207,27 +268,52 @@ public class PanelCentral extends JPanel {
 
     }
 
+    /**
+     * Método que refresca el panel de búsqueda.
+     * El panel de búsqueda se limpia para poder realizar una nueva búsqueda.
+     * <p>
+     * Se vacían los campos de búsqueda y se limpia la tabla de canciones.
+     */
     public void setPanelBuscar() {
         refrescarEstilo();
         vaciarCamposBuscar();
     }
 
+    /**
+     * Método que refresca el panel de gestión de canciones.
+     * El panel de gestión de canciones se limpia para poder realizar una nueva
+     * gestión.
+     */
     public void setPanelGestion() {
         vaciarCamposGestionar();
     }
 
+    /**
+     * Método que refresca el panel de canciones recientes.
+     * Refresca el panel de canciones recientes para mostrar las canciones recientes.
+     */
     public void setPanelRecientes() {
         controlador.setCancionesRecientes();
         controlador.setLastCancion();
         refrescarTablaCanciones(tablaCancionesRecientes);
     }
 
+    /**
+     * Método que refresca el panel de mis playlists.
+     * Refresca el panel de mis playlists para mostrar las playlists del usuario.
+     * <p>
+     * Se muestra el panel de playlists.
+     */
     public void setPanelMisPL() {
         tablaPlayList.setModel(crearModeloPlayList());
         CardLayout cardLayout = (CardLayout) panelMisPL.getLayout();
         cardLayout.show(panelMisPL, "panelPL");
     }
 
+    /**
+     * Método que refresca el panel de top canciones.
+     * Refresca el panel de top canciones para mostrar las top canciones.
+     */
     public void setPanelTopCanciones() {
         controlador.setTopCancionesPlayListActual();
         controlador.setLastCancion();
@@ -236,6 +322,18 @@ public class PanelCentral extends JPanel {
 
     // --------- Metodos auxiliares ---------------
 
+    /**
+     * Método que crea una tabla de canciones.
+     * Crea una tabla de canciones con las columnas de ID, Título, Intérprete,
+     * Estilo y una columna adicional.
+     * <p>
+     * La columna adicional puede ser de favoritas o de canciones.
+     * <p>
+     * La tabla de canciones se añade a un panel.
+     * @param tabla Tabla de canciones.
+     * @param checkColumna Columna de la tabla.
+     * @return Panel de la tabla de canciones.
+     */
     private JPanel crearTablas(JTable tabla, String checkColumna) {
         JPanel panelTabla = new JPanel();
         @SuppressWarnings("rawtypes")
@@ -263,6 +361,12 @@ public class PanelCentral extends JPanel {
         return panelTabla;
     }
 
+    /**
+     * Método que crea una tabla de canciones no modificable.
+     * @param Data Datos de la tabla.
+     * @param Columnas Columnas de la tabla.
+     * @return Modelo de la tabla de canciones.
+     */
     private DefaultTableModel crearTablaNoMod(Object[][] Data, Object[] Columnas) {
         return new DefaultTableModel(Data, Columnas) {
             @Override
@@ -273,6 +377,11 @@ public class PanelCentral extends JPanel {
         };
     }
 
+    /**
+     * Método que reproduce una canción de la tabla.
+     * Si se hace doble clic en una canción de la tabla, se reproduce la canción.
+     * @param tabla Tabla de canciones.
+     */
     private void reproducirCancionTabla(JTable tabla){
         tabla.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -290,8 +399,32 @@ public class PanelCentral extends JPanel {
         });
     }
 
+    /**
+     * Método que crea un panel de canciones.
+     * @param tabla Tabla de canciones.
+     * @return Panel de canciones.
+     */
+    private JPanel crearPanelCancion(JTable tabla) {
+        JPanel panelCancion = new JPanel();
+        panelCancion.setLayout(new BorderLayout());
+
+        refrescarTablaCanciones(tabla);
+        reproducirCancionTabla(tabla);
+
+        // Añadir la tabla a un JScrollPane y luego al panel correspondiente
+        JScrollPane scrollPane = new JScrollPane(tabla);
+        panelCancion.add(scrollPane, BorderLayout.CENTER);
+
+        return panelCancion;
+    }
+
     // Metodos Auxiliares para el panelBuscar
 
+    /**
+     * Método que añade un panel de filtros.
+     * El panel de filtros se compone de los diferentes campos de búsqueda (intérprete, título, estilo y favoritos) y un botón de búsqueda.
+     * @return Panel de filtros.
+     */
     private JPanel addPanelFiltros() {
         JPanel panelFiltros = new JPanel();
         panelFiltros.setLayout(new GridBagLayout());
@@ -351,6 +484,11 @@ public class PanelCentral extends JPanel {
         return panelFiltros;
     }
 
+    /**
+     * Método que rellena la tabla de búsqueda.
+     * Rellena la tabla de búsqueda con las canciones que cumplen los filtros de búsqueda.
+     * @param canciones Lista de canciones.
+     */
     private void rellenarTablaBuscar(List<Cancion> canciones) {
         modeloTablaBuscar = (DefaultTableModel) tablaBuscar.getModel();
         modeloTablaBuscar.setRowCount(0);
@@ -363,6 +501,12 @@ public class PanelCentral extends JPanel {
 
     }
 
+    /**
+     * Método que añade un listener a la tabla de búsqueda.
+     * Si se hace doble clic en una canción de la tabla, se reproduce la canción.
+     * Si se hace clic en la columna de favoritos, se marcará o desmarcará la canción como favorita.
+     * 
+     */
     private void listenerTablaBuscar() {
         tablaBuscar.getModel().addTableModelListener(new TableModelListener() {
             @Override
@@ -394,6 +538,10 @@ public class PanelCentral extends JPanel {
         });
     }
 
+    /**
+     * Método que añade un listener al botón de búsqueda.
+     * Si se hace clic en el botón de búsqueda, se realizará una búsqueda con los filtros seleccionados.
+     */
     private void listenerBtnBuscar() {
         btnBuscar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -412,6 +560,10 @@ public class PanelCentral extends JPanel {
         });
     }
 
+    /**
+     * Método que refresca el estilo de la lista desplegable.
+     * Refresca el estilo de la lista desplegable con los estilos de las canciones.
+     */
     private void refrescarEstilo() {
         DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(
                 controlador.listarEstilos().toArray(new String[0]));
@@ -420,6 +572,10 @@ public class PanelCentral extends JPanel {
         comboBoxEstilo.setSelectedIndex(0);
     }
 
+    /**
+     * Método que vacía los campos de búsqueda.
+     * Vacía los campos de búsqueda y limpia la tabla de canciones.
+     */
     private void vaciarCamposBuscar() {
         txtInterprete.setText("");
         txtTitulo.setText("");
@@ -430,6 +586,17 @@ public class PanelCentral extends JPanel {
 
     // Metodos Auxiliares para el panelGestion
 
+    /**
+     * Método que añade un panel de botonera de gestión.
+     * El panel de botonera de gestión se compone de un campo de texto para el nombre de la playlist,
+     *  un botón de marcar/desmarcar todas las canciones, un botón de crear/cargar una playlist, un botón de eliminar una playlist 
+     * y un botón de cancelar operación.
+     * <p>
+     * Si se hace clic en el botón de marcar/desmarcar todas las canciones, se marcarán o desmarcarán todas las canciones.
+     * <p>
+     * 
+     * @return Panel de botonera de gestión.
+     */
     private JPanel addPanelBotoneraGestion() {
 
         JPanel panelBotonera = new JPanel();
@@ -477,18 +644,30 @@ public class PanelCentral extends JPanel {
         return panelBotonera;
     }
 
+    /**
+     * Método que cambia la visibilidad de los botones de la botonera de gestión.
+     */
     private void switchVisibilidadBotones() {
         btnCancelar.setVisible(!btnCancelar.isVisible());
         btnMarcarDesmarcar.setVisible(!btnMarcarDesmarcar.isVisible());
         btnEliminar.setVisible(!btnEliminar.isVisible());
     }
 
+    /**
+     * Método que apaga la visibilidad de los botones de la botonera de gestión.
+     */
     private void offVisibilidadBotones() {
         btnCancelar.setVisible(false);
         btnMarcarDesmarcar.setVisible(false);
         btnEliminar.setVisible(false);
     }
 
+    /**
+     * Método que rellena la tabla de gestión.
+     * Rellena la tabla de gestión con las canciones que se pueden añadir a la playlist.
+     * @param canciones Lista de canciones.
+     * @param cancionesPlayList Lista de canciones de la playlist.
+     */
     private void rellenarTablaGestion(List<Cancion> canciones, List<Cancion> cancionesPlayList) {
         modeloTablaGestion = (DefaultTableModel) tablaGestion.getModel();
         modeloTablaGestion.setRowCount(0);
@@ -518,6 +697,16 @@ public class PanelCentral extends JPanel {
         }
     }
 
+    /**
+     * Método que añade listeners al panel de gestión.
+     * Si se hace clic en el botón de crear/cargar, se creará o cargará una playlist.
+     * <p>
+     * Al crear/cargar una playlist valida se entrará en modo edición de la playlist.
+     * <p>
+     * El modo edición de la playlist activa los botones de marcar/desmarcar todas las canciones, eliminar y cancelar operación.
+     * <p>
+     * Si se estaba en modo edición de la playlist y se hace clic en el botón de guardar, se guardará la playlist.
+     */
     private void listenersPanelGestion() {
 
         btnCrear.addActionListener(new ActionListener() {
@@ -608,6 +797,9 @@ public class PanelCentral extends JPanel {
         });
     }
 
+    /**
+     * Método que vacía los campos de gestión.
+     */
     private void vaciarCamposGestionar() {
         btnCrear.setText("Crear/Cargar");
         txtPlayList.setText("");
@@ -619,6 +811,10 @@ public class PanelCentral extends JPanel {
 
     // Metodos Auxiliares para el panelMisPL
 
+    /**
+     * Método que crea un modelo de tabla de playlists.
+     * @return Modelo de tabla de playlists.
+     */
     private DefaultTableModel crearModeloPlayList() {
         // Obtener la lista de playlists del usuario
         List<String> playlists = controlador.stringPlayListUsuario();
@@ -634,6 +830,11 @@ public class PanelCentral extends JPanel {
         return model;
     }
 
+    /**
+     * Método que crea un panel de playlists.
+     * El panel de playlists se compone de una tabla de playlists.
+     * @return Panel de playlists.
+     */
     private JPanel crearPanelPL() {
         JPanel panelPL = new JPanel();
         
@@ -652,12 +853,10 @@ public class PanelCentral extends JPanel {
                     // seleccionada
                     controlador.setPlayList(selectedPlaylist); // Cambiar la playlist actual a la seleccionada
 
-                    // Cambiar al panel "Recientes"
+                    // Cambiar al panel "panelCancion"
                     refrescarTablaCanciones(tablaCancionesMisPL);
                     CardLayout cl = (CardLayout) (panelMisPL.getLayout());
-                    cl.show(panelMisPL, "panelCancion"); // Asumiendo que "Recientes" es el nombre del card para el
-                                                         // panel
-                                                         // Recientes
+                    cl.show(panelMisPL, "panelCancion"); 
                 }
             }
         });
@@ -670,6 +869,11 @@ public class PanelCentral extends JPanel {
         return panelPL;
     }
 
+    /**
+     * Método que refresca la tabla de canciones.
+     * Refresca la tabla de canciones con las canciones de la playlist seleccionada.
+     * @param tabla Tabla de canciones.
+     */
     private void refrescarTablaCanciones(JTable tabla) {
         List<Cancion> canciones = controlador.getCancionesPlayListActual();
         String[] columnNames = { "ID", "Título", "Intérprete", "Estilo" };
@@ -689,20 +893,10 @@ public class PanelCentral extends JPanel {
         tabla.setModel(model);
     }
 
-    private JPanel crearPanelCancion(JTable tabla) {
-        JPanel panelCancion = new JPanel();
-        panelCancion.setLayout(new BorderLayout());
-
-        refrescarTablaCanciones(tabla);
-        reproducirCancionTabla(tabla);
-
-        // Añadir la tabla a un JScrollPane y luego al panel correspondiente
-        JScrollPane scrollPane = new JScrollPane(tabla);
-        panelCancion.add(scrollPane, BorderLayout.CENTER);
-
-        return panelCancion;
-    }
-
+    /**
+     * Método que añade un botón de volver al panel de canciones.
+     * @param panelCancion Panel de canciones.
+     */
     private void addBotonVolver(JPanel panelCancion) {
         // Create a button to return to the panelPL
         JButton btnReturn = new JButton("Volver");
@@ -718,6 +912,12 @@ public class PanelCentral extends JPanel {
 
     // -------- metodos auxiliares para el panelTopCanciones
 
+    /**
+     * Método que añade un botón de generar PDF.
+     * Si se hace clic en el botón de generar PDF, se generará un PDF con las top canciones.
+     * <p>
+     * Se abrirá un JFileChooser para seleccionar la ruta donde guardar el PDF.
+     */
     private void botonGenerarPDF() {
 
         JButton btnGenerarPDF = new JButton("Generar PDF");

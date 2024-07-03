@@ -23,6 +23,21 @@ import pulsador.IEncendidoListener;
 import pulsador.Luz;
 import umu.tds.controlador.Controlador;
 
+/**
+ * Panel que contiene los botones de las distintas opciones de la aplicación.
+ * <p>
+ * Se encarga de gestionar los eventos de los botones y de cambiar el panel
+ * principal de la aplicación.
+ * <p>
+ * Además, contiene un botón de luz que permite cargar canciones desde un
+ * archivo XML.
+ * 
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see Controlador
+ * @see VentanaAppMusic
+ * @see PanelCentral
+ */
 
 public class PanelMenu extends JPanel {
 
@@ -41,6 +56,13 @@ public class PanelMenu extends JPanel {
 
     private GridBagConstraints gbc;
 
+    /**
+     * Constructor de la clase PanelMenu.
+     * Creará el panel y los botones de las distintas opciones de la aplicación.
+     * Además, se encargará de gestionar los eventos de los botones.
+     * @param frame Ventana principal de la aplicación.
+     * @param controlador Controlador de la aplicación.
+     */
     public PanelMenu(VentanaAppMusic frame, Controlador controlador) {
         this.frame = frame;
         this.controlador = controlador;
@@ -48,7 +70,10 @@ public class PanelMenu extends JPanel {
         crearBotones();
         addBotonListeners();
     }
-
+    
+    /**
+     * Método que crea el panel y establece su layout.
+     */
     private void crearPanel() {
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -58,6 +83,12 @@ public class PanelMenu extends JPanel {
         gbc.insets = new Insets(0, 10, 0, 0);
     }
 
+    /**
+     * Método que crea los botones de las distintas opciones de la aplicación.
+     * Además, se establece el icono y el tamaño de los botones.
+     * <p>
+     * Se crea un botón de tipo Luz que permitirá cargar canciones desde un archivo XML.
+     */
     private void crearBotones() {
 
         btnBuscar = new JButton("Buscar Canciones");
@@ -89,6 +120,14 @@ public class PanelMenu extends JPanel {
 
     }
 
+    /**
+     * Método que añade los listeners a los botones de las distintas opciones de la aplicación.
+     * <p>
+     * Se añade un listener a cada botón que cambiará el panel principal de la aplicación
+     * al panel correspondiente a la opción seleccionada.
+     * <p>
+     * Además, se añade un listener a la luz que permitirá cargar canciones desde un archivo XML.
+     */
     private void addBotonListeners() {
 
         btnBuscar.addActionListener(new ActionListener() {
@@ -135,6 +174,12 @@ public class PanelMenu extends JPanel {
 
     // -------- Metodos auxiliares
 
+    /**
+     * Método que genera los botones de las distintas opciones de la aplicación.
+     * @param posicion Posición en la que se añadirá el botón.
+     * @param nombreIcono Nombre del icono que se añadirá al botón.
+     * @param boton Botón que se añadirá al panel.
+     */
     private void generarBotones(int posicion, String nombreIcono, JButton boton) {
         gbc.gridx = 0;
         gbc.gridy = posicion;
@@ -144,6 +189,9 @@ public class PanelMenu extends JPanel {
         boton.setFont(new Font("Tahoma", Font.BOLD, 14));
     }
 
+    /**
+     * Método que genera el botón de la luz.
+     */
     private void generarBotonLuz() {
         luz.setColorEncendido(Color.GREEN);
         luz.setColorApagado(Color.RED);
@@ -152,14 +200,28 @@ public class PanelMenu extends JPanel {
         gbc.gridy = 5;
     }
 
+    /**
+     * Método que establece si el usuario actual es premium o no.
+     * @param b Booleano que indica si el usuario actual es premium o no.
+     */
     public void setModoPremium(Boolean b) {
         btnTopCanciones.setVisible(b);
     }
 
+    /**
+     * Método que cambia el panel principal de la aplicación.
+     * @param cardLy Nombre del panel al que se cambiará.
+     */
     private void cambiarCardLayout(String cardLy) {
         frame.switchCardLayout(cardLy);
     }
 
+    /**
+     * Método que permite cargar canciones desde un archivo XML.
+     * <p>
+     * Se abrirá un JFileChooser que permitirá seleccionar un archivo XML con las canciones.
+     * Se cargará el archivo y se mostrará un mensaje de éxito.
+     */
     private void luzCargaCanciones() {
         JFileChooser jfc = new JFileChooser(new String("./xml"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Xml Song Files", "xml");

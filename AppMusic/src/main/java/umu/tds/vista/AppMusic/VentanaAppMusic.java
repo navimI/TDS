@@ -8,6 +8,12 @@ import javax.swing.JFrame;
 
 import umu.tds.controlador.Controlador;
 
+/**
+ * Ventana principal de la aplicación AppMusic.
+ * <p>
+ * Se encarga de gestionar la ventana principal de la aplicación, de inicializar
+ * los paneles de la aplicación y de gestionar el cambio de paneles.
+ */
 public class VentanaAppMusic extends JFrame{
     
     private Controlador controlador;
@@ -18,7 +24,10 @@ public class VentanaAppMusic extends JFrame{
     PanelCentral panelCentral;
                 
 
-
+    /**
+     * Lanza la aplicación.
+     * @param args Argumentos de la línea de comandos.
+     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -32,10 +41,19 @@ public class VentanaAppMusic extends JFrame{
         });
     }
 
+    /**
+     * Constructor de la clase VentanaAppMusic.
+     */
     public VentanaAppMusic() {
         initialize();
     }
 
+    /**
+     * Inicializa la ventana de la aplicación.
+     * <p>
+     * Se encarga de inicializar la ventana de la aplicación, de añadir los
+     * paneles de la aplicación y de añadir los listeners a los botones.
+     */
     private void initialize() {
         setTitle("AppMusic");
         setBounds(100, 100, 800, 600);
@@ -65,15 +83,25 @@ public class VentanaAppMusic extends JFrame{
 
     //----------auxiliar methods----------------
 
+    /**
+     * Establece el modo premium en el panel de menú.
+     */
     public void setModoPremium(){
             boolean b = controlador.esUsuarioActualPremium();
             panelMenu.setModoPremium(b);
     }
 
+    /**
+     * Ajusta el panel de búsqueda de canciones.
+     */
     public void ajustarBuscarCanciones(){
         panelCentral.setPanelBuscar();
     }
 
+    /**
+     * Cambia el panel central de la aplicación.
+     * @param cardLy Nombre del panel al que se quiere cambiar.
+     */
     public void switchCardLayout(String cardLy) {
         switch (cardLy) {
             case "panelBuscar":

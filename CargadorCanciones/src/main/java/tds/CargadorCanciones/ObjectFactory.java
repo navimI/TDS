@@ -10,9 +10,6 @@ package tds.CargadorCanciones;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
-import tds.CargadorCanciones.Cancion;
-import tds.CargadorCanciones.Canciones;
-
 
 /**
  * This object contains factory methods for each 

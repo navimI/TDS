@@ -1,11 +1,5 @@
 package tds.CargadorCanciones;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class Programa {
 
 	public static void main(String[] args) {

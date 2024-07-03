@@ -58,7 +58,7 @@ public class CatalogoUsuarios {
 	/**
 	 * Devuelve una lista con todos los usuarios del catalogo
 	 * @return Lista de usuarios
-	 * @throws DAOException
+	 * @throws DAOException Excepcion lanzada si no se pueden recuperar los usuarios
 	 */
 
 	
@@ -93,6 +93,7 @@ public class CatalogoUsuarios {
 	/**
 	 * Comprueba si un usuario esta registrado en el catalogo
 	 * @param user Nombre de usuario
+	 * @param password Contraseña del usuario
 	 * @return true si el usuario esta registrado, false en caso contrario
 	 */
 	public boolean login(String user, String password) {

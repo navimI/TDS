@@ -15,6 +15,9 @@ public abstract class FactoriaDAO {
 	/** 
 	 * Crea un tipo de factoria DAO.
 	 * La factoria es un singleton.
+	 * @param tipo Tipo de la instancia que se quiere tener
+	 * @return Factoria del tipo pasado por parametro
+	 * @throws DAOException Excepcion lanzada si no se puede crear la factoria
 	 */
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException{
 		if (unicaInstancia == null)
@@ -29,6 +32,7 @@ public abstract class FactoriaDAO {
 	/**
 	 * Devuelve la única instancia de la clase FactoriaDAO.
 	 * @return unicaInstancia que es un objeto de tipo FactoriaDAO.
+	 * @throws DAOException Excepcion lanzada si no se puede crear la factoria
 	 */
 
 	public static FactoriaDAO getInstancia() throws DAOException{

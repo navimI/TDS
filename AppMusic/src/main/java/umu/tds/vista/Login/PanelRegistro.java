@@ -24,7 +24,15 @@ import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.Controlador;
 
-
+/**
+ * Panel que contiene los campos de registro de la aplicación.
+ * <p>
+ * Se encarga de gestionar el registro de los usuarios que acceden a la aplicación.
+ * @version 1.0
+ * @author Ivan Garcia Alcaraz
+ * @see VentanaLoginRegistro
+ * @see Controlador
+ */
 public class PanelRegistro   {
 	
 	private JPanel panelRegistro;
@@ -43,14 +51,12 @@ public class PanelRegistro   {
 	
 	private SimpleDateFormat dateFormat;
 
-
-
-	/*
-	 * private JLabel lblUsuarioError; private JLabel lblPassError; private JLabel
-	 * lblNombreError; private JLabel lblEmailError; private JLabel lblFechaError;
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear los paneles y campos necesarios para el registro de un usuario.
+	 * @param frmLogin Ventana de login y registro.
 	 */
-	
-
 	public PanelRegistro(VentanaLoginRegistro frmLogin) {
 		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -65,6 +71,12 @@ public class PanelRegistro   {
 		
 	}
 	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear el panel de registro y establecer el layout.
+	 * @param frmLogin Ventana de login y registro.
+	 */
 	private void crearPanel(VentanaLoginRegistro frmLogin) {
 		panelRegistro = new JPanel();
 		frmLogin.getContentPane().add(panelRegistro, "panelRegistro");
@@ -74,6 +86,11 @@ public class PanelRegistro   {
 		panelRegistro.setLayout(gbl_panelRegistro);
 	}
 	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear el panel de logo y añadirlo al panel de registro.
+	 */
 	private void crearPanelLogo() {
 		JLabel lblLogoReg = new JLabel();
 		URL urlLogo = getClass().getResource("/vista/imagenes/logo.png");
@@ -85,6 +102,11 @@ public class PanelRegistro   {
 		panelRegistro.add(lblLogoReg, gbc_panelRegistro);
 	}	
 	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear el panel de formulario y añadirlo al panel de registro.
+	 */
 	private void crearPanelFormulario() {
 		panelFormulario = new JPanel();
 		GridBagConstraints gbc_panelFormulario = new GridBagConstraints();
@@ -199,6 +221,14 @@ public class PanelRegistro   {
 		
 	}
 	
+	/**
+	 * Crea el panel de registro.
+	 * <p>
+	 * Se encarga de crear el panel de botones y añadirlo al panel de registro.
+	 * <p>
+	 * Los listeners de los botones se encargan de comprobar los campos y registrar al usuario.
+	 * @param frmLogin Ventana de login y registro.
+	 */
 	private void crearPanelBoton(VentanaLoginRegistro frmLogin) {
 		JPanel panel_1 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
@@ -259,6 +289,12 @@ public class PanelRegistro   {
 	
 	//--------------------------Auxiliares--------------------------
 	
+	/**
+	 * Comprueba los campos del formulario.
+	 * <p>
+	 * Si los campos no son válidos, se resaltan en rojo y se muestra un mensaje de error.
+	 * @return String con el estado de los campos.
+	 */
 	private String checkFields() { 
 			  
 		String status = "";
@@ -297,6 +333,11 @@ public class PanelRegistro   {
 		return status.equals("") ? "OK" : status;
 	}
 	
+	/**
+	 * Resetea los campos del formulario.
+	 * <p>
+	 * Deja los elementos JLabel, los campos donde se rellena información y la font por defecto.
+	 */
 	private void resetFields() {
 		//Deja los elementos JLabel, los campos donde se rellena información y la font por defecto
 		lblUsuario.setForeground(Color.BLACK);
@@ -316,6 +357,11 @@ public class PanelRegistro   {
 		dateField.setBackground(Color.WHITE);
 	}
 
+	/**
+	 * Resetea los campos del formulario.
+	 * <p>
+	 * Deja los campos de texto vacíos.
+	 */
 	private void emptyFields() {
 		userField.setText("");
 		passwordField.setText("");
@@ -324,26 +370,50 @@ public class PanelRegistro   {
 		dateField.setDate(null);
 	}
 		  
-	
+	/**
+	 * Comprueba si el nombre introducido es válido.
+	 * @param input Nombre introducido.
+	 * @return true si el nombre es válido, false en caso contrario.
+	 */
 	private boolean isValidUsername(String input) {
 		String regex = "^[a-zA-Z0-9\\s-_]+$";
 		return input.matches(regex);
 	}
 	
+	/**
+	 * Comprueba si la contraseña introducida es válida.
+	 * @param input Contraseña introducida.
+	 * @return true si la contraseña es válida, false en caso contrario.
+	 */
 	private boolean isValidPassword(String input) {
 		return input.length() > 6;
 	}
 
+	/**
+	 * Comprueba si el nombre introducido es válido.
+	 * @param input Nombre introducido.
+	 * @return true si el nombre es válido, false en caso contrario.
+	 */
 	private boolean isValidName(String input) {
 		String regex = "^[a-zA-Z\\s]+$";
 		return input.matches(regex);
 	}
 	
+	/**
+	 * Comprueba si el email introducido es válido.
+	 * @param input Email introducido.
+	 * @return true si el email es válido, false en caso contrario.
+	 */
 	private boolean isValidEmail(String input) {
 		String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 		return input.matches(regex);
 	}
 
+	/**
+	 * Comprueba si la fecha introducida es válida.
+	 * @param input Fecha introducida.
+	 * @return true si la fecha es válida, false en caso contrario.
+	 */
 	private boolean isValidDate(Date input) {
 		return input.before(new Date(System.currentTimeMillis()));
 		

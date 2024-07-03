@@ -587,9 +587,11 @@ public class Controlador implements CancionesListener{
 		// Si el usuario tiene la playlist y el idCanciones no esta vacio se quitara las canciones que no esten en idCanciones
 		}else if(selectedPlaylist != null){
 			selectedPlaylist.removeNotInclued(idCanciones);
+			adaptadorPlayList.modificarPlayList(selectedPlaylist);
 		}
 		// Modifica el usuario actual en el servicio de persistencia
 		adaptadorUsuario.modificarUsuario(usuarioActual);
+		catalogoUsuarios.updateUsuario(usuarioActual);
 		playListFavoritos.clear();
 		
 	}
@@ -707,6 +709,8 @@ public class Controlador implements CancionesListener{
 	 */
     public void desactivarPremium() {
     	usuarioActual.setPremium(false);
+    	cancionActual = null;
+    	playListActual = null;
     	catalogoUsuarios.updateUsuario(usuarioActual);
     	adaptadorUsuario.modificarUsuario(usuarioActual);
     }
