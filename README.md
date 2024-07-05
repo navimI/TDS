@@ -1,2 +1,2 @@
 # TDS
-Lola e Iván, grupos 3
+Iván, grupos 3
